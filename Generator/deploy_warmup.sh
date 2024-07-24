@@ -4,7 +4,7 @@ echo "##################### Initialisation1 ####################################
 
 export PATH="$HOME/.local/bin:$PATH"
 
-target="172.16.192.4"
+target="172.16.192.9"
 
 nb_thread=128
 
@@ -95,7 +95,7 @@ java -jar httploadgenerator.jar director -s $target -a "$file_name" -l "./teasto
 
 echo "#########################Load Injection finished######################################"
 
-sleep 300
+sleep 600
 
 
 #moveRepo="../Load/intensity_profiles_2024-07-14/"

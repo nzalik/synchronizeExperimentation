@@ -51,7 +51,7 @@ def process_csv_line(csv_file):
     # Ajouter 5 minutes à l'objet datetime
     new_time_obj = time_obj + timedelta(minutes=5)
 
-    timestamp_formatted = new_time_obj.strftime('%H:%M:%S.%f')[:-3]
+    timestamp_formatted = time_obj.strftime('%H:%M:%S.%f')[:-3]
 
     print("dans un premier temps")
     print(timestamp_formatted)
@@ -215,7 +215,7 @@ for start_datetime_str in date_list:
     start_timestamp = start_datetime.timestamp()
 
     print("start_timestamp", start_datetime)
-    end_datetime = start_datetime + timedelta(minutes=10)
+    end_datetime = start_datetime + timedelta(minutes=15)
 
     end_timestamp = end_datetime.timestamp()
     print("end_timestamp", end_datetime)
