@@ -6,32 +6,12 @@
 
 --[[
 	Global Variables. Initialized at load driver startup.
-	prefix = "http://172.16.192.3:30080/tools.descartes.teastore.webui/"
+
 --]]
 
+prefix = "http://172.16.192.20:30080/tools.descartes.teastore.webui/"
 productviewcount = 30
 postIndex = {3, 11, 13}
-
--- Chargement de la bibliothèque JSON
-local json = require("dkjson")
-
--- Ouverture du fichier JSON
-local config_file = io.open("config.json", "r")
-
--- Lecture du contenu du fichier
-local config_data = config_file:read("*a")
-
--- Fermeture du fichier
-config_file:close()
-
--- Décodage du contenu JSON
-local config = json.decode(config_data)
-
--- Accès à la valeur souhaitée
-local server_address = config.WEBUI_ADDR_LUA
-
--- Utilisation de la valeur
-prefix = server_address
 
 --[[
 	Gets called at the beginning of each "call cycle", perform as much work as possible here.
