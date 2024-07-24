@@ -85,8 +85,8 @@ kubectl create -f ../custom_deployments/teastore-clusterip-1cpu-5giga.yaml
 
 sleep 120
 
-result="$output_part.csv"
-#result="output-$output_part.csv"
+#result="$output_part.csv"
+result="output-$output_part.csv"
 
 res="$output_part.csv"
 
@@ -104,7 +104,7 @@ python3 ../Fetcher/fetchWarmup.py $res $workload_dir $exp_folder_path
 sleep 120
 
 #mv ../Load/intensity_profiles_2024-07-14/$result $lOutput
-mv "$workload_dir/$result" $lOutput
+#mv "$workload_dir/$result" $lOutput
 
 kubectl delete pods,deployments,services -l app=teastore
 
