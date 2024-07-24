@@ -100,7 +100,7 @@ sleep 300
 
 #moveRepo="../Load/intensity_profiles_2024-07-14/"
 
-python3 ../Fetcher/fetchWarmup.py $res $workload_dir $exp_folder_path
+python3 ../Fetcher/fetchWarmup.py $result $workload_dir $exp_folder_path
 
 sleep 120
 
