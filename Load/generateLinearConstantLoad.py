@@ -25,11 +25,11 @@ def generate_linear_profile(duration, duration_linear, step_sizes, start_value):
             writer.writerow(['timestamp', 'requests'])
 
             current_timestamp = start_value
-            while current_timestamp <= duration_linear:  # Première partie : progression linéaire jusqu'à 180 secondes
-                writer.writerow([current_timestamp, step_size * (current_timestamp / 180)])
+            while current_timestamp <= duration_linear + start_value - 1:  # Première partie : progression linéaire jusqu'à 180 secondes
+                writer.writerow([current_timestamp, step_size * ((current_timestamp - start_value + 1) / 180)])
                 current_timestamp += 1
 
-            while current_timestamp <= duration:  # Deuxième partie : charge stable jusqu'à 600 secondes
+            while current_timestamp <= duration + start_value - 1:  # Deuxième partie : charge stable jusqu'à 600 secondes
                 writer.writerow([current_timestamp, step_size])
                 current_timestamp += 1
 
