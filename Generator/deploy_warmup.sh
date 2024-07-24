@@ -95,7 +95,8 @@ java -jar httploadgenerator.jar director -s $target -a "$file_name" -l "./teasto
 
 echo "#########################Load Injection finished######################################"
 
-sleep 120
+sleep 300
+
 
 #moveRepo="../Load/intensity_profiles_2024-07-14/"
 
