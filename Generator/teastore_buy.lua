@@ -6,19 +6,17 @@
 
 --[[
 	Global Variables. Initialized at load driver startup.
-
 --]]
-
 prefix = "http://172.16.192.20:30080/tools.descartes.teastore.webui/"
 productviewcount = 30
 postIndex = {3, 11, 13}
+
 
 --[[
 	Gets called at the beginning of each "call cycle", perform as much work as possible here.
 	Initialize all global variables here.
 	Note that math.random is already initialized using a fixed seed (5) for reproducibility.
 --]]
-
 function onCycle()
 	userpostfix = 1 + math.random(90)
 	calls = {
@@ -41,7 +39,7 @@ end
 --[[
 	Gets called with ever increasing callnums for each http call until it returns nil.
 	Once it returns nil, onCycle() is called again and callnum is reset to 1 (Lua convention).
-	
+
 	Here, you can use our HTML helper functions for conditional calls on returned texts (usually HTML, thus the name).
 	We offer:
 	- html.getMatches( regex )
