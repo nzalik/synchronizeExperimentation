@@ -24,6 +24,10 @@ def generate_linear_profile(duration, duration_linear, step_sizes, start_value):
             writer = csv.writer(csv_file)
             writer.writerow(['timestamp', 'requests'])
 
+            # Vérifier si start_value est inférieur à 1 et le remplacer par 1 si c'est le cas
+            if start_value < 1:
+                start_value = 1
+
             current_timestamp = start_value
             while current_timestamp <= duration_linear + start_value - 1:  # Première partie : progression linéaire jusqu'à 180 secondes
                 writer.writerow([current_timestamp, step_size * ((current_timestamp - start_value + 1) / 180)])
