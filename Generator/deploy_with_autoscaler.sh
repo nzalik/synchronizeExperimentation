@@ -82,7 +82,7 @@ echo "##################### Initialisation #####################################
 # Créer le déploiement Kubernetes
 kubectl create -f ../custom_deployments/teastore-clusterip-1cpu-5giga.yaml
 
-sleep 300
+sleep 240
 
 kubectl create -f "../autoscalers/autoscaler-nodb-noregistry-5-max-replicas.yaml"
 
@@ -97,7 +97,7 @@ java -jar httploadgenerator.jar director -s $target -a "$warmupFile" -l "./teast
 
 echo "##################### Sleeping before load ##################################################"
 
-sleep 300
+sleep 240
 
 result="$output_part.csv"
 #result="output-$output_part.csv"
@@ -109,14 +109,14 @@ java -jar httploadgenerator.jar director -s $target -a "$file_name" -l "./teasto
 
 echo "#########################Load Injection finished######################################"
 
-sleep 180
+sleep 60
 
 #moveRepo="../Load/intensity_profiles_2024-07-14/"
 
 python3 ../Fetcher/PostFetcher.py $res $workload_dir $exp_folder_path
-python3 ../Fetcher/PostFetcher.py $warm $warmup_dir $exp_folder_path
+#python3 ../Fetcher/PostFetcher.py $warm $warmup_dir $exp_folder_path
 
-#sleep 180
+sleep 60
 
 #mv ../Load/intensity_profiles_2024-07-14/$result $lOutput
 mv "$workload_dir/$result" $lOutput
@@ -124,6 +124,6 @@ mv "$workload_dir/$result" $lOutput
 kubectl delete pods,deployments,services -l app=teastore
 kubectl delete hpa --all
 
-sleep 300
+sleep 240
 
 done

@@ -8,8 +8,12 @@ import pandas as pd
 import json
 from datetime import datetime, timedelta, date
 
-elts = [100, 130, 180, 200]
+elts = [20, 40, 60, 80]
 #x = 1
+cpu_limit_max=1.2
+load_max=90
+memory_limit=5
+pod_limit=6
 
 #while x <= 1:
 for x in elts:
@@ -19,19 +23,20 @@ for x in elts:
         return parameters
 
 
-    plot_path = "../nantes/hyperthreading/autoscale/128/3nodes/linear/23-07-2024/experimentation1/data/load/"
+    plot_path = "../nantes/hyperthreading/128/warmup/24-07-2024/experimentation1/data/load/"
 
-    fileToPlot = f"linear_{x}requests_max_per_sec.csv"
+    #fileToPlot = f"linear_{x}requests_max_per_sec.csv"
+    fileToPlot = f"output-const_linear_{x}requests_per_sec.csv"
     #fileToPlot = f"output-linear_80requests_max_per_sec.csv"
 
     cpu_step = "2m"
 
     file_path = '../teastore.json'
 
-    save_path = f"../nantes/hyperthreading/autoscale/128/3nodes/linear/23-07-2024/experimentation1/data/metrics/experimentation-linear_{x}requests_max_per_sec.csv/"
+    save_path = f"../nantes/hyperthreading/128/warmup/24-07-2024/experimentation1/data/metrics/experimentation-output-const_linear_{x}requests_per_sec.csv/"
     #save_path = f"../nantes/hyperthreading/16-07-2024/data/metrics/experimentation-output-linear_80requests_max_per_sec.csv/"
 
-    save_graphics_at = f"../nantes/hyperthreading/autoscale/128/3nodes/linear/23-07-2024/experimentation1/Plots"
+    save_graphics_at = f"../nantes/hyperthreading/128/warmup/24-07-2024/experimentation1/Plots"
 
     parameters = read_parameters_from_json(file_path)
 
@@ -225,7 +230,7 @@ for x in elts:
     plt.xlabel('Time (seconds)')
     plt.ylabel('cores per second')
     plt.title('CPU usage')
-    plt.ylim(0, 1.5)
+    plt.ylim(0, cpu_limit_max)
     #plt.grid(True)
     plt.xticks(rotation=45)
     #plt.legend()
@@ -264,7 +269,7 @@ for x in elts:
     plt.xlabel('Time (seconds)')
     plt.ylabel('Memory (Gbytes)')
     plt.title('Memory usage')
-    plt.ylim(0, 5)
+    plt.ylim(0, memory_limit)
     #plt.grid(True)
     plt.xticks(rotation=45)
     #plt.legend()
@@ -336,7 +341,7 @@ for x in elts:
     plt.legend([line1, line2, line3, ], ['Load Intensity', 'Successful Transactions', 'Failed Transactions'])
 
     #plt.xlim(0, 6)  # Limites de l'axe des abscisses
-    plt.ylim(0, 300)  # Limites de l'axe des ordonnées
+    plt.ylim(0, load_max)  # Limites de l'axe des ordonnées
 
     plt.xlabel('Time (seconds)')
     plt.ylabel('Number of requests')
@@ -393,7 +398,7 @@ for x in elts:
     ticks4 = np.arange(start_time4, end_time4 + 1, plot_window)
 
     ticks_seconds4 = [((ts - start_time4) // plot_window) * plot_window for ts in ticks4]
-    plt.ylim(0, 6)
+    plt.ylim(0, pod_limit)
     plt.xticks(ticks4, ticks_seconds4)
     plt.xlabel('Time (seconds)')
     plt.ylabel('Number of pods')

@@ -81,7 +81,7 @@ echo "##################### Initialisation #####################################
 # Créer le déploiement Kubernetes
 kubectl create -f ../custom_deployments/teastore-clusterip-1cpu-5giga.yaml
 
-sleep 300
+sleep 240
 
 echo "##################### Sleeping before warmup ##################################################"
 
@@ -102,19 +102,19 @@ java -jar httploadgenerator.jar director -s $target -a "$file_name" -l "./teasto
 
 echo "#########################Load Injection finished######################################"
 
-sleep 180
+sleep 60
 
 #moveRepo="../Load/intensity_profiles_2024-07-14/"
 
 python3 ../Fetcher/PostFetcher.py $res $workload_dir $exp_folder_path
 
-sleep 180
+sleep 60
 
 #mv ../Load/intensity_profiles_2024-07-14/$result $lOutput
 mv "$workload_dir/$result" $lOutput
 
 kubectl delete pods,deployments,services -l app=teastore
 
-sleep 600
+sleep 240
 
 done

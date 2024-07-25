@@ -105,7 +105,7 @@ python3 ../Fetcher/fetchWarmup.py $result $workload_dir $exp_folder_path
 sleep 120
 
 #mv ../Load/intensity_profiles_2024-07-14/$result $lOutput
-#mv "$workload_dir/$result" $lOutput
+mv "$workload_dir/$result" $lOutput
 
 kubectl delete pods,deployments,services -l app=teastore
 
