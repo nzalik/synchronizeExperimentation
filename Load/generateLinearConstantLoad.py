@@ -8,6 +8,7 @@ def generate_linear_profile(duration, duration_linear, step_sizes, start_value):
 
     Args:
         duration (float): Durée totale du profil de charge (en secondes).
+        duration_linear (float): Durée de la partie linéaire du profil (en secondes).
         step_sizes (list): Liste des tailles de progression à utiliser.
         start_value (float): Valeur de départ.
     """
@@ -26,9 +27,7 @@ def generate_linear_profile(duration, duration_linear, step_sizes, start_value):
 
             current_timestamp = start_value
             while current_timestamp <= duration_linear + start_value - 1:  # Première partie : progression linéaire jusqu'à 180 secondes
-                value = step_size * ((current_timestamp - start_value + 1) / 180)
-                if value < 1:
-                    value = 1
+                value = min(step_size * ((current_timestamp - start_value + 1) / duration_linear), step_size)
                 writer.writerow([current_timestamp, value])
                 current_timestamp += 1
 
