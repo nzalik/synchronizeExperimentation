@@ -2,6 +2,7 @@ import csv
 from datetime import datetime, timedelta, date
 import os
 
+
 def generate_linear_profile(duration, duration_linear, step_sizes, start_value):
     """
     Génère des profils de charge linéaires avec différentes progressions.
@@ -28,6 +29,8 @@ def generate_linear_profile(duration, duration_linear, step_sizes, start_value):
             current_timestamp = start_value
             while current_timestamp <= duration_linear + start_value - 1:  # Première partie : progression linéaire jusqu'à 180 secondes
                 value = min(step_size * ((current_timestamp - start_value + 1) / duration_linear), step_size)
+                if value < 1:
+                    value = 1
                 writer.writerow([current_timestamp, value])
                 current_timestamp += 1
 
@@ -36,6 +39,8 @@ def generate_linear_profile(duration, duration_linear, step_sizes, start_value):
                 current_timestamp += 1
 
         print(f"Profil de charge linéaire généré : {file_path}")
+
+
 # Paramètres de configuration
 DURATION_LINEAR = 300  # Durée pour la charge linéaire
 DURATION = 600  # Durée totale du profil de charge (en secondes)
