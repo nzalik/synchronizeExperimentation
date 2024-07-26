@@ -4,7 +4,7 @@ echo "##################### Initialisation1 ####################################
 
 export PATH="$HOME/.local/bin:$PATH"
 
-target="172.16.192.9"
+target="172.16.192.19"
 
 nb_thread=128
 
@@ -14,7 +14,7 @@ parent_dir=$(dirname $(pwd))
 # Obtenir la date actuelle
 date_str=$(date +"%d-%m-%Y")
 
-category="128/warmup"
+category="128/warmup2"
 
 # Chemin complet du nouveau dossier
 new_folder_path="$parent_dir/nantes/hyperthreading/$category/$date_str"
