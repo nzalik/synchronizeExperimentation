@@ -4,7 +4,7 @@ echo "##################### Initialisation1 ####################################
 
 export PATH="$HOME/.local/bin:$PATH"
 
-target="172.16.192.19"
+target="172.16.192.18"
 
 nb_thread=128
 
