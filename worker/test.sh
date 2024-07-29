@@ -1,0 +1,1 @@
+java -jar -Xms8g -Xmx32g -Xss512k Experimentations/synchronizeExperimentation/Generator/httploadgenerator.jar loadgenerator
