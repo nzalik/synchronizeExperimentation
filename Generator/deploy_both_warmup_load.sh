@@ -118,7 +118,7 @@ sleep 60
 
 #moveRepo="../Load/intensity_profiles_2024-07-14/"
 
-saveElement="$exp_folder_path/$elt_part"
+saveElement="$exp_folder_path/$output_part"
 
 mkdir -p "$saveElement"
 
