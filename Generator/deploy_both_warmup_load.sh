@@ -87,6 +87,11 @@ output_part=$(basename "$input_string" .csv)
 output_part="${output_part#profiles_}"
 echo "$output_part"
 
+elt_string=$element
+elt_part=$(basename "$elt_string" .csv)
+elt_part="${elt_part#profiles_}"
+echo "$elt_part"
+
 echo "##################### Initialisation ##################################################"
 
 # Créer le déploiement Kubernetes
@@ -95,7 +100,7 @@ kubectl create -f ../custom_deployments/teastore-clusterip-1cpu-5giga.yaml
 sleep 180
 
 #result="$output_part.csv"
-result="output-$output_part.csv"
+result="output-$elt_part.csv"
 
 res="$output_part.csv"
 
@@ -113,11 +118,15 @@ sleep 60
 
 #moveRepo="../Load/intensity_profiles_2024-07-14/"
 
-python3 ../Fetcher/fetchWarmup.py $result $loadDir $exp_folder_path
+saveElement="$exp_folder_path/$elt_part"
+
+mkdir -p "$saveElement"
+
+python3 ../Fetcher/fetchWarmup.py $result $loadDir "$saveElement"
 
 sleep 120
 
-#mv ../Load/intensity_profiles_2024-07-14/$result $lOutput
+mv ../Load/intensity_profiles_2024-07-23/$result $lOutput
 #mv "$workload_dir/$result" $lOutput
 
 kubectl delete pods,deployments,services -l app=teastore
