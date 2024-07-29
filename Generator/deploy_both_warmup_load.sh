@@ -99,7 +99,7 @@ result="output-$output_part.csv"
 
 res="$output_part.csv"
 
-java -jar httploadgenerator.jar director -s $target -a "$file_name" -l "./teastore_buy.lua" -o  "$file_name.csv" -t $nb_thread
+java -jar httploadgenerator.jar director -s $target -a "$file_name" -l "./teastore_buy.lua" -o  "warmup-$output_part.csv" -t $nb_thread
 
 echo "#########################Load Injection finished######################################"
 
