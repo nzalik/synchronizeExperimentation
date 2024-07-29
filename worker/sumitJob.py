@@ -18,7 +18,7 @@ api_job_url = f"https://api.grid5000.fr/stable/sites/{site_id}/jobs"
 
 payload = {
     "resources": "nodes=2,walltime=4:00",
-    "command": 'sleep 14000',
+    "command": 'sleep 31536000',
     "stdout": "api-test-stdout2",
     "properties": f"cluster='{cluster}'",
     "name": "load_scal"

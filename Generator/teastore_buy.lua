@@ -7,7 +7,7 @@
 --[[
 	Global Variables. Initialized at load driver startup.
 --]]
-prefix = "http://172.16.192.19:30080/tools.descartes.teastore.webui/"
+prefix = "http://172.16.192.11:30080/tools.descartes.teastore.webui/"
 productviewcount = 30
 postIndex = {3, 11, 13}
 
