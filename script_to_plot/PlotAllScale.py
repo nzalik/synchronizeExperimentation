@@ -8,7 +8,7 @@ import pandas as pd
 import json
 from datetime import datetime, timedelta, date
 
-elts = [20, 40, 60, 80]
+elts = [20, 40, 60]
 #x = 1
 cpu_limit_max=1.2
 load_max=90
@@ -23,7 +23,7 @@ for x in elts:
         return parameters
 
 
-    plot_path = "../nantes/hyperthreading/128/warmup/24-07-2024/experimentation1/data/load/"
+    plot_path = "../nantes/hyperthreading/128/warmup2/26-07-2024/experimentation6/data/load/"
 
     #fileToPlot = f"linear_{x}requests_max_per_sec.csv"
     fileToPlot = f"output-const_linear_{x}requests_per_sec.csv"
@@ -33,10 +33,10 @@ for x in elts:
 
     file_path = '../teastore.json'
 
-    save_path = f"../nantes/hyperthreading/128/warmup/24-07-2024/experimentation1/data/metrics/experimentation-output-const_linear_{x}requests_per_sec.csv/"
+    save_path = f"../nantes/hyperthreading/128/warmup2/26-07-2024/experimentation6/data/metrics/experimentation-output-const_linear_{x}requests_per_sec.csv/"
     #save_path = f"../nantes/hyperthreading/16-07-2024/data/metrics/experimentation-output-linear_80requests_max_per_sec.csv/"
 
-    save_graphics_at = f"../nantes/hyperthreading/128/warmup/24-07-2024/experimentation1/Plots"
+    save_graphics_at = f"../nantes/hyperthreading/128/warmup2/26-07-2024/experimentation6/data/Plots"
 
     parameters = read_parameters_from_json(file_path)
 
@@ -293,17 +293,20 @@ for x in elts:
 
     nombre_lignes = len(df)
 
-    lastEl = 600
+    print("nombre de ligne "+str(nombre_lignes))
+
+    lastEl = 900
     # if nombre_lignes > 0:
     #     test = nombre_lignes
-    if nombre_lignes > lastEl:
-        test = nombre_lignes
+    #if nombre_lignes > lastEl:
+    test = nombre_lignes
 
     nouvelles_lignes = []
 
     #lastEl = 1202
 
     if test < lastEl:
+        print("ligne dedans "+str(test))
         for i in range(test + 1, lastEl + 1):
             #for i in range(0, lastEl+1):
             target_time = i + 0.5
@@ -325,6 +328,7 @@ for x in elts:
         df = pd.concat([df] + [nouvelle_ligne], ignore_index=True)
         #df.to_csv(f"output{x}.csv", index=False)
 
+    print("la taille actuelle "+str(len(df)))
     df['Target Time'] = df['Target Time'].astype(int)
 
     # Votre code pour créer le graphique
