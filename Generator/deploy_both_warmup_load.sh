@@ -62,7 +62,6 @@ workload_files=($(ls "$workload_dir"/*.csv))
 
 load_files=($(ls "$loadDir"/*.csv))
 
-
 warmup="const_linear_80requests_per_sec.csv"
 
 warmupFile="../warmUp/${warmup}"
@@ -126,7 +125,8 @@ python3 ../Fetcher/fetchWarmup.py $result $loadDir "$saveElement"
 
 sleep 120
 
-mv ../Load/intensity_profiles_2024-07-23/$result $lOutput
+mv "../Load/profiles_2024-07-23/output*.csv" $lOutput
+mv "../Load/profiles_2024-07-29/warmup*.csv" $wOutput
 #mv "$workload_dir/$result" $lOutput
 
 kubectl delete pods,deployments,services -l app=teastore
