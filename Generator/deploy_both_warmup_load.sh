@@ -79,6 +79,8 @@ for file_name in "${workload_files[@]}"; do
 for element in "${load_files[@]}"; do
 
 echo $file_name
+echo "-----------"
+echo "$element"
 
 input_string=$file_name
 output_part=$(basename "$input_string" .csv)
