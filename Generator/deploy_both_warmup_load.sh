@@ -92,7 +92,7 @@ echo "##################### Initialisation #####################################
 # Créer le déploiement Kubernetes
 kubectl create -f ../custom_deployments/teastore-clusterip-1cpu-5giga.yaml
 
-sleep 120
+sleep 180
 
 #result="$output_part.csv"
 result="output-$output_part.csv"
