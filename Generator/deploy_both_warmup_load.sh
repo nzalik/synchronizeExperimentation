@@ -4,7 +4,7 @@ echo "##################### Initialisation1 ####################################
 
 export PATH="$HOME/.local/bin:$PATH"
 
-target="172.16.192.17"
+target="172.16.192.20"
 nb_thread=64
 
 # Obtenir le répertoire parent
