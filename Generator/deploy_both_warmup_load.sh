@@ -105,7 +105,7 @@ for file_name in "${workload_files[@]}"; do
 
         sleep 120
 
-        mv "../Load/profiles_2024-07-23/$result" "$lOutput"
+        mv "../Load/profiles_2024-07-23/$result" "$saveElement"
         mv "../Load/profiles_2024-07-30/warmup-$output_part.csv" "$wOutput"
 
         kubectl delete pods,deployments,services -l app=teastore
