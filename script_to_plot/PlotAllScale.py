@@ -11,7 +11,7 @@ from datetime import datetime, timedelta, date
 elts = [10, 50, 100, 150, 200]
 #x = 1
 cpu_limit_max=1.2
-load_max=90
+load_max=250
 memory_limit=5
 pod_limit=6
 
@@ -225,7 +225,7 @@ for x in elts:
 
     print("max cpu")
     print(len(ticks_seconds))
-
+    plt.axhline(y=1, color='r', linestyle='--')
     plt.xticks(ticks, ticks_seconds)
     plt.xlabel('Time (seconds)')
     plt.ylabel('cores per second')
