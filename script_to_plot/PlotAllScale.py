@@ -1,12 +1,11 @@
+import json
 import os
+import re
+from datetime import date
 
 import matplotlib.pyplot as plt
 import numpy as np
-import json
-import re
 import pandas as pd
-import json
-from datetime import datetime, timedelta, date
 
 elts = [10, 50, 100, 150, 200]
 #x = 1
