@@ -45,6 +45,6 @@ def generate_linear_profile(duration, step_size, start_value, end_values):
 DURATION = 599.5  # Durée totale du profil de charge (en secondes)
 STEP_SIZE = 1.0
 START_VALUE = 1.0  # Valeur de départ modifiée à 1.0
-END_VALUE = [350, 400, 450]  # Valeur finale
+END_VALUE = [250, 300]  # Valeur finale
 
 generate_linear_profile(DURATION, STEP_SIZE, START_VALUE, END_VALUE)

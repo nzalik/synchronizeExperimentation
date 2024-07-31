@@ -2,7 +2,7 @@
 
 export PATH="$HOME/.local/bin:$PATH"
 
-target="172.16.192.4"
+target="172.16.192.20"
 
 nb_thread=128
 
@@ -15,7 +15,7 @@ date_str=$(date +"%d-%m-%Y")
 category="autoscale/3nodes/linear"
 
 # Chemin complet du nouveau dossier
-new_folder_path="$parent_dir/nantes/hyperthreading/$category/$date_str"
+new_folder_path="$parent_dir/nantes/hyperthreading/$category/31-07-2024"
 
 # Créer le nouveau dossier s'il n'existe pas déjà
 if [ ! -d "$new_folder_path" ]; then
@@ -51,7 +51,8 @@ fi
 #   "intensity_profile-three-21-06-2024-10min-100.0requests.csv",
 #)
 workload_date=$(date +"%Y-%m-%d")
-workload_dir="../Load/profiles_$workload_date"
+#workload_dir="../Load/profiles_$workload_date"
+workload_dir="../Load/profiles_2024-07-31"
 warmup_dir="../warmUp"
 
 pwd
@@ -84,10 +85,6 @@ kubectl create -f ../custom_deployments/teastore-clusterip-1cpu-5giga.yaml
 
 sleep 240
 
-kubectl create -f "../autoscalers/autoscaler-nodb-noregistry-5-max-replicas.yaml"
-
-sleep 180
-
 echo "##################### Sleeping before warmup ##################################################"
 
 warm="warmup-$output_part.csv"
@@ -95,14 +92,22 @@ warm="warmup-$output_part.csv"
 #Lancer le générateur de charge HTTP
 java -jar httploadgenerator.jar director -s $target -a "$warmupFile" -l "./teastore_buy.lua" -o "$warm" -t $nb_thread
 
+sleep 180
+
+echo "##################### Sleeping before autoscaler ##################################################"
+
+
+kubectl create -f "../autoscalers/autoscaler-nodb-noregistry-5-max-replicas.yaml"
+
+
 echo "##################### Sleeping before load ##################################################"
 
-sleep 240
+sleep 120
 
-result="$output_part.csv"
-#result="output-$output_part.csv"
+#result="$output_part.csv"
+result="output-$output_part.csv"
 
-res="$output_part.csv"
+#res="$output_part.csv"
 
 
 java -jar httploadgenerator.jar director -s $target -a "$file_name" -l "./teastore_buy.lua" -o $result -t $nb_thread
@@ -113,7 +118,7 @@ sleep 60
 
 #moveRepo="../Load/intensity_profiles_2024-07-14/"
 
-python3 ../Fetcher/PostFetcher.py $res $workload_dir $exp_folder_path
+python3 ../Fetcher/PostFetcher.py $result $workload_dir $exp_folder_path
 #python3 ../Fetcher/PostFetcher.py $warm $warmup_dir $exp_folder_path
 
 sleep 60

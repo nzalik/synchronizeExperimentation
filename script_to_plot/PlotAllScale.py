@@ -22,7 +22,7 @@ for x in elts:
         return parameters
 
 
-    plot_path = "../nantes/hyperthreading/64/constant/31-07-2024/experimentation1/data/load/"
+    plot_path = "../nantes/hyperthreading/64/constant/31-07-2024/experimentation4/data/load/"
 
     #fileToPlot = f"linear_{x}requests_max_per_sec.csv"
     fileToPlot = f"output-constant_{x}requests_per_sec.csv"
@@ -32,10 +32,10 @@ for x in elts:
 
     file_path = '../teastore.json'
 
-    save_path = f"../nantes/hyperthreading/64/constant/31-07-2024/experimentation1/data/metrics/experimentation-output-constant_{x}requests_per_sec.csv/"
+    save_path = f"../nantes/hyperthreading/64/constant/31-07-2024/experimentation4/data/metrics/experimentation-output-constant_{x}requests_per_sec.csv/"
     #save_path = f"../nantes/hyperthreading/16-07-2024/data/metrics/experimentation-output-linear_80requests_max_per_sec.csv/"
 
-    save_graphics_at = f"../nantes/hyperthreading/64/constant/31-07-2024/experimentation1/data/Plots"
+    save_graphics_at = f"../nantes/hyperthreading/64/constant/31-07-2024/experimentation4/data/Plots"
 
     parameters = read_parameters_from_json(file_path)
 
@@ -348,7 +348,7 @@ for x in elts:
 
     plt.xlabel('Time (seconds)')
     plt.ylabel('Number of requests')
-
+    plt.axhline(y=200, color='r', linestyle='--')
     plt.subplot(4, 1, 4)
     all_timestamps3 = []
     # Read JSON data from a file
