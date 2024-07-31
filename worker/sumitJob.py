@@ -21,7 +21,7 @@ payload = {
     "command": "sleep infinity",
     "stdout": "api-test-stdout2",
     "properties": f"cluster='{cluster}'",
-    "name": "load_scal_loc"
+    "name": "load_constant"
 }
 job = requests.post(api_job_url, data=payload, auth=g5k_auth).json()
 job_id = job["uid"]
