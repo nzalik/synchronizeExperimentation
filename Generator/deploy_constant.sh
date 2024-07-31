@@ -4,7 +4,7 @@ export PATH="$HOME/.local/bin:$PATH"
 
 target="172.16.192.18"
 
-nb_thread=1
+nb_thread=16
 
 # Obtenir le répertoire parent
 parent_dir=$(dirname $(pwd))
