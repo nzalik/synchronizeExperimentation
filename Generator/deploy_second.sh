@@ -2,7 +2,7 @@
 
 export PATH="$HOME/.local/bin:$PATH"
 
-target="172.16.192.3"
+target="172.16.192.20"
 
 nb_thread=128
 
@@ -92,13 +92,13 @@ echo "##################### Sleeping before load ###############################
 
 sleep 240
 
-result="$output_part.csv"
-#result="output-$output_part.csv"
+#result="$output_part.csv"
+result="output-$output_part.csv"
 
 res="$output_part.csv"
 
 
-java -jar httploadgenerator.jar director -s $target -a "$file_name" -l "./teastore_buy.lua" -o $result -t $nb_thread
+java -jar httploadgenerator.jar director -s $target -a "$file_name" -l "./teastore_buy.lua" -o "$result" -t $nb_thread
 
 echo "#########################Load Injection finished######################################"
 
@@ -106,7 +106,7 @@ sleep 60
 
 #moveRepo="../Load/intensity_profiles_2024-07-14/"
 
-python3 ../Fetcher/PostFetcher.py $res $workload_dir $exp_folder_path
+python3 ../Fetcher/PostFetcher.py $result $workload_dir $exp_folder_path
 
 sleep 60
 
