@@ -8,7 +8,7 @@ import pandas as pd
 import json
 from datetime import datetime, timedelta, date
 
-elts = [20, 40, 60]
+elts = [10, 50, 100, 150, 200]
 #x = 1
 cpu_limit_max=1.2
 load_max=90
@@ -23,20 +23,20 @@ for x in elts:
         return parameters
 
 
-    plot_path = "../nantes/hyperthreading/128/warmup2/26-07-2024/experimentation6/data/load/"
+    plot_path = "../nantes/hyperthreading/64/constant/31-07-2024/experimentation1/data/load/"
 
     #fileToPlot = f"linear_{x}requests_max_per_sec.csv"
-    fileToPlot = f"output-const_linear_{x}requests_per_sec.csv"
+    fileToPlot = f"output-constant_{x}requests_per_sec.csv"
     #fileToPlot = f"output-linear_80requests_max_per_sec.csv"
 
     cpu_step = "2m"
 
     file_path = '../teastore.json'
 
-    save_path = f"../nantes/hyperthreading/128/warmup2/26-07-2024/experimentation6/data/metrics/experimentation-output-const_linear_{x}requests_per_sec.csv/"
+    save_path = f"../nantes/hyperthreading/64/constant/31-07-2024/experimentation1/data/metrics/experimentation-output-constant_{x}requests_per_sec.csv/"
     #save_path = f"../nantes/hyperthreading/16-07-2024/data/metrics/experimentation-output-linear_80requests_max_per_sec.csv/"
 
-    save_graphics_at = f"../nantes/hyperthreading/128/warmup2/26-07-2024/experimentation6/data/Plots"
+    save_graphics_at = f"../nantes/hyperthreading/64/constant/31-07-2024/experimentation1/data/Plots"
 
     parameters = read_parameters_from_json(file_path)
 
