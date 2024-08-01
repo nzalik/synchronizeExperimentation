@@ -2,7 +2,7 @@
 
 export PATH="$HOME/.local/bin:$PATH"
 
-target="172.16.192.18"
+target="172.16.192.9"
 
 nb_thread=128
 
@@ -51,7 +51,8 @@ fi
 #   "intensity_profile-three-21-06-2024-10min-100.0requests.csv",
 #)
 workload_date=$(date +"%Y-%m-%d")
-workload_dir="../Load/profiles_$workload_date"
+#workload_dir="../Load/profiles_$workload_date"
+workload_dir="../Load/profiles_2024-07-31"
 
 pwd
 

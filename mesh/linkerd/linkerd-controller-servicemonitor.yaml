@@ -1,0 +1,25 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: prometheus-oper-linkerd-controller
+  namespace: monitoring
+  labels:
+    release: kube-prometheus-stack
+spec:
+  jobLabel: linkerd-controller
+  selector:
+    matchLabels:
+      app: linkerd
+  namespaceSelector:
+    matchNames:
+      - linkerd
+  endpoints:
+    - port: admin-http
+      interval: 15s
+      relabelings:
+        - sourceLabels: [__meta_kubernetes_pod_container_port_name]
+          action: keep
+          regex: admin-http
+        - sourceLabels: [__meta_kubernetes_pod_container_name]
+          action: replace
+          target_label: component

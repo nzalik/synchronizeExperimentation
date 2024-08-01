@@ -1,0 +1,27 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: prometheus-oper-linkerd-service-mirror
+  namespace: monitoring
+  labels:
+    release: kube-prometheus-stack
+spec:
+  jobLabel: linkerd-service-mirror
+  selector:
+    matchLabels:
+      linkerd.io/control-plane-component: service-mirror
+  namespaceSelector:
+    matchNames:
+      - linkerd
+  endpoints:
+    - port: admin-http
+      interval: 15s
+      relabelings:
+        - sourceLabels:
+          - __meta_kubernetes_pod_label_linkerd_io_control_plane_component
+          - __meta_kubernetes_pod_container_port_name
+          action: keep
+          regex: linkerd-service-mirror;admin-http$
+        - sourceLabels: [__meta_kubernetes_pod_container_name]
+          action: replace
+          target_label: component
