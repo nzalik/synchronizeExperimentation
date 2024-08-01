@@ -51,7 +51,7 @@ fi
 #   "intensity_profile-three-21-06-2024-10min-100.0requests.csv",
 #)
 workload_date=$(date +"%Y-%m-%d")
-workload_dir="../Load/constant_profiles_$workload_date"
+workload_dir="../Load/constant_profiles_2024-07-31"
 
 pwd
 
