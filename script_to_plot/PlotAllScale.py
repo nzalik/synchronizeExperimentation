@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-elts = [10, 50, 100, 150, 200]
+elts = [250, 300, 350, 400]
 #x = 1
 cpu_limit_max=1.2
 load_max=250
@@ -22,20 +22,20 @@ for x in elts:
         return parameters
 
 
-    plot_path = "../nantes/hyperthreading/64/constant/31-07-2024/experimentation4/data/load/"
+    plot_path = "../nantes/hyperthreading/128/autoscale/31-07-2024/experimentation1/data/load/"
 
     #fileToPlot = f"linear_{x}requests_max_per_sec.csv"
-    fileToPlot = f"output-constant_{x}requests_per_sec.csv"
+    fileToPlot = f"output-linear_{x}requests_max_per_sec.csv"
     #fileToPlot = f"output-linear_80requests_max_per_sec.csv"
 
     cpu_step = "2m"
 
     file_path = '../teastore.json'
 
-    save_path = f"../nantes/hyperthreading/64/constant/31-07-2024/experimentation4/data/metrics/experimentation-output-constant_{x}requests_per_sec.csv/"
+    save_path = f"../nantes/hyperthreading/128/autoscale/31-07-2024/experimentation1/data/metrics/experimentation-output-linear_{x}requests_max_per_sec.csv/"
     #save_path = f"../nantes/hyperthreading/16-07-2024/data/metrics/experimentation-output-linear_80requests_max_per_sec.csv/"
 
-    save_graphics_at = f"../nantes/hyperthreading/64/constant/31-07-2024/experimentation4/data/Plots"
+    save_graphics_at = f"../nantes/hyperthreading/128/autoscale/31-07-2024/experimentation1/data/Plots"
 
     parameters = read_parameters_from_json(file_path)
 
@@ -294,7 +294,7 @@ for x in elts:
 
     print("nombre de ligne "+str(nombre_lignes))
 
-    lastEl = 900
+    lastEl = 600
     # if nombre_lignes > 0:
     #     test = nombre_lignes
     #if nombre_lignes > lastEl:
