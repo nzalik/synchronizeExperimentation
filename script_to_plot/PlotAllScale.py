@@ -7,10 +7,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-elts = [10, 50, 100, 150, 200]
+elts = [100, 130, 150, 180, 200, 250, 300, 350, 400, 450]
 #x = 1
 cpu_limit_max=1.2
-load_max=250
+load_max=475
 memory_limit=5
 pod_limit=6
 
@@ -22,20 +22,20 @@ for x in elts:
         return parameters
 
 
-    plot_path = "../nantes/hyperthreading/64/constant/31-07-2024/experimentation2/data/load/"
+    plot_path = "../nantes/hyperthreading/128/linear/128/3nodes/linear/23-07-2024/experimentation1/data/load/"
 
-    #fileToPlot = f"linear_{x}requests_max_per_sec.csv"
-    fileToPlot = f"output-linear_{x}requests_max_per_sec.csv"
+    #fileToPlot = f"linear_{x}requests_per_sec.csv"
+    fileToPlot = f"linear_{x}requests_max_per_sec.csv"
     #fileToPlot = f"output-linear_80requests_max_per_sec.csv"
 
     cpu_step = "2m"
 
     file_path = '../teastore.json'
 
-    save_path = f"../nantes/hyperthreading/64/constant/31-07-2024/experimentation2/data/metrics/experimentation-output-linear_{x}requests_max_per_sec.csv/"
+    save_path = f"../nantes/hyperthreading/128/linear/128/3nodes/linear/23-07-2024/experimentation1/data/metrics/experimentation-linear_{x}requests_max_per_sec.csv/"
     #save_path = f"../nantes/hyperthreading/16-07-2024/data/metrics/experimentation-output-linear_80requests_max_per_sec.csv/"
 
-    save_graphics_at = f"../nantes/hyperthreading/64/constant/31-07-2024/experimentation2/data/Plots"
+    save_graphics_at = f"../nantes/hyperthreading/128/linear/128/3nodes/linear/23-07-2024/experimentation1/data/Plots"
 
     parameters = read_parameters_from_json(file_path)
 

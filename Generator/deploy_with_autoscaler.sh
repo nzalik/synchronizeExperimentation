@@ -2,7 +2,7 @@
 
 export PATH="$HOME/.local/bin:$PATH"
 
-target="172.16.192.9"
+target="172.16.192.5"
 
 nb_thread=128
 
@@ -12,10 +12,10 @@ parent_dir=$(dirname $(pwd))
 # Obtenir la date actuelle
 date_str=$(date +"%d-%m-%Y")
 
-category="autoscale/3nodes/linear"
+category="autoscale/3nodes/linear/70percent"
 
 # Chemin complet du nouveau dossier
-new_folder_path="$parent_dir/nantes/hyperthreading/$category/31-07-2024"
+new_folder_path="$parent_dir/nantes/hyperthreading/$category/$date_str"
 
 # Créer le nouveau dossier s'il n'existe pas déjà
 if [ ! -d "$new_folder_path" ]; then
@@ -97,7 +97,7 @@ sleep 180
 echo "##################### Sleeping before autoscaler ##################################################"
 
 
-kubectl create -f "../autoscalers/autoscaler-nodb-noregistry-5-max-replicas.yaml"
+kubectl create -f "../autoscalers/autoscaler-nodb-noregistry-5-max-replicas-70percent.yaml"
 
 
 echo "##################### Sleeping before load ##################################################"
