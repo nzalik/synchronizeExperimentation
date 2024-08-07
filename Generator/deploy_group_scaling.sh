@@ -2,7 +2,7 @@
 
 export PATH="$HOME/.local/bin:$PATH"
 
-target="172.16.192.5"
+target="172.16.192.8"
 
 nb_thread=128
 
@@ -92,17 +92,17 @@ warm="warmup-$output_part.csv"
 #Lancer le générateur de charge HTTP
 java -jar httploadgenerator.jar director -s $target -a "$warmupFile" -l "./teastore_buy.lua" -o "$warm" -t $nb_thread
 
-sleep 180
+#sleep 180
 
-echo "##################### Sleeping before autoscaler ##################################################"
+#echo "##################### Sleeping before autoscaler ##################################################"
 
 
-kubectl create -f "../autoscalers/autoscaler-nodb-noregistry-5-max-replicas-70percent.yaml"
+#kubectl create -f "../autoscalers/autoscaler-nodb-noregistry-5-max-replicas-70percent.yaml"
 
 
 echo "##################### Sleeping before load ##################################################"
 
-sleep 120
+sleep 180
 
 #result="$output_part.csv"
 result="output-$output_part.csv"
@@ -110,7 +110,14 @@ result="output-$output_part.csv"
 #res="$output_part.csv"
 
 
-java -jar httploadgenerator.jar director -s $target -a "$file_name" -l "./teastore_buy.lua" -o $result -t $nb_thread
+java -jar httploadgenerator.jar director -s $target -a "$file_name" -l "./teastore_buy.lua" -o $result -t $nb_thread  &
+
+java_pid=$!
+
+# Lancer le script Python après 300 secondes
+(sleep 300; python3 horizontal.py) &
+
+wait $java_pid
 
 echo "#########################Load Injection finished######################################"
 
