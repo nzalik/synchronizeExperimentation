@@ -109,6 +109,7 @@ result="output-$output_part.csv"
 
 #res="$output_part.csv"
 
+pip3 install kubernetes
 
 java -jar httploadgenerator.jar director -s $target -a "$file_name" -l "./teastore_buy.lua" -o $result -t $nb_thread  &
 
