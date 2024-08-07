@@ -12,7 +12,7 @@ parent_dir=$(dirname $(pwd))
 # Obtenir la date actuelle
 date_str=$(date +"%d-%m-%Y")
 
-category="autoscale/3nodes/linear/70percent"
+category="group/3nodes/linear"
 
 # Chemin complet du nouveau dossier
 new_folder_path="$parent_dir/nantes/hyperthreading/$category/$date_str"
@@ -115,7 +115,7 @@ java -jar httploadgenerator.jar director -s $target -a "$file_name" -l "./teasto
 java_pid=$!
 
 # Lancer le script Python après 300 secondes
-(sleep 300; python3 horizontal.py) &
+(sleep 300; python3 ../pvc_debug/scaler-script.py) &
 
 wait $java_pid
 
@@ -134,7 +134,6 @@ sleep 60
 mv "$workload_dir/$result" $lOutput
 
 kubectl delete pods,deployments,services -l app=teastore
-kubectl delete hpa --all
 
 sleep 240
 
