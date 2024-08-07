@@ -12,7 +12,7 @@ parent_dir=$(dirname $(pwd))
 # Obtenir la date actuelle
 date_str=$(date +"%d-%m-%Y")
 
-category="group/3nodes/linear"
+category="128/group/3nodes/linear"
 
 # Chemin complet du nouveau dossier
 new_folder_path="$parent_dir/nantes/hyperthreading/$category/$date_str"
