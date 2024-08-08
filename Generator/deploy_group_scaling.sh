@@ -116,7 +116,7 @@ java -jar httploadgenerator.jar director -s $target -a "$file_name" -l "./teasto
 java_pid=$!
 
 # Lancer le script Python après 300 secondes
-(sleep 300; python3 ../pvc_debug/scaler-script.py) &
+(sleep 290; python3 ../pvc_debug/scaler-script.py) &
 
 wait $java_pid
 
