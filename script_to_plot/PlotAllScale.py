@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-elts = [150]
+elts = [150, 180, 200, 250, 300]
 #x = 1
 cpu_limit_max=1.2
 load_max=475
