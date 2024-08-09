@@ -2,7 +2,7 @@
 
 export PATH="$HOME/.local/bin:$PATH"
 
-target="172.16.192.8"
+target="172.16.192.9"
 
 nb_thread=128
 
@@ -116,7 +116,7 @@ java -jar httploadgenerator.jar director -s $target -a "$file_name" -l "./teasto
 java_pid=$!
 
 # Lancer le script Python après 300 secondes
-(sleep 290; python3 ../pvc_debug/scaler-script.py) &
+(sleep 250; python3 ../pvc_debug/scaler-script.py) &
 
 wait $java_pid
 

@@ -1,7 +1,7 @@
 {
-    "WEBUI_ADDR": "http://172.16.192.6:30080/",
-    "WEBUI_ADDR_LUA": "http://172.16.192.6:30080/tools.descartes.teastore.webui/",
-    "PROMETHEUS_URL": "http://172.16.192.6:31416",
+    "WEBUI_ADDR": "http://172.16.192.8:30080/",
+    "WEBUI_ADDR_LUA": "http://172.16.192.8:30080/tools.descartes.teastore.webui/",
+    "PROMETHEUS_URL": "http://172.16.192.8:30955",
     "DURATION": "10",
     "DURATION_UNIT": "minutes",
     "STEP"    : "1s",
