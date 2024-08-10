@@ -35,7 +35,7 @@ def update_replicas(namespace, deployments):
 if __name__ == "__main__":
     # Exemple d'utilisation
     deployments = {
-        "teastore-persistence": 4,
+        "teastore-persistence": 6,
         "teastore-webui": 2,
         "teastore-auth": 2,
 
