@@ -1,5 +1,7 @@
 #!/bin/bash
 
+git pull
+
 # Adresse SSH du serveur worker
 WORKER_SSH_HOST="user@worker-server.com"
 
