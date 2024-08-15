@@ -5,7 +5,7 @@ from time import sleep
 import subprocess
 
 #user = input(f"Grid'5000 username (default is {os.getlogin()}): ") or os.getlogin()
-user = "ykoagnenzali "
+user = "ykoagnenzali"
 password = "GPuVQr2G!Rw2YM9"
 #password = ""
 #password = input("Grid'5000 password (leave blank on frontends): ")

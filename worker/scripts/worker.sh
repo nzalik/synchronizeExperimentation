@@ -15,10 +15,12 @@ WORKER_COMMAND="java -jar -Xms16g -Xmx32g -Xss256k ./httploadgenerator.jar loadg
 
 screen -S $WORKER_SCREEN_NAME -X quit
 
+echo "La screen est lance"
   # Création d'une nouvelle screen et lancement du worker
 cd $WORKER_DIR
 screen -S $WORKER_SCREEN_NAME -d -m $WORKER_COMMAND
 
+echo "le code est lancé"
 # Connexion SSH au serveur worker
 # shellcheck disable=SC2087
 #ssh $WORKER_SSH_HOST << EOF
