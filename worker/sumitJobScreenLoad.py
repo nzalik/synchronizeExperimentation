@@ -40,9 +40,18 @@ servers = state["assigned_nodes"]
 print("the servers are")
 print(servers)
 
+# Define server with f-string (safe for variable substitution)
 server1 = f"{user}@{servers[0]}"
-# Execute the previous script on server1
-subprocess.run(["ssh", server1, "bash ~/Experimentations/synchronizeExperimentation/worker/scripts/worker.sh"], check=True)
+
+# Execute the script on server1 using SSH (more secure)
+result = subprocess.run(["ssh", server1, "~/Experimentations/synchronizeExperimentation/worker/scripts/worker.sh"],
+                         check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+# Capture the standard output of the script
+output = result.stdout.decode().strip()
+
+print(output)  # Affiche "Script parameter: my_value
+
 
 # Execute the deployment script on server2
 #subprocess.run(["ssh", servers[1], "bash ./deployment.sh"], check=True)
