@@ -42,7 +42,7 @@ print(servers)
 
 server1 = f"{user}@{servers[0]}"
 # Execute the previous script on server1
-subprocess.run(["ssh", server1, "bash ./scripts/worker.sh"], check=True)
+subprocess.run(["ssh", server1, "bash ~/Experimentations/synchronizeExperimentation/worker/scripts/worker.sh"], check=True)
 
 # Execute the deployment script on server2
 #subprocess.run(["ssh", servers[1], "bash ./deployment.sh"], check=True)
