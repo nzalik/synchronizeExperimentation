@@ -26,7 +26,7 @@ payload = {
 job = requests.post(api_job_url, data=payload, auth=g5k_auth).json()
 job_id = job["uid"]
 
-sleep(60)
+sleep(10)
 state = requests.get(api_job_url + f"/{job_id}", auth=g5k_auth).json()
 print("information ssur le job")
 print(json.dumps(state, indent=4))
@@ -36,21 +36,26 @@ print(json.dumps(state, indent=4))
 #     print("Job deleted.")
 
 servers = state["assigned_nodes"]
-script_path = "/home/ykoagnenzali/Experimentations/synchronizeExperimentation/worker/scripts/worker.sh"
-
+worker_script_path = "./scripts/worker.sh"
+deployment_script_path = "../Generator/deploy_group_scaling.sh"
 print("the servers are")
 print(servers)
 
 # Define server with f-string (safe for variable substitution)
 server1 = f"{user}@{servers[0]}"
+server2 = f"{user}@{servers[1]}"
 
 # Execute the script on server1 using SSH (more secure)
-result = subprocess.run(["ssh", server1, script_path],
-                         check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
+worker = subprocess.run([worker_script_path, server1], capture_output=True, text=True)
 
-# Affiche la sortie de la commande
-print(result.stdout.decode('utf-8'))
+print(worker.stdout)
+
+# Deployment here
+
+deployment = subprocess.run([deployment_script_path, server2, server1], capture_output=True, text=True)
+
+print(deployment.stdout)
 
 
 # Execute the deployment script on server2
