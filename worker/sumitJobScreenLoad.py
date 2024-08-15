@@ -36,7 +36,7 @@ print(json.dumps(state, indent=4))
 #     print("Job deleted.")
 
 servers = state["assigned_nodes"]
-script_path = "~/Experimentations/synchronizeExperimentation/worker/scripts/worker.sh"
+script_path = "/home/ykoagnenzali//Experimentations/synchronizeExperimentation/worker/scripts/worker.sh"
 
 print("the servers are")
 print(servers)
