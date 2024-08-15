@@ -44,7 +44,7 @@ print(servers)
 server1 = f"{user}@{servers[0]}"
 
 # Execute the script on server1 using SSH (more secure)
-result = subprocess.run(["ssh", server1, "~/Experimentations/synchronizeExperimentation/worker/scripts/worker.sh"],
+result = subprocess.run(["ssh", server1, "echo bonjour"],
                          check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
 # Capture the standard output of the script
