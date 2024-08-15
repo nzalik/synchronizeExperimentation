@@ -47,10 +47,9 @@ server1 = f"{user}@{servers[0]}"
 result = subprocess.run(["ssh", server1, "echo bonjour"],
                          check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
-# Capture the standard output of the script
-output = result.stdout.decode().strip()
 
-print(output)  # Affiche "Script parameter: my_value
+# Affiche la sortie de la commande
+print(result.stdout.decode('utf-8'))
 
 
 # Execute the deployment script on server2
