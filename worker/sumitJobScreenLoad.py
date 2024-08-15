@@ -17,7 +17,7 @@ cluster = "econome"
 api_job_url = f"https://api.grid5000.fr/stable/sites/{site_id}/jobs"
 
 payload = {
-    "resources": "nodes=2,walltime=5:00",
+    "resources": "nodes=1,walltime=1:00",
     "command": "sleep infinity",
     "stdout": "api-test-stdout2",
     "properties": f"cluster='{cluster}'",
@@ -36,6 +36,7 @@ print(json.dumps(state, indent=4))
 #     print("Job deleted.")
 
 servers = state["assigned_nodes"]
+script_path = "~/Experimentations/synchronizeExperimentation/worker/scripts/worker.sh"
 
 print("the servers are")
 print(servers)
@@ -44,7 +45,7 @@ print(servers)
 server1 = f"{user}@{servers[0]}"
 
 # Execute the script on server1 using SSH (more secure)
-result = subprocess.run(["ssh", server1, "echo bonjour"],
+result = subprocess.run(["ssh", server1, script_path],
                          check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
 
