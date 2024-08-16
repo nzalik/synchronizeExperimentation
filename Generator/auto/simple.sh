@@ -93,11 +93,11 @@ ssh "$NODE_SSH_HOST" << EOF
 
     echo "##################### Sleeping before load ##################################################"
 
-    sleep 180
+    #sleep 180
 
-    result="output-$output_part.csv"
+    #result="output-$output_part.csv"
 
-    java -jar ./Generator/httploadgenerator.jar director -s $target -a "$file_name" -l "./Generator/teastore_buy.lua" -o $result -t $nb_thread  &
+    #java -jar ./Generator/httploadgenerator.jar director -s $target -a "$file_name" -l "./Generator/teastore_buy.lua" -o $result -t $nb_thread  &
 
 
 done

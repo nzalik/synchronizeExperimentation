@@ -58,7 +58,7 @@ print(worker.stdout)
 
 # Deployment here
 
-deployment = subprocess.run([deployment_script_path, server2, server1], capture_output=True, text=True)
+deployment = subprocess.run([deployment_script_path, server2, servers[0]], capture_output=True, text=True)
 
 print("#########################")
 print(deployment.stdout)
