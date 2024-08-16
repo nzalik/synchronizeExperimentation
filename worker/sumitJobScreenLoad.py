@@ -17,7 +17,7 @@ cluster = "econome"
 api_job_url = f"https://api.grid5000.fr/stable/sites/{site_id}/jobs"
 
 payload = {
-    "resources": "nodes=1,walltime=1:00",
+    "resources": "nodes=2,walltime=1:00",
     "command": "sleep infinity",
     "stdout": "api-test-stdout2",
     "properties": f"cluster='{cluster}'",
@@ -28,8 +28,7 @@ job_id = job["uid"]
 
 sleep(10)
 state = requests.get(api_job_url + f"/{job_id}", auth=g5k_auth).json()
-print("information ssur le job")
-print(json.dumps(state, indent=4))
+
 # if state != "terminated":
 #     # Deleting the job, because it takes too much time.
 #     requests.delete(api_job_url+f"/{job_id}", auth=g5k_auth)
@@ -37,7 +36,8 @@ print(json.dumps(state, indent=4))
 
 servers = state["assigned_nodes"]
 worker_script_path = "./scripts/worker.sh"
-deployment_script_path = "../Generator/deploy_group_scaling.sh"
+#deployment_script_path = "../Generator/deploy_group_scaling.sh"
+deployment_script_path = "../Generator/auto/simple.sh"
 print("the servers are")
 print(servers)
 
