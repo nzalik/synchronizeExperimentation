@@ -97,30 +97,8 @@ ssh "$NODE_SSH_HOST" << EOF
 
     result="output-$output_part.csv"
 
-    pip3 install kubernetes
-
     java -jar ./Generator/httploadgenerator.jar director -s $target -a "$file_name" -l "./Generator/teastore_buy.lua" -o $result -t $nb_thread  &
 
-    java_pid=$!
-
-    # Lancer le script Python après 300 secondes
-    (sleep 250; python3 ./pvc_debug/scaler-script.py) &
-
-    wait $java_pid
-
-    echo "#########################Load Injection finished######################################"
-
-    sleep 60
-
-    python3 ./Fetcher/PostFetcher.py $result $workload_dir $exp_folder_path
-
-    sleep 60
-
-    mv "$workload_dir/$result" $lOutput
-
-    kubectl delete pods,deployments,services -l app=teastore
-
-    sleep 240
 
 done
 EOF
