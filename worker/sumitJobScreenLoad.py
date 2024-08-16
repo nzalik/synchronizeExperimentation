@@ -6,8 +6,8 @@ import subprocess
 
 #user = input(f"Grid'5000 username (default is {os.getlogin()}): ") or os.getlogin()
 user = "ykoagnenzali"
-password = "GPuVQr2G!Rw2YM9"
-#password = ""
+#password = "GPuVQr2G!Rw2YM9"
+password = ""
 
 admin = "root"
 #password = ""
