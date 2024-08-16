@@ -49,14 +49,14 @@ WORKER_DIR="~/Experimentations/synchronizeExperimentation"
 
 workload_date=$(date +"%Y-%m-%d")
 #workload_dir="../Load/profiles_$workload_date"
-workload_dir="../Load/profiles_2024-07-31"
-warmup_dir="../warmUp"
+workload_dir="./Load/profiles_2024-07-31"
+warmup_dir="./warmUp"
 
 workload_files=($(ls "$workload_dir"/*.csv))
 
 warmup="const_linear_80requests_per_sec.csv"
 
-warmupFile="../warmUp/${warmup}"
+warmupFile="./warmUp/${warmup}"
 
 # shellcheck disable=SC2087
 ssh "$NODE_SSH_HOST" << EOF
