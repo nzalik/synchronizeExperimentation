@@ -6,6 +6,8 @@ echo "$PATH"
 
 NODE_SSH_HOST=$1
 
+DEPLOY_SCREEN_NAME="deployment1"
+
 WORKER_DIR="/home/ykoagnenzali/Experimentations/synchronizeExperimentation/"
 
 echo "Script deployment with : $1"
@@ -14,16 +16,19 @@ echo "Script deployment with : $1"
 ssh "$NODE_SSH_HOST" << 'EOSSH'
 set -e  # Arrête le script en cas d'erreur
 
+screen -S $DEPLOY_SCREEN_NAME -X quit
+
 # Créer une nouvelle session screen détachée
 screen -dmS my_session bash -c '
     set -e  # Arrête le script en cas d'erreur
+
 
     echo "pas a jour kubeconfig"
     echo $KUBECONFIG
 
     curl -LO "https://dl.k8s.io/release/\$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
     chmod +x ./kubectl
-    sudo-g5k mv ./kubectl /usr/local/bin/kubectl
+    mv ./kubectl /usr/local/bin/kubectl
 
     # Vérification de la version kubectl
     kubectl version --client

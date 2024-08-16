@@ -8,6 +8,8 @@ import subprocess
 user = "ykoagnenzali"
 #password = "GPuVQr2G!Rw2YM9"
 password = ""
+
+admin = "root"
 #password = ""
 #password = input("Grid'5000 password (leave blank on frontends): ")
 g5k_auth = (user, password) if password else None
@@ -43,8 +45,8 @@ print("the servers are")
 print(servers)
 
 # Define server with f-string (safe for variable substitution)
-server1 = f"{user}@{servers[0]}"
-server2 = f"{user}@{servers[1]}"
+server1 = f"{admin}@{servers[0]}"
+server2 = f"{admin}@{servers[1]}"
 
 # Execute the script on server1 using SSH (more secure)
 
@@ -58,7 +60,5 @@ deployment = subprocess.run([deployment_script_path, server2, server1], capture_
 
 print(deployment.stdout)
 
-
 # Execute the deployment script on server2
 #subprocess.run(["ssh", servers[1], "bash ./deployment.sh"], check=True)
-
