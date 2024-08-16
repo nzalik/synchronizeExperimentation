@@ -11,9 +11,13 @@ WORKER_DIR="/home/ykoagnenzali/Experimentations/synchronizeExperimentation/"
 echo "Script deployment with : $1"
 
 # shellcheck disable=SC2087
-ssh "$NODE_SSH_HOST" << EOF
+ssh "$NODE_SSH_HOST" << 'EOSSH'
 set -e  # Arrête le script en cas d'erreur
 
+# Créer une nouvelle session screen (ou attacher à une existante)
+screen -S my_session
+
+# Exécuter les commandes à l'intérieur de la session screen
 export PATH="$HOME/.local/bin:$PATH"
 
 echo "le path sur le noeud"
@@ -32,4 +36,6 @@ kubectl get nodes > nodes.txt
 kubectl create -f custom_deployments/teastore-clusterip-1cpu-5giga.yaml > deploy.txt
 kubectl get pods > pods.txt
 
-EOF
+# Quitter la session screen
+exit
+EOSSH
