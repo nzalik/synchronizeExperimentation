@@ -6,24 +6,49 @@ echo "$PATH"
 
 NODE_SSH_HOST=$1
 
-#WORKER_DIR="/home/ykoagnenzali/Experimentations/synchronizeExperimentation/"
-# shellcheck disable=SC2088
-WORKER_DIR="~/Experimentations/synchronizeExperimentation/worker"
+WORKER_DIR="/home/ykoagnenzali/Experimentations/synchronizeExperimentation/"
 
 echo "Script deployment with : $1"
 
-DEPLOY_SCREEN_NAME="deployment"
-
-WORKER_COMMAND="kubectl get nodes"
-
-#WORKER_COMMAND="export PATH=\"\$HOME/.local/bin:\$PATH\"; export KUBECONFIG=/home/admin.conf; kubectl get nodes"
-
 # shellcheck disable=SC2087
-ssh "$NODE_SSH_HOST" << EOF
-  # Arrêt de la screen existante
-  screen -S $DEPLOY_SCREEN_NAME -X quit
+ssh "$NODE_SSH_HOST" << 'EOSSH'
+set -e  # Arrête le script en cas d'erreur
 
-  # Création d'une nouvelle screen et lancement du worker
-  cd $WORKER_DIR
-  screen -S $DEPLOY_SCREEN_NAME -d -m $WORKER_COMMAND
-EOF
+# Créer une nouvelle session screen détachée
+screen -dmS my_session bash -c '
+    set -e  # Arrête le script en cas d'erreur
+
+    echo "pas a jour kubeconfig"
+    echo $KUBECONFIG
+
+    curl -LO "https://dl.k8s.io/release/\$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+    chmod +x ./kubectl
+    sudo-g5k mv ./kubectl /usr/local/bin/kubectl
+
+    # Vérification de la version kubectl
+    kubectl version --client
+
+    # Ajouter le répertoire .local/bin au PATH
+    export PATH="$PATH:/usr/local/bin"
+
+    echo "le path sur le noeud"
+    echo $PATH
+
+    # Mise à jour Git
+    git pull
+
+    pwd
+
+    # Configuration KUBECONFIG
+    export KUBECONFIG=/home/ykoagnenzali/admin.conf
+
+    echo "le kubeconfig a jour"
+    echo $KUBECONFIG
+    # Exécution de commandes kubectl
+    kubectl get nodes > nodes.txt
+    kubectl create -f custom_deployments/teastore-clusterip-1cpu-5giga.yaml > deploy.txt
+    kubectl get pods > pods.txt
+'
+
+# Fin de la session SSH
+EOSSH
