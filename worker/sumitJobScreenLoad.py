@@ -29,7 +29,7 @@ payload = {
 job = requests.post(api_job_url, data=payload, auth=g5k_auth).json()
 job_id = job["uid"]
 
-sleep(10)
+sleep(20)
 state = requests.get(api_job_url + f"/{job_id}", auth=g5k_auth).json()
 
 # if state != "terminated":
