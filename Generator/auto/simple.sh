@@ -50,21 +50,21 @@ fi
 # shellcheck disable=SC2088
 WORKER_DIR="~/Experimentations/synchronizeExperimentation"
 
-workload_date=$(date +"%Y-%m-%d")
-#workload_dir="../Load/profiles_$workload_date"
-workload_dir="$WORKER_DIR/Load/profiles_2024-07-31"
-warmup_dir="$WORKER_DIR/warmUp"
-
-workload_files=($(ls "$workload_dir"/*.csv))
-
-warmup="const_linear_80requests_per_sec.csv"
-
-warmupFile="$warmup_dir/${warmup}"
-
 # shellcheck disable=SC2087
 ssh "$NODE_SSH_HOST" << EOF
 
   cd $WORKER_DIR
+
+
+  workload_date=$(date +"%Y-%m-%d")
+  workload_dir="./Load/profiles_2024-07-31"
+  warmup_dir="./warmUp"
+
+  workload_files=($(ls "$workload_dir"/*.csv))
+
+  warmup="const_linear_80requests_per_sec.csv"
+
+  warmupFile="./warmUp/${warmup}"
 
   pwd
   export PATH="$HOME/.local/bin:$PATH"
