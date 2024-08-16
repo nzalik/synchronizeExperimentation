@@ -13,4 +13,6 @@ ssh "$NODE_SSH_HOST" << EOF
   export PATH="$HOME/.local/bin:$PATH"
   export KUBECONFIG=/home/ykoagnenzali/admin.conf
   kubectl
+  echo "on vient de finir"
+  echo "###############"
 EOF
