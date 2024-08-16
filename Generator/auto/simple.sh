@@ -13,6 +13,8 @@ ssh "$NODE_SSH_HOST" << EOF
   export PATH="$HOME/.local/bin:$PATH"
   export KUBECONFIG=/home/ykoagnenzali/admin.conf
 
+  ls -l
+
   kubectl get nodes
   kubectl create -f ./custom_deployments/teastore-clusterip-1cpu-5giga.yaml
 
