@@ -14,7 +14,7 @@ echo "Script deployment with : $1"
 
 DEPLOY_SCREEN_NAME="deployment"
 
-WORKER_COMMAND="java -jar -Xms16g -Xmx32g -Xss256k ./httploadgenerator.jar loadgenerator"
+WORKER_COMMAND="kubectl get nodes"
 
 #WORKER_COMMAND="export PATH=\"\$HOME/.local/bin:\$PATH\"; export KUBECONFIG=/home/admin.conf; kubectl get nodes"
 
