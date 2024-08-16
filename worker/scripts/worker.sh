@@ -4,6 +4,7 @@
 
 echo "Script parameter: $1"
 
+echo "worker $1"
 # Adresse SSH du serveur worker
 WORKER_SSH_HOST=$1
 

@@ -1,5 +1,8 @@
 #!/bin/bash
 
+echo "target $2"
+echo "deployment $1"
+
 NODE_SSH_HOST=$1
 
 target=$2
