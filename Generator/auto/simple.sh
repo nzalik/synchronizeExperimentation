@@ -60,7 +60,8 @@ ssh "$NODE_SSH_HOST" << EOF
   workload_dir="./Load/profiles_2024-07-31"
   warmup_dir="./warmUp"
 
-  workload_files=($(ls "$workload_dir"/*.csv))
+  workload_files=($(ls "$workload_dir"))
+  #workload_files=($(ls "$workload_dir"/*.csv))
 
   warmup="const_linear_80requests_per_sec.csv"
 
