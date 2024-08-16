@@ -88,7 +88,8 @@ ssh "$NODE_SSH_HOST" << EOF
     warm="warmup-$output_part.csv"
 
     #Lancer le générateur de charge HTTP
-    java -jar ./Generator/httploadgenerator.jar director -s $target -a "$warmupFile" -l "./Generator/teastore_buy.lua" -o "$warm" -t $nb_thread
+    #java -jar ./Generator/httploadgenerator.jar director -s $target -a "$warmupFile" -l "./Generator/teastore_buy.lua" -o "$warm" -t $nb_thread
+    java -jar ./Generator/httploadgenerator.jar director -s econome-17.nantes.grid5000.fr -a "./warmUp/const_linear_80requests_per_sec.csv" -l "./Generator/teastore_buy.lua" -o "$warm" -t 128
 
     echo "##################### Sleeping before load ##################################################"
 
