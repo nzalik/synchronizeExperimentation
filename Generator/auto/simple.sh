@@ -10,25 +10,7 @@ echo "Script deployment with : $1"
 # shellcheck disable=SC2087
 ssh "$NODE_SSH_HOST" << EOF
 
-  pwd
-  echo "le path dedepart"
-  echo "$PATH"
-
-  kubectl
-
   export PATH="$HOME/.local/bin:$PATH"
-
- echo $KUBECONFIG
-
- export KUBECONFIG=/home/ykoagnenzali/admin.conf
-
-  echo "après"
-
-  echo "$PATH"
-
-  echo "config"
-
-  echo $KUBECONFIG
-
+  export KUBECONFIG=/home/ykoagnenzali/admin.conf
   kubectl
 EOF
