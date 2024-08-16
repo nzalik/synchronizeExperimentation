@@ -24,7 +24,7 @@ payload = {
     "command": "sleep infinity",
     "stdout": "api-test-stdout2",
     "properties": f"cluster='{cluster}'",
-    "name": "load_constant"
+    "name": "load_constant1"
 }
 job = requests.post(api_job_url, data=payload, auth=g5k_auth).json()
 job_id = job["uid"]
@@ -53,12 +53,16 @@ server2 = f"{user}@{servers[1]}"
 worker = subprocess.run([worker_script_path, server1], capture_output=True, text=True)
 
 print(worker.stdout)
+print("en cas deerrer")
+print(worker.stderr)
 
 # Deployment here
 
 deployment = subprocess.run([deployment_script_path, server2, server1], capture_output=True, text=True)
 
+print("#########################")
 print(deployment.stdout)
-
+print("en cas dereru")
+print(deployment.stderr)
 # Execute the deployment script on server2
 #subprocess.run(["ssh", servers[1], "bash ./deployment.sh"], check=True)
