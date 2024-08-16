@@ -6,8 +6,8 @@ import subprocess
 
 #user = input(f"Grid'5000 username (default is {os.getlogin()}): ") or os.getlogin()
 user = "ykoagnenzali"
-#password = "GPuVQr2G!Rw2YM9"
-password = ""
+password = "GPuVQr2G!Rw2YM9"
+#password = ""
 
 admin = "root"
 #password = ""
@@ -45,8 +45,8 @@ print("the servers are")
 print(servers)
 
 # Define server with f-string (safe for variable substitution)
-server1 = f"{admin}@{servers[0]}"
-server2 = f"{admin}@{servers[1]}"
+server1 = f"{user}@{servers[0]}"
+server2 = f"{user}@{servers[1]}"
 
 # Execute the script on server1 using SSH (more secure)
 
