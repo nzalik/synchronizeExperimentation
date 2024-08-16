@@ -52,14 +52,14 @@ WORKER_DIR="~/Experimentations/synchronizeExperimentation"
 
 workload_date=$(date +"%Y-%m-%d")
 #workload_dir="../Load/profiles_$workload_date"
-workload_dir="./Load/profiles_2024-07-31"
-warmup_dir="./warmUp"
+workload_dir="$WORKER_DIR/Load/profiles_2024-07-31"
+warmup_dir="$WORKER_DIR/warmUp"
 
 workload_files=($(ls "$workload_dir"/*.csv))
 
 warmup="const_linear_80requests_per_sec.csv"
 
-warmupFile="./warmUp/${warmup}"
+warmupFile="$warmup_dir/${warmup}"
 
 # shellcheck disable=SC2087
 ssh "$NODE_SSH_HOST" << EOF
@@ -88,10 +88,10 @@ ssh "$NODE_SSH_HOST" << EOF
     warm="warmup-$output_part.csv"
 
     #Lancer le générateur de charge HTTP
-    #java -jar ./Generator/httploadgenerator.jar director -s $target -a "$warmupFile" -l "./Generator/teastore_buy.lua" -o "$warm" -t $nb_thread
-    java -jar ./Generator/httploadgenerator.jar director -s $target -a "./warmUp/const_linear_80requests_per_sec.csv" -l "./Generator/teastore_buy.lua" -o "$warm" -t 128
+    java -jar ./Generator/httploadgenerator.jar director -s $target -a "$warmupFile" -l "./Generator/teastore_buy.lua" -o "$warm" -t $nb_thread
+    #java -jar ./Generator/httploadgenerator.jar director -s $target -a "./warmUp/const_linear_80requests_per_sec.csv" -l "./Generator/teastore_buy.lua" -o "$warm" -t 128
 
-    echo "##################### Sleeping before load ##################################################"
+    #echo "##################### Sleeping before load ##################################################"
 
     #sleep 180
 
