@@ -14,28 +14,29 @@ echo "Script deployment with : $1"
 ssh "$NODE_SSH_HOST" << 'EOSSH'
 set -e  # Arrête le script en cas d'erreur
 
-# Créer une nouvelle session screen (ou attacher à une existante)
-screen -S my_session
+# Créer une nouvelle session screen détachée
+screen -dmS my_session bash -c '
+    set -e  # Arrête le script en cas d'erreur
 
-# Exécuter les commandes à l'intérieur de la session screen
-export PATH="$HOME/.local/bin:$PATH"
+    # Ajouter le répertoire .local/bin au PATH
+    export PATH="$HOME/.local/bin:$PATH"
 
-echo "le path sur le noeud"
-echo $PATH
+    echo "le path sur le noeud"
+    echo $PATH
 
-# Mise à jour Git
-git pull
+    # Mise à jour Git
+    git pull
 
-pwd
+    pwd
 
-# Configuration KUBECONFIG
-export KUBECONFIG=/home/ykoagnenzali/admin.conf
+    # Configuration KUBECONFIG
+    export KUBECONFIG=/home/ykoagnenzali/admin.conf
 
-# Exécution de commandes kubectl
-kubectl get nodes > nodes.txt
-kubectl create -f custom_deployments/teastore-clusterip-1cpu-5giga.yaml > deploy.txt
-kubectl get pods > pods.txt
+    # Exécution de commandes kubectl
+    kubectl get nodes > nodes.txt
+    kubectl create -f custom_deployments/teastore-clusterip-1cpu-5giga.yaml > deploy.txt
+    kubectl get pods > pods.txt
+'
 
-# Quitter la session screen
-exit
+# Fin de la session SSH
 EOSSH
