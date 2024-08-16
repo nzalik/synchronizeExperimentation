@@ -26,5 +26,9 @@ ssh "$NODE_SSH_HOST" << EOF
 
   echo "$PATH"
 
+  echo "config"
+
+  echo $KUBECONFIG
+
   kubectl
 EOF

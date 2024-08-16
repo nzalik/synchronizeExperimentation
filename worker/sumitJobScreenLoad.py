@@ -53,8 +53,8 @@ server2 = f"{user}@{servers[1]}"
 worker = subprocess.run([worker_script_path, server1], capture_output=True, text=True)
 
 print(worker.stdout)
-print("en cas deerrer")
-print(worker.stderr)
+#print("en cas deerrer")
+#print(worker.stderr)
 
 # Deployment here
 
@@ -62,7 +62,7 @@ deployment = subprocess.run([deployment_script_path, server2, server1], capture_
 
 print("#########################")
 print(deployment.stdout)
-print("en cas dereru")
-print(deployment.stderr)
+#print("en cas dereru")
+#print(deployment.stderr)
 # Execute the deployment script on server2
 #subprocess.run(["ssh", servers[1], "bash ./deployment.sh"], check=True)
