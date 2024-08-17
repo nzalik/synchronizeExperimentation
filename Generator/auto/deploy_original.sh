@@ -63,7 +63,7 @@ warmup="const_linear_80requests_per_sec.csv"
 warmupFile="../warmUp/${warmup}"
 
 # shellcheck disable=SC2087
-ssh "$NODE_SSH_HOST" << EOF
+ssh -tt "$NODE_SSH_HOST" << EOF
 
   cd $WORKER_DIR
 
