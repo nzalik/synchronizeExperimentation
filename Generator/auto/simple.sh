@@ -55,7 +55,7 @@ ssh "$NODE_SSH_HOST" << EOF
 
   cd $WORKER_DIR
 
-  ls ./
+  ls ./Load/profiles_2024-07-31
 
   workload_date=$(date +"%Y-%m-%d")
   workload_dir="./Load/profiles_2024-07-31"
@@ -77,17 +77,17 @@ ssh "$NODE_SSH_HOST" << EOF
 
  #for file_name in "${workload_files[@]}"; do
 
-    input_string=$file_name
-    output_part=$(basename "$input_string" .csv)
-    output_part="${output_part#profiles_}"
+   # input_string=$file_name
+   # output_part=$(basename "$input_string" .csv)
+    #output_part="${output_part#profiles_}"
 
-    echo "##################### Initialisation ##################################################"
+    #echo "##################### Initialisation ##################################################"
 
     # Créer le déploiement Kubernetes
-    #kubectl create -f ./custom_deployments/teastore-clusterip-1cpu-5giga.yaml
+    kubectl create -f ./custom_deployments/teastore-clusterip-1cpu-5giga.yaml
 
-    sleep 240
-
+   # sleep 240
+    sleep 60
     echo "##################### Sleeping before warmup ##################################################"
 
     warm="warmup-$output_part.csv"
