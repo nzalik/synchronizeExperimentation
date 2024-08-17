@@ -41,8 +41,7 @@ servers = state["assigned_nodes"]
 worker_script_path = "../worker/scripts/worker.sh"
 #deployment_script_path = "../Generator/deploy_group_scaling.sh"
 deployment_script_path = "./deploy_group_scaling.sh"
-print("the servers are")
-print(servers)
+
 
 # Define server with f-string (safe for variable substitution)
 #server1 = f"{user}@{servers[0]}"
