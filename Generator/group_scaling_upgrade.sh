@@ -1,9 +1,14 @@
 #!/bin/bash
 
-
 export PATH="$HOME/.local/bin:$PATH"
 
-target=$1
+#Node reservation and worker start
+target=$(python3 ./worker_startup.py)
+
+echo "************** The worker is okay ***************"
+echo "lancé sur le $target"
+
+#Initialise the target
 
 nb_thread=128
 
@@ -71,6 +76,8 @@ export KUBECONFIG=/home/ykoagnenzali/admin.conf
 
 #for file_name in workload_files:
 for file_name in "${workload_files[@]}"; do
+
+/bin/bash ../worker/scripts/worker.sh $target
 
 echo $file_name
 

@@ -27,6 +27,7 @@ ssh "$WORKER_SSH_HOST" << EOF
 
   # Création d'une nouvelle screen et lancement du worker
   cd $WORKER_DIR
+  screen -wipe
   screen -S $WORKER_SCREEN_NAME -d -m $WORKER_COMMAND
 EOF
 

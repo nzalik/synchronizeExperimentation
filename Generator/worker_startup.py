@@ -45,24 +45,11 @@ print("the servers are")
 print(servers)
 
 # Define server with f-string (safe for variable substitution)
-server1 = f"{user}@{servers[0]}"
+#server1 = f"{user}@{servers[0]}"
 #server2 = f"{user}@{servers[1]}"
 
 # Execute the script on server1 using SSH (more secure)
 
-worker = subprocess.run([worker_script_path, server1], capture_output=True, text=True)
+#worker = subprocess.run([worker_script_path, server1], capture_output=True, text=True)
 
-print(worker.stdout)
-#print("en cas deerrer")
-#print(worker.stderr)
-
-# Deployment here
-
-deployment = subprocess.run([deployment_script_path, servers[0]], capture_output=True, text=True)
-
-print("#########################")
-print(deployment.stdout)
-print("en cas dereru")
-print(deployment.stderr)
-# Execute the deployment script on server2
-#subprocess.run(["ssh", servers[1], "bash ./deployment.sh"], check=True)
+print(servers[0])
