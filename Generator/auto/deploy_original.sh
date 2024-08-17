@@ -47,12 +47,16 @@ if [ ! -d "$lOutput" ]; then
     mkdir -p "$lOutput"
 fi
 
+
+# shellcheck disable=SC2087
+ssh -tt "$NODE_SSH_HOST" << 'EOSSH'
+
 # shellcheck disable=SC2088
 WORKER_DIR="~/Experimentations/synchronizeExperimentation"
 
 workload_date=$(date +"%Y-%m-%d")
 #workload_dir="../Load/profiles_$workload_date"
-workload_dir="../Load/profiles_2024-07-31"
+workload_dir="./Load/profiles_2024-07-31"
 
 warmup_dir="./warmUp"
 
@@ -60,10 +64,7 @@ workload_files=($(ls "$workload_dir"/*.csv))
 
 warmup="const_linear_80requests_per_sec.csv"
 
-warmupFile="../warmUp/${warmup}"
-
-# shellcheck disable=SC2087
-ssh -tt "$NODE_SSH_HOST" << EOF
+warmupFile="./warmUp/${warmup}"
 
   cd $WORKER_DIR
 
@@ -77,4 +78,4 @@ ssh -tt "$NODE_SSH_HOST" << EOF
   echo $file_name
   done
 
-EOF
+EOSSH
