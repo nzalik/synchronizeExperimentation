@@ -5,6 +5,8 @@ export PATH="$HOME/.local/bin:$PATH"
 #Node reservation and worker start
 target=$(python3 ./worker_startup.py)
 
+sleep 60
+
 echo "************** The worker is okay ***************"
 echo "lancé sur le $target"
 
