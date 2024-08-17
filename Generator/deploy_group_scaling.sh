@@ -1,17 +1,8 @@
 #!/bin/bash
 
-NODE_SSH_HOST=$1
-
-echo "Script deployment with : $1"
-
-# shellcheck disable=SC2087
-ssh "$NODE_SSH_HOST" << EOF
-
 export PATH="$HOME/.local/bin:$PATH"
 
-target=$2
-
-git pull
+target=$1
 
 nb_thread=128
 
@@ -148,4 +139,3 @@ kubectl delete pods,deployments,services -l app=teastore
 sleep 240
 
 done
-EOF

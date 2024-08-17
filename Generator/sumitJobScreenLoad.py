@@ -20,7 +20,7 @@ cluster = "econome"
 api_job_url = f"https://api.grid5000.fr/stable/sites/{site_id}/jobs"
 
 payload = {
-    "resources": "nodes=2,walltime=0:10",
+    "resources": "nodes=1,walltime=0:10",
     "command": "sleep infinity",
     "stdout": "api-test-stdout2",
     "properties": f"cluster='{cluster}'",
@@ -40,13 +40,13 @@ state = requests.get(api_job_url + f"/{job_id}", auth=g5k_auth).json()
 servers = state["assigned_nodes"]
 worker_script_path = "../worker/scripts/worker.sh"
 #deployment_script_path = "../Generator/deploy_group_scaling.sh"
-deployment_script_path = "./auto/deploy_original.sh"
+deployment_script_path = "./deploy_group_scaling.sh"
 print("the servers are")
 print(servers)
 
 # Define server with f-string (safe for variable substitution)
 server1 = f"{user}@{servers[0]}"
-server2 = f"{user}@{servers[1]}"
+#server2 = f"{user}@{servers[1]}"
 
 # Execute the script on server1 using SSH (more secure)
 
@@ -58,7 +58,7 @@ print(worker.stdout)
 
 # Deployment here
 
-deployment = subprocess.run([deployment_script_path, server2, servers[0]], capture_output=True, text=True)
+deployment = subprocess.run([deployment_script_path, servers[0]], capture_output=True, text=True)
 
 print("#########################")
 print(deployment.stdout)
