@@ -81,6 +81,8 @@ for file_name in "${workload_files[@]}"; do
 
 python3 ./worker_restart.py "$target"
 
+sleep 60
+
 echo $file_name
 
 input_string=$file_name
@@ -105,9 +107,6 @@ java -jar httploadgenerator.jar director -s $target -a "$warmupFile" -l "./teast
 #sleep 180
 
 #echo "##################### Sleeping before autoscaler ##################################################"
-
-
-#kubectl create -f "../autoscalers/autoscaler-nodb-noregistry-5-max-replicas-70percent.yaml"
 
 
 echo "##################### Sleeping before load ##################################################"
