@@ -55,13 +55,13 @@ ssh "$NODE_SSH_HOST" << EOF
 
   cd $WORKER_DIR
 
-  ls
+  ls ./
 
   workload_date=$(date +"%Y-%m-%d")
   workload_dir="./Load/profiles_2024-07-31"
   warmup_dir="./warmUp"
 
-  workload_files=($(ls "$workload_dir"))
+  #workload_files=($(ls "$workload_dir"))
   #workload_files=($(ls "$workload_dir"/*.csv))
 
   warmup="const_linear_80requests_per_sec.csv"
@@ -72,8 +72,8 @@ ssh "$NODE_SSH_HOST" << EOF
   export PATH="$HOME/.local/bin:$PATH"
   export KUBECONFIG=/home/ykoagnenzali/admin.conf
 
-  echo "voici les fichers"
-  echo $workload_files
+  #echo "voici les fichers"
+  #echo $workload_files
 
  #for file_name in "${workload_files[@]}"; do
 
@@ -84,7 +84,7 @@ ssh "$NODE_SSH_HOST" << EOF
     echo "##################### Initialisation ##################################################"
 
     # Créer le déploiement Kubernetes
-    kubectl create -f ./custom_deployments/teastore-clusterip-1cpu-5giga.yaml
+    #kubectl create -f ./custom_deployments/teastore-clusterip-1cpu-5giga.yaml
 
     sleep 240
 
