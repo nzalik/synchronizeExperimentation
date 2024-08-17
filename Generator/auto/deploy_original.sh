@@ -74,8 +74,6 @@ warmupFile="./warmUp/${warmup}"
   export PATH="$HOME/.local/bin:$PATH"
   export KUBECONFIG=/home/ykoagnenzali/admin.conf
 
-  for file_name in "${workload_files[@]}"; do
-  echo $file_name
-  done
+echo "Number of files: ${#workload_files[@]}"
 
 EOSSH
