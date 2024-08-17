@@ -55,6 +55,7 @@ ssh "$NODE_SSH_HOST" << EOF
 
   cd $WORKER_DIR
 
+  ls
 
   workload_date=$(date +"%Y-%m-%d")
   workload_dir="./Load/profiles_2024-07-31"
@@ -71,7 +72,10 @@ ssh "$NODE_SSH_HOST" << EOF
   export PATH="$HOME/.local/bin:$PATH"
   export KUBECONFIG=/home/ykoagnenzali/admin.conf
 
- for file_name in "${workload_files[@]}"; do
+  echo "voici les fichers"
+  echo $workload_files
+
+ #for file_name in "${workload_files[@]}"; do
 
     input_string=$file_name
     output_part=$(basename "$input_string" .csv)
@@ -101,5 +105,5 @@ ssh "$NODE_SSH_HOST" << EOF
     #java -jar ./Generator/httploadgenerator.jar director -s $target -a "$file_name" -l "./Generator/teastore_buy.lua" -o $result -t $nb_thread  &
 
 
-done
+#done
 EOF
