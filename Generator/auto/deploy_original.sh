@@ -72,6 +72,9 @@ ssh "$NODE_SSH_HOST" << EOF
 
   export PATH="$HOME/.local/bin:$PATH"
   export KUBECONFIG=/home/ykoagnenzali/admin.conf
-  echo $workload_files
+
+  for file_name in "${workload_files[@]}"; do
+  echo $file_name
+  done
 
 EOF
