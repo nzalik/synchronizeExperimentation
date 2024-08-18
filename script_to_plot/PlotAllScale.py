@@ -12,7 +12,7 @@ elts = [200, 250, 300, 350, 400, 450]
 cpu_limit_max=1.2
 load_max=475
 memory_limit=5
-pod_limit=6
+pod_limit=7
 
 #while x <= 1:
 for x in elts:
@@ -22,7 +22,7 @@ for x in elts:
         return parameters
 
 
-    plot_path = "../nantes/hyperthreading/128/group/3nodes/linear/13-08-2024/experimentation4/data/load/"
+    plot_path = "../nantes/hyperthreading/128/group/3nodes/linear/13-08-2024/experimentation5/data/load/"
 
     #fileToPlot = f"linear_{x}requests_per_sec.csv"
     fileToPlot = f"output-linear_{x}requests_max_per_sec.csv"
@@ -32,10 +32,10 @@ for x in elts:
 
     file_path = '../teastore.json'
 
-    save_path = f"../nantes/hyperthreading/128/group/3nodes/linear/13-08-2024/experimentation4/data/metrics/experimentation-output-linear_{x}requests_max_per_sec.csv/"
+    save_path = f"../nantes/hyperthreading/128/group/3nodes/linear/13-08-2024/experimentation5/data/metrics/experimentation-output-linear_{x}requests_max_per_sec.csv/"
     #save_path = f"../nantes/hyperthreading/16-07-2024/data/metrics/experimentation-output-linear_80requests_max_per_sec.csv/"
 
-    save_graphics_at = f"../nantes/hyperthreading/128/group/3nodes/linear/13-08-2024/experimentation4/data/Plots"
+    save_graphics_at = f"../nantes/hyperthreading/128/group/3nodes/linear/13-08-2024/experimentation5/data/Plots"
 
     parameters = read_parameters_from_json(file_path)
 
