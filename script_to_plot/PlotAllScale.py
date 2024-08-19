@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-elts = [200, 250, 300, 350, 400, 450]
+elts = [200, 300, 350, 400, 450]
 #x = 1
 cpu_limit_max=1.2
 load_max=475
@@ -22,7 +22,7 @@ for x in elts:
         return parameters
 
 
-    plot_path = "../nantes/hyperthreading/128/group/3nodes/linear/13-08-2024/experimentation5/data/load/"
+    plot_path = "../nantes/hyperthreading/128/group/3nodes/linear/13-08-2024/experimentation6/data/load/"
 
     #fileToPlot = f"linear_{x}requests_per_sec.csv"
     fileToPlot = f"output-linear_{x}requests_max_per_sec.csv"
@@ -32,10 +32,10 @@ for x in elts:
 
     file_path = '../teastore.json'
 
-    save_path = f"../nantes/hyperthreading/128/group/3nodes/linear/13-08-2024/experimentation5/data/metrics/experimentation-output-linear_{x}requests_max_per_sec.csv/"
+    save_path = f"../nantes/hyperthreading/128/group/3nodes/linear/13-08-2024/experimentation6/data/metrics/experimentation-output-linear_{x}requests_max_per_sec.csv/"
     #save_path = f"../nantes/hyperthreading/16-07-2024/data/metrics/experimentation-output-linear_80requests_max_per_sec.csv/"
 
-    save_graphics_at = f"../nantes/hyperthreading/128/group/3nodes/linear/13-08-2024/experimentation5/data/Plots"
+    save_graphics_at = f"../nantes/hyperthreading/128/group/3nodes/linear/13-08-2024/experimentation6/data/Plots"
 
     parameters = read_parameters_from_json(file_path)
 
@@ -408,7 +408,7 @@ for x in elts:
     plt.title('Evolution of pods')
 
     plt.xticks(rotation=45)
-    plt.legend()
+    #plt.legend()
 
     plt.tight_layout()
 
@@ -417,7 +417,7 @@ for x in elts:
     my_string = f"{save_graphics_at}/output{str(data_count + 1)}-{fileToPlot}.png"
 
     #plt.legend(legend_dict.values(), legend_dict.keys(), loc='upper center', ncol=3)
-    plt.legend(legend_objects, legend_labels, loc='upper center', ncol=3)
+    #plt.legend(legend_objects, legend_labels, loc='upper center', ncol=3)
 
     plt.savefig(my_string)
     plt.show()
