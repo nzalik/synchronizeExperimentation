@@ -14,18 +14,17 @@ admin = "root"
 #password = input("Grid'5000 password (leave blank on frontends): ")
 g5k_auth = (user, password) if password else None
 
-site_id = "nantes"
-cluster = "econome"
+site_id = "grenoble"
+cluster = "dahu"
 
 api_job_url = f"https://api.grid5000.fr/stable/sites/{site_id}/jobs"
 
-payload = {
-    "resources": "nodes=1,walltime=1:30",
-    "command": "sleep infinity",
-    "stdout": "api-test-stdout2",
-    "properties": f"cluster='{cluster}'",
-    "name": "load_constant1"
-}
+payload = {"resources": "nodes=1,walltime=1:00",
+           "command": "sleep infinity",
+           "stdout": "api-test-stdout2",
+           "properties": f"cluster='{cluster}'",
+           "name": "load_constant1"
+           }
 job = requests.post(api_job_url, data=payload, auth=g5k_auth).json()
 job_id = job["uid"]
 
@@ -41,7 +40,6 @@ servers = state["assigned_nodes"]
 worker_script_path = "../worker/scripts/worker.sh"
 #deployment_script_path = "../Generator/deploy_group_scaling.sh"
 deployment_script_path = "./deploy_group_scaling.sh"
-
 
 # Define server with f-string (safe for variable substitution)
 #server1 = f"{user}@{servers[0]}"
