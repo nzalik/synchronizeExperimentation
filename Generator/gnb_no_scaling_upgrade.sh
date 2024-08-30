@@ -23,7 +23,7 @@ date_str=$(date +"%d-%m-%Y")
 category="128/group/3nodes/linear"
 
 # Chemin complet du nouveau dossier
-new_folder_path="$parent_dir/grenoble/hyperthreading/$category/$date_str"
+new_folder_path="$parent_dir/nantes/hyperthreading/$category/$date_str"
 
 # Créer le nouveau dossier s'il n'existe pas déjà
 if [ ! -d "$new_folder_path" ]; then
@@ -68,7 +68,7 @@ pwd
 workload_files=($(ls "$workload_dir"/*.csv))
 
 
-warmup="const_linear_40requests_per_sec.csv"
+warmup="const_linear_80requests_per_sec.csv"
 
 warmupFile="../warmUp/${warmup}"
 

@@ -1,6 +1,6 @@
 {
-    "WEBUI_ADDR": "http://172.16.52.8:30080/",
-    "PROMETHEUS_URL": "http://172.16.52.8:31294",
+    "WEBUI_ADDR": "http://172.16.192.20:30080/",
+    "PROMETHEUS_URL": "http://172.16.192.20:30442",
     "DURATION": "10",
     "DURATION_UNIT": "minutes",
     "STEP"    : "1s",

@@ -14,8 +14,8 @@ admin = "root"
 #password = input("Grid'5000 password (leave blank on frontends): ")
 g5k_auth = (user, password) if password else None
 
-site_id = "lyon"
-cluster = "nova"
+site_id = "nantes"
+cluster = "econome"
 
 api_job_url = f"https://api.grid5000.fr/stable/sites/{site_id}/jobs"
 
