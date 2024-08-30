@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-elts = [180, 200, 250, 300, 350, 400, 450]
+elts = [20, 40, 60, 80]
 #x = 1
 cpu_limit_max=1.2
 load_max=475
@@ -22,20 +22,28 @@ for x in elts:
         return parameters
 
 
-    plot_path = "../nantes/hyperthreading/128/group/3nodes/linear/13-08-2024/experimentation8/data/load/"
+    # plot_path = "../nantes/hyperthreading/128/group/3nodes/linear/13-08-2024/experimentation8/data/load/"
+    #
+    # save_path = f"../nantes/hyperthreading/128/group/3nodes/linear/13-08-2024/experimentation8/data/metrics/experimentation-output-linear_{x}requests_max_per_sec.csv/"
+    # #save_path = f"../nantes/hyperthreading/16-07-2024/data/metrics/experimentation-output-linear_80requests_max_per_sec.csv/"
+    #
+    # save_graphics_at = f"../nantes/hyperthreading/128/group/3nodes/linear/13-08-2024/experimentation8/data/Plots"
+    #
 
-    #fileToPlot = f"linear_{x}requests_per_sec.csv"
-    fileToPlot = f"output-linear_{x}requests_max_per_sec.csv"
-    #fileToPlot = f"output-linear_80requests_max_per_sec.csv"
+    plot_path = f"../nantes/hyperthreading/128/loadWarmup/30-07-2024/experimentation1/const_linear_{x}requests_per_sec/"
+
+    save_path = f"../nantes/hyperthreading/128/loadWarmup/30-07-2024/experimentation1/const_linear_{x}requests_per_sec/data/metrics/experimentation-output-linear_200requests_max_per_sec.csv/"
+
+    save_graphics_at = f"../nantes/hyperthreading/128/loadWarmup/30-07-2024/experimentation1/const_linear_{x}requests_per_sec/Plots"
+
+    #fileToPlot = f"output-linear_{x}requests_max_per_sec.csv"
+    fileToPlot = f"output-linear_200requests_max_per_sec.csv"
 
     cpu_step = "2m"
 
     file_path = '../teastore.json'
 
-    save_path = f"../nantes/hyperthreading/128/group/3nodes/linear/13-08-2024/experimentation8/data/metrics/experimentation-output-linear_{x}requests_max_per_sec.csv/"
-    #save_path = f"../nantes/hyperthreading/16-07-2024/data/metrics/experimentation-output-linear_80requests_max_per_sec.csv/"
 
-    save_graphics_at = f"../nantes/hyperthreading/128/group/3nodes/linear/13-08-2024/experimentation8/data/Plots"
 
     parameters = read_parameters_from_json(file_path)
 

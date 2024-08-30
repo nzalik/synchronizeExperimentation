@@ -42,9 +42,9 @@ def generate_linear_profile(duration, duration_linear, step_sizes, start_value):
 
 
 # Paramètres de configuration
-DURATION_LINEAR = 300  # Durée pour la charge linéaire
-DURATION = 600  # Durée totale du profil de charge (en secondes)
-STEP_SIZES = [20, 40, 60, 80]  # Tailles de progression à utiliser
+DURATION_LINEAR = 150  # Durée pour la charge linéaire
+DURATION = 300  # Durée totale du profil de charge (en secondes)
+STEP_SIZES = [40]  # Tailles de progression à utiliser
 START_VALUE = 0.5  # Valeur de départ
 
 generate_linear_profile(DURATION, DURATION_LINEAR, STEP_SIZES, START_VALUE)

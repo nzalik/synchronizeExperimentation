@@ -68,7 +68,7 @@ pwd
 workload_files=($(ls "$workload_dir"/*.csv))
 
 
-warmup="const_linear_80requests_per_sec.csv"
+warmup="const_linear_40requests_per_sec.csv"
 
 warmupFile="../warmUp/${warmup}"
 
