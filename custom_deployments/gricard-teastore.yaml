@@ -103,6 +103,7 @@ spec:
       labels:
         app: teastore
         run: teastore-persistence
+    spec:
       containers:
       - name: teastore-persistence
         image: gricad-registry.univ-grenoble-alpes.fr/nzalikoy/scaler-task/teastore-persistence:dev3
