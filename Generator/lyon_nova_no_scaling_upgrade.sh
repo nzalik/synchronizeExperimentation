@@ -3,7 +3,7 @@
 export PATH="$HOME/.local/bin:$PATH"
 
 #Node reservation and worker start
-target=$(python3 ./worker_startup.py)
+target=$(python3 ./worker_startup.py lyon nova)
 
 sleep 60
 

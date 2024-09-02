@@ -2,7 +2,7 @@ import json
 import os
 import requests
 from time import sleep
-import subprocess
+import sys
 
 #user = input(f"Grid'5000 username (default is {os.getlogin()}): ") or os.getlogin()
 user = "ykoagnenzali"
@@ -14,8 +14,8 @@ admin = "root"
 #password = input("Grid'5000 password (leave blank on frontends): ")
 g5k_auth = (user, password) if password else None
 
-site_id = "nantes"
-cluster = "econome"
+site_id = sys.argv[1] #"nantes"
+cluster = sys.argv[2] #"econome"
 
 api_job_url = f"https://api.grid5000.fr/stable/sites/{site_id}/jobs"
 
@@ -23,7 +23,7 @@ payload = {"resources": "nodes=1,walltime=1:00",
            "command": "sleep infinity",
            "stdout": "api-test-stdout2",
            "properties": f"cluster='{cluster}'",
-           "name": "nova_injector"
+           "name": f"{site_id}-{cluster}"
            }
 job = requests.post(api_job_url, data=payload, auth=g5k_auth).json()
 job_id = job["uid"]

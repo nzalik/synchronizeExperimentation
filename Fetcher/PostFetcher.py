@@ -20,7 +20,7 @@ if len(sys.argv) > 1:
     print(string_argument)
     print(repo_argument)
 
-file_path = '../teastore.json'
+file_path = '../teastore_grenoble.json'
 
 def process_csv_line(csv_file):
     """
