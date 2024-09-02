@@ -74,7 +74,7 @@ warmupFile="../warmUp/${warmup}"
 
 echo $warmupFile
 
-export KUBECONFIG=/home/ykoagnenzali/admin_kube5k-scale.conf
+export KUBECONFIG=~/admin_gnr-kube5k-scale.conf
 
 #for file_name in workload_files:
 for file_name in "${workload_files[@]}"; do
@@ -93,7 +93,7 @@ echo "$output_part"
 echo "##################### Initialisation ##################################################"
 
 # Créer le déploiement Kubernetes
-kubectl create -f ../custom_deployments/teastore-clusterip-1cpu-5giga.yaml
+kubectl create -f ../custom_deployments/gricard-teastore.yaml
 
 sleep 240
 
