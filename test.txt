@@ -1,1 +1,7 @@
 fafazfa
+
+Deploy socialNetwork
+
+/home/erods-chouette/Documents/1Research/D1/Research/Computation/k8s-operator/internship/aware-deployment-grid5k/KubePrep/kube_cluster_prep
+
+helm install socialnetwork ./DeathStarBench/socialNetwork/helm-chart/socialnetwork/
