@@ -100,7 +100,7 @@ echo "##################### Initialisation #####################################
 kubectl create -f ../custom_deployments/gricard-teastore.yaml
 
 
-sleep 300
+sleep 360
 
 echo "##################### Sleeping before warmup ##################################################"
 
