@@ -3,6 +3,6 @@ kind: PriorityClass
 metadata:
   name: high-priority
 value: 1000000000
-globalDefault: false
+globalDefault: true # Apply to all pod created after the priority class
 description: "This priority class should be used for XYZ service pods only."
 ---
