@@ -65,7 +65,7 @@ warmup_dir="../warmUp"
 
 pwd
 
-workload_files=($(ls "$workload_dir"/*.csv))
+workload_files=($(ls "$workload_dir"/li*.csv))
 
 
 warmup="const_linear_80requests_per_sec.csv"
@@ -74,7 +74,7 @@ warmupFile="../warmUp/${warmup}"
 
 echo $warmupFile
 
-export KUBECONFIG=/home/ykoagnenzali/admin.conf
+export KUBECONFIG=~/admin_gnr-kube5k-scale.conf
 
 #for file_name in workload_files:
 for file_name in "${workload_files[@]}"; do
@@ -93,9 +93,9 @@ echo "$output_part"
 echo "##################### Initialisation ##################################################"
 
 # Créer le déploiement Kubernetes
-kubectl create -f ../custom_deployments/teastore-clusterip-1cpu-5giga.yaml
+kubectl create -f ../custom_deployments/gricard-teastore.yaml
 
-sleep 240
+sleep 360
 
 echo "##################### Sleeping before warmup ##################################################"
 
