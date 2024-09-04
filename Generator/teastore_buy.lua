@@ -7,7 +7,9 @@
 --[[
 	Global Variables. Initialized at load river startup.
 --]]
-prefix = "http://172.16.20.24:30080/tools.descartes.teastore.webui/"
+local ip_address = os.getenv("TEASTORE_IP") -- Valeur par défaut si la variable n'est pas définie
+local prefix = "http://" .. ip_address .. ":30080/tools.descartes.teastore.webui/"
+--prefix = "http://172.16.20.24:30080/tools.descartes.teastore.webui/"
 productviewcount = 30
 postIndex = {3, 11, 13}
 

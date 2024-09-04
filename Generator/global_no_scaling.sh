@@ -1,9 +1,12 @@
 #!/bin/bash
 
+site="lyon"
+machine="nova"
+
 export PATH="$HOME/.local/bin:$PATH"
 
 #Node reservation and worker start
-target=$(python3 ./worker_startup.py grenoble dahu)
+target=$(python3 ./worker_startup.py $site $machine)
 
 sleep 60
 
@@ -23,7 +26,7 @@ date_str=$(date +"%d-%m-%Y")
 category="128/group/3nodes/linear"
 
 # Chemin complet du nouveau dossier
-new_folder_path="$parent_dir/grenoble/hyperthreading/$category/$date_str"
+new_folder_path="$parent_dir/$site/hyperthreading/$category/$date_str"
 
 # Créer le nouveau dossier s'il n'existe pas déjà
 if [ ! -d "$new_folder_path" ]; then
@@ -40,6 +43,7 @@ if [ ! -d "$exp_folder_path" ]; then
     mkdir -p "$exp_folder_path"
 fi
 
+export TEASTORE_IP=$1
 
 #wOutput="$exp_folder_path/warmup"
 lOutput="$exp_folder_path/data/load"
@@ -74,7 +78,7 @@ warmupFile="../warmUp/${warmup}"
 
 echo $warmupFile
 
-export KUBECONFIG=~/admin_gnr-kube5k-scale.conf
+export KUBECONFIG=~/admin_kube5k-scale.conf
 
 #kubectl create -f ../custom_deployments/high-priority-persistence.yaml
 
