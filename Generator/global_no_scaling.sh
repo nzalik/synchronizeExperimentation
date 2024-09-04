@@ -43,7 +43,7 @@ if [ ! -d "$exp_folder_path" ]; then
     mkdir -p "$exp_folder_path"
 fi
 
-export TEASTORE_IP=$1
+#export TEASTORE_IP=$1
 
 #wOutput="$exp_folder_path/warmup"
 lOutput="$exp_folder_path/data/load"
