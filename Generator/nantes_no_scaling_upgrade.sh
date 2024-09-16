@@ -74,7 +74,7 @@ warmupFile="../warmUp/${warmup}"
 
 echo $warmupFile
 
-export KUBECONFIG=~/admin_gnr-kube5k-scale.conf
+export KUBECONFIG=~/admin_k8s_chouette.conf
 
 #for file_name in workload_files:
 for file_name in "${workload_files[@]}"; do
@@ -93,9 +93,9 @@ echo "$output_part"
 echo "##################### Initialisation ##################################################"
 
 # Créer le déploiement Kubernetes
-kubectl create -f ../custom_deployments/gricard-teastore.yaml
+#kubectl create -f ../custom_deployments/gricard-teastore.yaml
 
-sleep 240
+#sleep 240
 
 echo "##################### Sleeping before warmup ##################################################"
 
