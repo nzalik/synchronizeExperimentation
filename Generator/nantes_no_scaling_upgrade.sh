@@ -93,7 +93,8 @@ echo "$output_part"
 echo "##################### Initialisation ##################################################"
 
 # Créer le déploiement Kubernetes
-kubectl create -f ../custom_deployments/gricard-teastore.yaml
+#kubectl create -f ../custom_deployments/gricard-teastore.yaml
+kubectl create -f ../custom_deployments/teastore-clusterip-1cpu-5giga.yaml
 
 sleep 240
 
