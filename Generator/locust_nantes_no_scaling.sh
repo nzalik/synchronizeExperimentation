@@ -65,7 +65,9 @@ warmup_dir="../warmUp"
 
 pwd
 
-workload_files=($(ls "$workload_dir"/*.csv))
+#workload_files=($(ls "$workload_dir"/*.csv))
+# shellcheck disable=SC2125
+workload_files="$workload_dir"/*.csv
 
 
 warmup="const_linear_80requests_per_sec.csv"
@@ -74,7 +76,7 @@ warmupFile="../warmUp/${warmup}"
 
 echo $warmupFile
 
-export KUBECONFIG=~/admin_gnr-kube5k-scale.conf
+export KUBECONFIG=~/admin_k8s_chouette.conf
 
 #for file_name in workload_files:
 for file_name in "${workload_files[@]}"; do
@@ -93,7 +95,8 @@ echo "$output_part"
 echo "##################### Initialisation ##################################################"
 
 # Créer le déploiement Kubernetes
-kubectl create -f ../custom_deployments/gricard-teastore.yaml
+#kubectl create -f ../custom_deployments/gricard-teastore.yaml
+kubectl create -f ../custom_deployments/teastore-clusterip-1cpu-5giga.yaml
 
 sleep 240
 
@@ -118,7 +121,8 @@ result="output-$output_part.csv"
 
 res="$output_part.csv"
 
-env NGINX_ADDR=$webui_addr MEDIA_ADDR=$media_addr INTENSITY_FILE=$file_name COMP_OPT=$REQUEST locust -f locustfile-custom-scale.py --headless --csv=log --csv-full-history
+#env NGINX_ADDR=$webui_addr MEDIA_ADDR=$media_addr INTENSITY_FILE=$file_name COMP_OPT=$REQUEST locust -f locustfile-custom-scale.py --headless --csv=log --csv-full-history
+env INTENSITY_FILE=$file_name locust -f ../workload_generator/locust/teastore_locustfile-custom-scale.py --headless --csv=log --csv-full-history
 
 #java -jar httploadgenerator.jar director -s $target -a "$file_name" -l "./teastore_buy.lua" -o "$result" -t $nb_thread
 
