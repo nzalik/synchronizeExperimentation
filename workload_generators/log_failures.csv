@@ -1,5 +1,0 @@
-Method,Name,Error,Occurrences
-GET,/tools.descartes.teastore.webui/product?id=459,"ConnectionResetError(104, 'Connection reset by peer')",1
-GET,/tools.descartes.teastore.webui/category?page=5&category=4,RemoteDisconnected('Remote end closed connection without response'),1
-POST,/tools.descartes.teastore.webui/loginAction?username=76&password=password,"ConnectionResetError(104, 'Connection reset by peer')",1
-POST,/tools.descartes.teastore.webui/cartAction?addToCart=&productid=288,"ConnectionResetError(104, 'Connection reset by peer')",1
