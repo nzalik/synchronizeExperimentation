@@ -74,7 +74,7 @@ warmupFile="../warmUp/${warmup}"
 
 echo $warmupFile
 
-export KUBECONFIG=~/admin_gnr-kube5k-scale.conf
+export KUBECONFIG=~/admin_k8s_chouette.conf
 
 #for file_name in workload_files:
 for file_name in "${workload_files[@]}"; do

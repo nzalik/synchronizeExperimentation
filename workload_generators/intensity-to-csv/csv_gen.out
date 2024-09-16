@@ -1,0 +1,54 @@
+- Sin files
+sin_17: ceil=509 | floor=333 | peaks=3
+sin_18: ceil=699 | floor=433 | peaks=3
+sin_19: ceil=326 | floor=304 | peaks=1
+sin_20: ceil=320 | floor=303 | peaks=1
+sin_21: ceil=990 | floor=838 | peaks=1
+sin_22: ceil=334 | floor=305 | peaks=1
+sin_23: ceil=785 | floor=345 | peaks=2
+sin_24: ceil=344 | floor=327 | peaks=2
+- Random Stairs files
+rdstairs_17: ceil=556 | floor=300
+rdstairs_18: ceil=716 | floor=300
+rdstairs_19: ceil=748 | floor=300
+rdstairs_20: ceil=472 | floor=300
+rdstairs_21: ceil=812 | floor=300
+rdstairs_22: ceil=573 | floor=300
+rdstairs_23: ceil=471 | floor=300
+rdstairs_24: ceil=361 | floor=300
+- Random Jump files
+rdjump_17: ceil=935 | floor=300
+rdjump_18: ceil=610 | floor=300
+rdjump_19: ceil=388 | floor=300
+rdjump_20: ceil=788 | floor=300
+rdjump_21: ceil=951 | floor=300
+rdjump_22: ceil=453 | floor=300
+rdjump_23: ceil=800 | floor=300
+rdjump_24: ceil=460 | floor=300
+- Linear files
+linear_17: ceil=692 | floor=600 | a=2
+linear_18: ceil=648 | floor=353 | a=1
+linear_19: ceil=358 | floor=336 | a=3
+linear_20: ceil=391 | floor=382 | a=1
+linear_21: ceil=720 | floor=679 | a=3
+linear_22: ceil=390 | floor=306 | a=1
+linear_23: ceil=486 | floor=369 | a=2
+linear_24: ceil=775 | floor=690 | a=1
+- Stairs Up files
+stairsu_17: ceil=468 | floor=300
+stairsu_18: ceil=668 | floor=300
+stairsu_19: ceil=460 | floor=300
+stairsu_20: ceil=445 | floor=300
+stairsu_21: ceil=657 | floor=300
+stairsu_22: ceil=706 | floor=300
+stairsu_23: ceil=818 | floor=300
+stairsu_24: ceil=762 | floor=300
+- Stairs Down files
+stairsd_17: ceil=617 | floor=300
+stairsd_18: ceil=887 | floor=300
+stairsd_19: ceil=912 | floor=300
+stairsd_20: ceil=814 | floor=300
+stairsd_21: ceil=950 | floor=300
+stairsd_22: ceil=854 | floor=300
+stairsd_23: ceil=805 | floor=300
+stairsd_24: ceil=942 | floor=300

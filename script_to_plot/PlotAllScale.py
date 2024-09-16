@@ -7,12 +7,12 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-elts = [180, 200, 250, 300, 350, 400]
+elts = [180, 200, 250, 300, 350, 400, 450]
 #x = 1
 cpu_limit_max=1.2
 load_max=475
 memory_limit=5
-pod_limit=7
+pod_limit=6
 
 #while x <= 1:
 for x in elts:
@@ -22,7 +22,7 @@ for x in elts:
         return parameters
 
 
-    plot_path = "../grenoble/hyperthreading/128/group/3nodes/autoscale/03-09-2024/experimentation1/data/load/"
+    plot_path = "../nantes/hyperthreading/128/group/3nodes/linear/13-08-2024/experimentation8/data/load/"
 
     #fileToPlot = f"linear_{x}requests_per_sec.csv"
     fileToPlot = f"output-linear_{x}requests_max_per_sec.csv"
@@ -32,10 +32,10 @@ for x in elts:
 
     file_path = '../teastore.json'
 
-    save_path = f"../grenoble/hyperthreading/128/group/3nodes/autoscale/03-09-2024/experimentation1/data/metrics/experimentation-output-linear_{x}requests_max_per_sec.csv/"
-    #save_path = f"../grenoble/hyperthreading/16-07-2024/data/metrics/experimentation-output-linear_80requests_max_per_sec.csv/"
+    save_path = f"../nantes/hyperthreading/128/group/3nodes/linear/13-08-2024/experimentation8/data/metrics/experimentation-output-linear_{x}requests_max_per_sec.csv/"
+    #save_path = f"../nantes/hyperthreading/16-07-2024/data/metrics/experimentation-output-linear_80requests_max_per_sec.csv/"
 
-    save_graphics_at = f"../grenoble/hyperthreading/128/group/3nodes/autoscale/03-09-2024/experimentation1/data/Plots"
+    save_graphics_at = f"../nantes/hyperthreading/128/group/3nodes/linear/13-08-2024/experimentation8/data/Plots"
 
     parameters = read_parameters_from_json(file_path)
 
@@ -382,11 +382,11 @@ for x in elts:
         # Récupérer le nom de la métrique et du déploiement
         metric_name = result["metric"]["__name__"]
         deployment_name = result["metric"]["deployment"]
-
-        legend_dict[deployment_name] = \
-            line = plt.plot([], [], color=get_color_for_serviceInit(deployment_name), label=deployment_name)[0]
-        legend_objects.append(line)
-        legend_labels.append(deployment_name)
+        if deployment_name not in legend_dict:
+            legend_dict[deployment_name] = \
+                line = plt.plot([], [], color=get_color_for_serviceInit(deployment_name), label=deployment_name)[0]
+            legend_objects.append(line)
+            legend_labels.append(deployment_name)
         # plt.plot(timestamps, values, color=get_color_for_serviceInit(deployment_name), label=f"{deployment_name}")
 
         color = get_color_for_serviceInit(deployment_name)
@@ -408,7 +408,7 @@ for x in elts:
     plt.title('Evolution of pods')
 
     plt.xticks(rotation=45)
-    #plt.legend()
+    plt.legend()
 
     plt.tight_layout()
 
