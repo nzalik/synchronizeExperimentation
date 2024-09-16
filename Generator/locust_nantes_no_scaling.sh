@@ -122,7 +122,7 @@ result="output-$output_part.csv"
 res="$output_part.csv"
 
 #env NGINX_ADDR=$webui_addr MEDIA_ADDR=$media_addr INTENSITY_FILE=$file_name COMP_OPT=$REQUEST locust -f locustfile-custom-scale.py --headless --csv=log --csv-full-history
-env INTENSITY_FILE=$file_name locust -f ../workload_generator/locust/teastore_locustfile-custom-scale.py --headless --csv=log --csv-full-history
+env INTENSITY_FILE=$file_name locust -f ../workload_generators/locust/teastore_locustfile-custom-scale.py --headless --csv=log --csv-full-history
 
 #java -jar httploadgenerator.jar director -s $target -a "$file_name" -l "./teastore_buy.lua" -o "$result" -t $nb_thread
 
