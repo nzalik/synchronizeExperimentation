@@ -103,9 +103,11 @@ echo "##################### Sleeping before warmup #############################
 
 warm="warmup-$output_part.csv"
 
+for warmp in ../warmUp/*.csv; do
 #Lancer le générateur de charge HTTP
-env INTENSITY_FILE=$file_name locust -f ~/Experimentations/synchronizeExperimentation/workload_generators/locust/teastore_locustfile-custom-scale.py --headless --csv=log --csv-full-history
+env INTENSITY_FILE=$warmp locust -f ~/Experimentations/synchronizeExperimentation/workload_generators/locust/teastore_locustfile-custom-scale.py --headless --csv=log --csv-full-history
 
+done
 #sleep 180
 
 #echo "##################### Sleeping before autoscaler ##################################################"
