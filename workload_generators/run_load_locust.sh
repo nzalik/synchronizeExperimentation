@@ -1,7 +1,7 @@
 # shellcheck disable=SC2045
 #/!/bin/bash
 
-for i in ./locust/intensity_profiles/*.csv; do
+for i in ../Load/profiles_2024-07-31/*.csv; do
 #for i in $(ls ../Load/profiles_2024-07-31/*.csv); do
 			INTENSITY=$( basename ${i%.*} )
 			begin_t=$(date +%s)

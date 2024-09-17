@@ -41,7 +41,7 @@ class LoadShape(LoadTestShape):
         return user_count, spawn_rate
 
 class UserBehavior(HttpUser):
-    host = "http://172.16.192.9:30080/tools.descartes.teastore.webui"  # Remplacez par votre URL
+    host = "http://172.16.192.22:30080/tools.descartes.teastore.webui"  # Remplacez par votre URL
     wait_time = between(1, 3)  # Temps d'attente entre les requêtes
 
     @task

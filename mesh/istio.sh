@@ -1,11 +1,11 @@
 #!/bin/bash
 
 # Définir le KUBECONFIG
-export KUBECONFIG=/home/erods-chouette/load_128/admin.conf
+export KUBECONFIG=/home/erods-chouette/admin_k8s_chouette.conf
 
 # Télécharger et extraire Istio
 curl -L https://istio.io/downloadIstio | sh -
-cd istio-1.22.3
+cd istio-1.23.1
 
 # Ajouter Istio au PATH
 export PATH=$PWD/bin:$PATH
@@ -35,6 +35,7 @@ export SECURE_INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressga
 export INGRESS_HOST=$(kubectl get po -l istio=ingressgateway -n istio-system -o jsonpath='{.items[0].status.hostIP}')
 export GATEWAY_URL="http://$INGRESS_HOST:$INGRESS_PORT"
 export PRODUCTPAGE_URL="$GATEWAY_URL/productpage"
+
 echo $PRODUCTPAGE_URL
 
 # Déployer les addons Istio

@@ -76,8 +76,9 @@ echo $warmupFile
 
 export KUBECONFIG=~/admin_k8s_chouette.conf
 
-#for file_name in workload_files:
-for file_name in "${workload_files[@]}"; do
+#for file_name in "${workload_files[@]}"; do
+# shellcheck disable=SC2066
+for file_name in "../Load/profiles_2024-07-31/*.csv"; do
 
 python3 ./worker_restart.py "$target"
 
@@ -112,7 +113,7 @@ java -jar httploadgenerator.jar director -s $target -a "$warmupFile" -l "./teast
 
 echo "##################### Sleeping before load ##################################################"
 
-sleep 240
+sleep 120
 
 #result="$output_part.csv"
 result="output-$output_part.csv"
@@ -120,25 +121,26 @@ result="output-$output_part.csv"
 res="$output_part.csv"
 
 
-java -jar httploadgenerator.jar director -s $target -a "$file_name" -l "./teastore_buy.lua" -o "$result" -t $nb_thread
+env INTENSITY_FILE=$file_name locust -f ./../workload_generators/locust/teastore_locustfile-custom-scale.py --headless --csv=log --csv-full-history
+
+#java -jar httploadgenerator.jar director -s $target -a "$file_name" -l "./teastore_buy.lua" -o "$result" -t $nb_thread
 
 echo "#########################Load Injection finished######################################"
 
-sleep 60
+#sleep 60
 
 #moveRepo="../Load/intensity_profiles_2024-07-14/"
 
-# shellcheck disable=SC2086
-python3 ../Fetcher/PostFetcher.py "$result" $workload_dir $exp_folder_path
+#python3 ../Fetcher/PostFetcher.py "$result" $workload_dir $exp_folder_path
 #python3 ../Fetcher/PostFetcher.py $warm $warmup_dir $exp_folder_path
 
-sleep 60
+#sleep 60
 
 #mv ../Load/intensity_profiles_2024-07-14/$result $lOutput
-mv "$workload_dir/$result" $lOutput
+#mv "$workload_dir/$result" $lOutput
 
-kubectl delete pods,deployments,services -l app=teastore
+#kubectl delete pods,deployments,services -l app=teastore
 
-sleep 240
+#sleep 240
 
 done
