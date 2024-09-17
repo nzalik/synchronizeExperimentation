@@ -13,20 +13,21 @@ else:
 
 class LoadShape(LoadTestShape):
     row_offset = 0
+    csv_list = []
 
     def tick(self):
         # Lire le fichier CSV
-        if not GLOBAL_INTENSITY_FILE:
-            logging.error("INTENSITY_FILE environment variable not set.")
-            return None
+        if not self.csv_list:
+            if not GLOBAL_INTENSITY_FILE:
+                logging.error("INTENSITY_FILE environment variable not set.")
+                return None
 
-        with open(GLOBAL_INTENSITY_FILE) as intensity_csv:
-            csv_reader = csv.reader(intensity_csv, delimiter=',')
-            csv_list = list(csv_reader)
+            with open(GLOBAL_INTENSITY_FILE) as intensity_csv:
+                csv_reader = csv.reader(intensity_csv, delimiter=',')
+                csv_list = list(csv_reader)
 
             # Ignorer la première ligne (en-têtes)
-        if self.row_offset == 0:
-            self.row_offset += 1  # Passer la première ligne
+            self.row_offset = 1
 
         # Vérifier si nous sommes en dehors des limites du CSV
         if self.row_offset >= len(csv_list):
