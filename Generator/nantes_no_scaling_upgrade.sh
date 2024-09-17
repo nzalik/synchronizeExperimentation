@@ -3,12 +3,12 @@
 export PATH="$HOME/.local/bin:$PATH"
 
 #Node reservation and worker start
-target=$(python3 ./worker_startup.py nantes econome)
+#target=$(python3 ./worker_startup.py nantes econome)
 
-sleep 60
+#sleep 60
 
 echo "************** The worker is okay ***************"
-echo "lancé sur le $target"
+#echo "lancé sur le $target"
 
 #Initialise the target
 
@@ -104,7 +104,7 @@ echo "##################### Sleeping before warmup #############################
 warm="warmup-$output_part.csv"
 
 #Lancer le générateur de charge HTTP
-java -jar httploadgenerator.jar director -s $target -a "$warmupFile" -l "./teastore_buy.lua" -o "$warm" -t $nb_thread
+env INTENSITY_FILE=$file_name locust -f ~/Experimentations/synchronizeExperimentation/workload_generators/locust/teastore_locustfile-custom-scale.py --headless --csv=log --csv-full-history
 
 #sleep 180
 
