@@ -78,7 +78,7 @@ export KUBECONFIG=~/admin_k8s_chouette.conf
 
 #for file_name in "${workload_files[@]}"; do
 # shellcheck disable=SC2066
-for file_name in "../Load/profiles_2024-07-31/*.csv"; do
+for file_name in ../Load/profiles_2024-07-31/*.csv; do
 
 python3 ./worker_restart.py "$target"
 
@@ -121,7 +121,7 @@ result="output-$output_part.csv"
 res="$output_part.csv"
 
 
-env INTENSITY_FILE=$file_name locust -f ./../workload_generators/locust/teastore_locustfile-custom-scale.py --headless --csv=log --csv-full-history
+env INTENSITY_FILE=$file_name locust -f ~/Experimentations/synchronizeExperimentation/workload_generators/locust/teastore_locustfile-custom-scale.py --headless --csv=log --csv-full-history
 
 #java -jar httploadgenerator.jar director -s $target -a "$file_name" -l "./teastore_buy.lua" -o "$result" -t $nb_thread
 
