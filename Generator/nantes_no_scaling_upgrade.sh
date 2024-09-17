@@ -80,9 +80,9 @@ export KUBECONFIG=~/admin_k8s_chouette.conf
 # shellcheck disable=SC2066
 for file_name in ../Load/profiles_2024-07-31/*.csv; do
 
-python3 ./worker_restart.py "$target"
+#python3 ./worker_restart.py "$target"
 
-sleep 60
+#sleep 60
 
 echo $file_name
 
@@ -95,9 +95,9 @@ echo "##################### Initialisation #####################################
 
 # Créer le déploiement Kubernetes
 #kubectl create -f ../custom_deployments/gricard-teastore.yaml
-kubectl create -f ../custom_deployments/teastore-clusterip-1cpu-5giga.yaml
+#kubectl create -f ../custom_deployments/teastore-clusterip-1cpu-5giga.yaml
 
-sleep 240
+#sleep 240
 
 echo "##################### Sleeping before warmup ##################################################"
 
