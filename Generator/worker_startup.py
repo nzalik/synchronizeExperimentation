@@ -19,7 +19,7 @@ cluster = sys.argv[2] #"econome"
 
 api_job_url = f"https://api.grid5000.fr/stable/sites/{site_id}/jobs"
 
-payload = {"resources": "nodes=1,walltime=5:00",
+payload = {"resources": "nodes=1,walltime=1:00",
            "command": "sleep infinity",
            "stdout": "api-test-stdout2",
            "properties": f"cluster='{cluster}'",
