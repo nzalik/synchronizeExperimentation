@@ -39,12 +39,12 @@ else:
     GLOBAL_COMPOSITIONS = [(5, 40, 55), (5, 45, 50), (5, 50, 45), (5, 55, 40), (10, 35, 55), (10, 40, 50), (10, 45, 45), (10, 50, 40), (10, 55, 35), (15, 35, 50), (15, 40, 45), (15, 45, 40), (15, 50, 35)]
 
 ####################################################################################################################################
-texts = [text.replace('@', '') for text in list(open('./datasets/social-graph/fb-posts/news.txt'))]
-media = [os.path.join('./datasets/inria-person', fname) for fname in os.listdir('./datasets/inria-person')]
+texts = [text.replace('@', '') for text in list(open('~/Experimentations/synchronizeExperimentation/workload_generators/locust/datasets/fb-posts/news.txt'))]
+media = [os.path.join('~/Experimentations/synchronizeExperimentation/workload_generators/locust/datasets/inria-person', fname) for fname in os.listdir('~/Experimentations/synchronizeExperimentation/workload_generators/locust/datasets/inria-person')]
 users = list(range(1, 963))
 cycle = 0
 active_users, inactive_users = [], list(range(1, 963))
-with open('./datasets/social-graph/socfb-Reed98.mtx', 'r') as f:
+with open('~/Experimentations/synchronizeExperimentation/workload_generators/locust/datasets/social-graph/socfb-Reed98.mtx', 'r') as f:
     friends = {}
     for edge in f.readlines():
         edge = list(map(int, edge.strip().split()))
