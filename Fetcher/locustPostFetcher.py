@@ -130,7 +130,7 @@ else:
     loop_limit = int(valueTime*60)
 
 window = 6
-window2 = 10
+window2 = 12
 
 prom_url = parameters['PROMETHEUS_URL']
 
@@ -213,7 +213,7 @@ for start_datetime_str in date_list:
     start_timestamp = start_datetime.timestamp()
 
     print("start_timestamp", start_datetime)
-    end_datetime = start_datetime + timedelta(minutes=10)
+    end_datetime = start_datetime + timedelta(minutes=12)
 
     end_timestamp = end_datetime.timestamp()
     print("end_timestamp", end_datetime)

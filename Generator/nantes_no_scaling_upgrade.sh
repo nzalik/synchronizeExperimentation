@@ -130,20 +130,20 @@ env INTENSITY_FILE=$file_name locust -f ~/Experimentations/synchronizeExperiment
 
 echo "#########################Load Injection finished######################################"
 
-sleep 60
+sleep 120
 
 #moveRepo="../Load/intensity_profiles_2024-07-14/"
 
 python3 ../Fetcher/locustPostFetcher.py "$result" $workload_dir $exp_folder_path $time_obj
 #python3 ../Fetcher/PostFetcher.py $warm $warmup_dir $exp_folder_path
 
-#sleep 60
+sleep 60
 
 #mv ../Load/intensity_profiles_2024-07-14/$result $lOutput
 #mv "$workload_dir/$result" $lOutput
 
-#kubectl delete pods,deployments,services -l app=teastore
+kubectl delete pods,deployments,services -l app=teastore
 
-#sleep 240
+sleep 240
 
 done
