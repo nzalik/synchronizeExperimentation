@@ -28,7 +28,7 @@ def generate_linear_profile(duration, duration_linear, step_sizes, start_value):
 
             current_timestamp = start_value
             while current_timestamp <= duration_linear + start_value - 1:  # Première partie : progression linéaire jusqu'à 180 secondes
-                value = min(step_size * ((current_timestamp - start_value + 1) / duration_linear), step_size)
+                value = round(min(step_size * ((current_timestamp - start_value + 1) / duration_linear), step_size))
                 if value < 1:
                     value = 1
                 writer.writerow([current_timestamp, value])
@@ -44,7 +44,7 @@ def generate_linear_profile(duration, duration_linear, step_sizes, start_value):
 # Paramètres de configuration
 DURATION_LINEAR = 150  # Durée pour la charge linéaire
 DURATION = 300  # Durée totale du profil de charge (en secondes)
-STEP_SIZES = [40]  # Tailles de progression à utiliser
-START_VALUE = 0.5  # Valeur de départ
+STEP_SIZES = [80]  # Tailles de progression à utiliser
+START_VALUE = 1  # Valeur de départ
 
 generate_linear_profile(DURATION, DURATION_LINEAR, STEP_SIZES, START_VALUE)
