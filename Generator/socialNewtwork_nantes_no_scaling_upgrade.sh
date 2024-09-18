@@ -1,4 +1,5 @@
 #!/bin/bash
+#python3 locust/warmup.py --graph ./datasets/social-graph/socfb-Reed98.mtx --addr http://172.16.192.9:30081
 
 export PATH="$HOME/.local/bin:$PATH"
 
@@ -128,6 +129,9 @@ webui_addr="http://172.16.192.9:30081"
 REQUEST="composePost"
 
 time_obj=$(date +"%H:%M:%S.%3N")
+
+echo "le fichier de profil"
+echo $file_name
 
 env NGINX_ADDR=$webui_addr MEDIA_ADDR=$media_addr INTENSITY_FILE=$file_name COMP_OPT=$REQUEST locust -f ../workload_generators/locust/locustfile-custom-scale.py --headless --csv=log --csv-full-history
 
