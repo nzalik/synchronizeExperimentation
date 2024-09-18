@@ -103,11 +103,11 @@ echo "##################### Sleeping before warmup #############################
 
 warm="warmup-$output_part.csv"
 
-for warmp in ../warmUp/*.csv; do
+#for warmp in ../warmUp/*.csv; do
 #Lancer le générateur de charge HTTP
-env INTENSITY_FILE=$warmp locust -f ~/Experimentations/synchronizeExperimentation/workload_generators/locust/teastore_locustfile-custom-scale.py --headless --csv=log --csv-full-history
+#env INTENSITY_FILE=$warmp locust -f ~/Experimentations/synchronizeExperimentation/workload_generators/locust/teastore_locustfile-custom-scale.py --headless --csv=log --csv-full-history
 
-done
+#done
 #sleep 180
 
 #echo "##################### Sleeping before autoscaler ##################################################"
@@ -115,13 +115,14 @@ done
 
 echo "##################### Sleeping before load ##################################################"
 
-sleep 120
+#sleep 120
 
 #result="$output_part.csv"
 result="output-$output_part.csv"
 
 res="$output_part.csv"
 
+time_obj=$(date +"%H:%M:%S.%3N")
 
 env INTENSITY_FILE=$file_name locust -f ~/Experimentations/synchronizeExperimentation/workload_generators/locust/teastore_locustfile-custom-scale.py --headless --csv=log --csv-full-history
 
@@ -133,16 +134,16 @@ sleep 60
 
 #moveRepo="../Load/intensity_profiles_2024-07-14/"
 
-python3 ../Fetcher/PostFetcher.py "$result" $workload_dir $exp_folder_path
+python3 ../Fetcher/locustPostFetcher.py "$result" $workload_dir $exp_folder_path $time_obj
 #python3 ../Fetcher/PostFetcher.py $warm $warmup_dir $exp_folder_path
 
-sleep 60
+#sleep 60
 
 #mv ../Load/intensity_profiles_2024-07-14/$result $lOutput
-mv "$workload_dir/$result" $lOutput
+#mv "$workload_dir/$result" $lOutput
 
-kubectl delete pods,deployments,services -l app=teastore
+#kubectl delete pods,deployments,services -l app=teastore
 
-sleep 240
+#sleep 240
 
 done
