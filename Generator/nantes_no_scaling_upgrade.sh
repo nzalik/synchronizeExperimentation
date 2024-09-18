@@ -23,7 +23,7 @@ date_str=$(date +"%d-%m-%Y")
 category="128/group/3nodes/linear"
 
 # Chemin complet du nouveau dossier
-new_folder_path="$parent_dir/lucust/nantes/hyperthreading/$category/$date_str"
+new_folder_path="$parent_dir/locust/nantes/hyperthreading/$category/$date_str"
 
 # Créer le nouveau dossier s'il n'existe pas déjà
 if [ ! -d "$new_folder_path" ]; then
