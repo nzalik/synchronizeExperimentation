@@ -75,7 +75,7 @@ warmupFile="../warmUp/${warmup}"
 
 echo $warmupFile
 
-export KUBECONFIG=~/admin_k8s_chouette.conf
+export KUBECONFIG=~/admin_k8s_soc.conf
 
 #for file_name in "${workload_files[@]}"; do
 # shellcheck disable=SC2066
