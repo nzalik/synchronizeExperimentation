@@ -7,11 +7,12 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-elts = [180]
+#elts = [180]
+elts = [180, 200, 250, 300, 350]
 #x = 1
 cpu_limit_max=1.2
 load_max=475
-memory_limit=5
+memory_limit=6
 pod_limit=6
 
 #while x <= 1:
@@ -29,10 +30,10 @@ for x in elts:
 
     file_path = '../teastore.json'
 
-    save_path = f"../locust/nantes/hyperthreading/128/group/3nodes/linear/18-09-2024/experimentation5/data/metrics/experimentation-output-linear_{x}requests_max_per_sec.csv/"
+    save_path = f"../locust/nantes/hyperthreading/128/group/3nodes/linear/18-09-2024/experimentation1/data/metrics/experimentation-output-linear_{x}requests_max_per_sec.csv/"
     #save_path = f"../nantes/hyperthreading/16-07-2024/data/metrics/experimentation-output-linear_80requests_max_per_sec.csv/"
 
-    save_graphics_at = f"../locust/nantes/hyperthreading/128/group/3nodes/linear/18-09-2024/experimentation5/data/Plots"
+    save_graphics_at = f"../locust/nantes/hyperthreading/128/group/3nodes/linear/18-09-2024/experimentation1/data/Plots"
 
     parameters = read_parameters_from_json(file_path)
 
@@ -103,7 +104,7 @@ for x in elts:
         else:
             color = base_color
 
-        return color
+        return color, base_name
 
 
     def plot_json(file_name, label):
@@ -131,9 +132,14 @@ for x in elts:
             #lissageValues = smooth(last_ten_valuesReduce)
             lissageValues = last_ten_valuesReduce
 
-            color = get_color_for_service(label)
+            #color = get_color_for_service(label)
+            color, base_name = get_color_for_service(label)
 
-            plt.plot(greater_than_valueReduce, lissageValues, color=color, label=label)
+            current_line = plt.plot([], [], color=color, label="")[0]
+            legend_objectsCpu.append(current_line)
+            legend_labelsCpu.append(base_name)
+
+            plt.plot(greater_than_valueReduce, lissageValues, color=color, label=base_name)
             return greater_than_valueReduce
         return []
 
@@ -171,9 +177,14 @@ for x in elts:
             # lissageValues = smooth(last_ten_valuesReduce)
             lissageValues = last_ten_valuesReduce
 
-            color = get_color_for_service(label)
+            color, base_name = get_color_for_service(label)
 
-            plt.plot(greater_than_valueReduce, lissageValues, color=color, label=label)
+            current_line = plt.plot([], [], color=color, label="")[0]
+            legend_objectsMemory.append(current_line)
+            legend_labelsMemory.append(base_name)
+
+            plt.plot(greater_than_valueReduce, lissageValues, color=color, label=base_name)
+
             return greater_than_valueReduce
         return []
 
@@ -194,6 +205,8 @@ for x in elts:
     if not os.path.exists(save_graphics_at):
         os.makedirs(save_graphics_at)
 
+    legend_objectsCpu = []
+    legend_labelsCpu = []
     directory = save_path + 'cpu'
     for file_name in os.listdir(directory):
         file_path = os.path.join(directory, file_name)
@@ -219,8 +232,7 @@ for x in elts:
     # Set ticks on the x-axis
     ticks_seconds = [((ts - start_time) // plot_window) * plot_window for ts in ticks]
 
-    print("max cpu")
-    print(len(ticks_seconds))
+
     plt.axhline(y=1, color='r', linestyle='--')
     plt.xticks(ticks, ticks_seconds)
     plt.xlabel('Time (seconds)')
@@ -229,11 +241,26 @@ for x in elts:
     plt.ylim(0, cpu_limit_max)
     #plt.grid(True)
     plt.xticks(rotation=45)
-    plt.legend()
+
+    # Associer les objets à leurs labels
+    legend_pairs2 = list(zip(legend_objectsCpu, legend_labelsCpu))
+
+    # Trier les paires par les labels (ordre alphabétique)
+    legend_pairs_sorted2 = sorted(legend_pairs2, key=lambda x: x[1])
+
+    # Séparer les objets et les labels après le tri
+    legend_objects_sorted2, legend_labels_sorted2 = zip(*legend_pairs_sorted2)
+
+    plt.legend(legend_objects_sorted2, legend_labels_sorted2)
+
+    #plt.legend()
 
     # Plot the second set of data
     plt.subplot(3, 1, 2)
     all_timestamps2 = []
+
+    legend_objectsMemory = []
+    legend_labelsMemory = []
 
     directory2 = save_path + 'memory'
     for file_name in os.listdir(directory2):
@@ -246,6 +273,7 @@ for x in elts:
 
         if len(timestamps2) > 0:
             all_timestamps2.append(timestamps2)
+
 
     # Concatenate all timestamps
     all_timestamps2 = np.concatenate(all_timestamps2)
@@ -260,6 +288,7 @@ for x in elts:
     # Set ticks on the x-axis
     ticks_seconds2 = [((ts - start_time2) // plot_window) * plot_window for ts in ticks2]
 
+
     plt.xticks(ticks2, ticks_seconds2)
 
     plt.xlabel('Time (seconds)')
@@ -268,7 +297,17 @@ for x in elts:
     plt.ylim(0, memory_limit)
     #plt.grid(True)
     plt.xticks(rotation=45)
-    #plt.legend()
+
+    # Associer les objets à leurs labels
+    legend_pairs = list(zip(legend_objectsMemory, legend_labelsMemory))
+
+    # Trier les paires par les labels (ordre alphabétique)
+    legend_pairs_sorted = sorted(legend_pairs, key=lambda x: x[1])
+
+    # Séparer les objets et les labels après le tri
+    legend_objects_sorted, legend_labels_sorted = zip(*legend_pairs_sorted)
+
+    plt.legend(legend_objects_sorted, legend_labels_sorted)
 
     lastEl = ticks_seconds2[-1]
 
@@ -306,11 +345,12 @@ for x in elts:
         # Récupérer le nom de la métrique et du déploiement
         metric_name = result["metric"]["__name__"]
         deployment_name = result["metric"]["deployment"]
-        if deployment_name not in legend_dict:
-            legend_dict[deployment_name] = \
-                line = plt.plot([], [], color=get_color_for_serviceInit(deployment_name), label=deployment_name)[0]
-            legend_objects.append(line)
-            legend_labels.append(deployment_name)
+
+        #if deployment_name not in legend_dict:
+            #legend_dict[deployment_name] = \
+        line = plt.plot([], [], color=get_color_for_serviceInit(deployment_name), label="")[0]
+        legend_objects.append(line)
+        legend_labels.append(deployment_name)
         # plt.plot(timestamps, values, color=get_color_for_serviceInit(deployment_name), label=f"{deployment_name}")
 
         color = get_color_for_serviceInit(deployment_name)
@@ -332,7 +372,9 @@ for x in elts:
     plt.title('Evolution of pods')
 
     plt.xticks(rotation=45)
-    plt.legend()
+
+    plt.legend(legend_objects, legend_labels, loc='upper center', ncol=2)
+    #plt.legend()
 
     plt.tight_layout()
 

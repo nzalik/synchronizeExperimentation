@@ -346,7 +346,7 @@ for x in elts:
     plt.ylim(0, load_max)  # Limites de l'axe des ordonnées
 
     plt.xlabel('Time (seconds)')
-    plt.ylabel('Number of requests')
+    plt.ylabel('RPS')
     plt.axhline(y=200, color='r', linestyle='--')
     plt.subplot(1, 4, 4)
     all_timestamps3 = []
