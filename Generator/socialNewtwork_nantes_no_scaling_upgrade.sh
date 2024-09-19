@@ -124,8 +124,9 @@ echo "##################### Sleeping before load ###############################
 result="output-$output_part.csv"
 
 res="$output_part.csv"
-media_addr="http://172.16.192.9:30082"
-webui_addr="http://172.16.192.9:30081"
+media_addr="http://172.16.192.6:30082"
+webui_addr="http://172.16.192.6:30081"
+
 REQUEST="composePost"
 
 time_obj=$(date +"%H:%M:%S.%3N")
