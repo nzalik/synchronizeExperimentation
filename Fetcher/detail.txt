@@ -1,0 +1,10 @@
+Reporter source : collecter les informations côté client de latence par exemple
+d'envoi de la requete et du temps de traitement
+Reporter destination :  collecter les latences de traitement au niveau du serveur - le microservice
+appelé.
+
+
+Experimentation 1 (Sans précision du reporteur)
+datadir2 collecte de données aggrégé par microservices de destination
+datadir3 colecte les données avec serviceSrc et servicedst
+

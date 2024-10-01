@@ -79,7 +79,7 @@ export KUBECONFIG=~/admin_k8s_soc.conf
 
 #for file_name in "${workload_files[@]}"; do
 # shellcheck disable=SC2066
-for file_name in ../Load/profiles_2024-07-31/*.csv; do
+for file_name in ../Load/profiles_2024-09-18/*.csv; do
 
 #python3 ./worker_restart.py "$target"
 
@@ -144,7 +144,18 @@ sleep 120
 
 #moveRepo="../Load/intensity_profiles_2024-07-14/"
 
-python3 ../Fetcher/socialFecther.py "$result" $workload_dir $exp_folder_path $time_obj
+fetch_d="../metric-dataset-generator/metric_fetcher"
+prometheus_url="http://172.16.192.6:32170"
+data_dir="../routes"
+duration="3"
+time_step="1"
+namespace="default"
+
+#python3 ../Fetcher/socialFecther.py "$result" $workload_dir $exp_folder_path $time_obj
+#python3 ../metric-dataset-generator/metric_fetcher/prometheus_fetch.py "$result" $workload_dir $exp_folder_path $time_obj
+python3 $fetch_d/prometheus_fetch.py $prometheus_url \
+				-N "teastore" -d "$data_dir" -p "node_dist_1/hw_spec_2/pod_spec_0/$REQUEST/$INTENSITY/" \
+				-t $duration -s $time_step -c $fetch_d/metrics.ini -n $namespace
 #python3 ../Fetcher/PostFetcher.py $warm $warmup_dir $exp_folder_path
 
 #sleep 60

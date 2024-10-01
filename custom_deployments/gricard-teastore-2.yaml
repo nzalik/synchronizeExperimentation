@@ -21,10 +21,6 @@ spec:
         image: gricad-registry.univ-grenoble-alpes.fr/nzalikoy/scaler-task/teastore-db:dev
         ports:
         - containerPort: 3306
-        resources:
-          limits:
-            cpu: "1"
-            memory: "5G"
       imagePullSecrets:
         - name: docker-registry-secret
 ---
@@ -65,10 +61,6 @@ spec:
         image: gricad-registry.univ-grenoble-alpes.fr/nzalikoy/scaler-task/teastore-registry:dev
         ports:
         - containerPort: 8080
-        resources:
-          limits:
-            cpu: "1"
-            memory: "5G"
       imagePullSecrets:
         - name: docker-registry-secret
 ---
@@ -118,10 +110,6 @@ spec:
           value: "teastore-db"
         - name: DB_PORT
           value: "3306"
-        resources:
-          limits:
-            cpu: "1"
-            memory: "5G"
       imagePullSecrets:
         - name: docker-registry-secret
 ---
@@ -167,10 +155,6 @@ spec:
           value: "teastore-auth"
         - name: REGISTRY_HOST
           value: "teastore-registry"
-        resources:
-          limits:
-            cpu: "1"
-            memory: "5G"
       imagePullSecrets:
         - name: docker-registry-secret
 ---
@@ -216,10 +200,6 @@ spec:
           value: "teastore-image"
         - name: REGISTRY_HOST
           value: "teastore-registry"
-        resources:
-          limits:
-            cpu: "1"
-            memory: "5G"
       imagePullSecrets:
         - name: docker-registry-secret
 ---
@@ -265,10 +245,6 @@ spec:
           value: "teastore-recommender"
         - name: REGISTRY_HOST
           value: "teastore-registry"
-        resources:
-          limits:
-            cpu: "1"
-            memory: "5G"
       imagePullSecrets:
         - name: docker-registry-secret
 ---
@@ -314,10 +290,6 @@ spec:
           value: "teastore-webui"
         - name: REGISTRY_HOST
           value: "teastore-registry"
-        resources:
-          limits:
-            cpu: "1"
-            memory: "5G"
       imagePullSecrets:
         - name: docker-registry-secret
 ---

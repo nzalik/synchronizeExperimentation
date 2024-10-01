@@ -34,7 +34,7 @@ def generate_linear_profile(duration, step_size, start_value, end_values):
                     value = start_value + (end_value - start_value) * t / duration
                     if value % 1 != 0:  # Si la valeur n'est pas un entier
                         value = int(value)  # Arrondir au nombre entier le plus proche
-                    writer.writerow([t+0.5, max(value, 1)])  # S'assurer que la valeur est au moins de 1
+                    writer.writerow([t+0.5, int(max(value, 1))])  # S'assurer que la valeur est au moins de 1
                 else:
                     # Pendant les 2 derniers paliers, conserver la même valeur finale
                     writer.writerow([t+0.5, int(end_value)])

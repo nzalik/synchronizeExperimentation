@@ -36,7 +36,7 @@ def get_color_for_serviceInit(service_name):
         case 'nginx-thrift':
             return '#054a29'
         case 'user-mongodb':
-            return '#FB8500'
+            return '#732b35'
         case 'media-service':
             return '#8ECAE6'
         case 'jaeger':
@@ -58,7 +58,7 @@ def get_color_for_serviceInit(service_name):
         case 'user-service':
             return '#98c1d9'
         case 'post-storage-service':
-            return '#3d5a80'
+            return '#ff0000'
         case 'url-shorten-service':
             return '#f3722c'
         case 'media-mongodb':
@@ -74,9 +74,9 @@ def get_color_for_serviceInit(service_name):
         case 'url-shorten-mongodb':
             return '#4d908e'
         case 'post-storage-mongodb':
-            return '#577590'
+            return '#0d47a1'
         case 'text-service':
-            return '#277da1'
+            return '#c6def1'
         case _:
             return 'black'
 
@@ -198,10 +198,10 @@ def sort_legend(legend_objects, legend_labels):
 
     return legend_objects_sorted, legend_labels_sorted
 
-#elts = [180]
-elts = [180, 200, 250, 300, 350, 400, 450]
+#elts = [500]
+elts = [500, 750, 1000, 1500, 2000]
 #x = 1
-cpu_limit_max=0.5
+cpu_limit_max=1
 load_max=475
 memory_limit=1.5
 pod_limit=3
@@ -214,10 +214,10 @@ for x in elts:
     fileToPlot = f"output-constant_{x}requests_per_sec.csv"
     #fileToPlot = f"output-linear_80requests_max_per_sec.csv"
 
-    save_path = f"../socialNetwork/locust/nantes/hyperthreading/128/group/3nodes/linear/18-09-2024/experimentation6/data/metrics/experimentation-output-linear_{x}requests_max_per_sec.csv/"
+    save_path = f"../socialNetwork/locust/nantes/hyperthreading/128/group/3nodes/linear/18-09-2024/experimentation3/data/metrics/experimentation-output-linear_{x}requests_max_per_sec.csv/"
     #save_path = f"../nantes/hyperthreading/16-07-2024/data/metrics/experimentation-output-linear_80requests_max_per_sec.csv/"
 
-    save_graphics_at = f"../socialNetwork/locust/nantes/hyperthreading/128/group/3nodes/linear/18-09-2024/experimentation6/data/Plots"
+    save_graphics_at = f"../socialNetwork/locust/nantes/hyperthreading/128/group/3nodes/linear/18-09-2024/experimentation3/data/Plots"
 
     parameters = read_parameters_from_json(file_path)
 

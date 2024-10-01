@@ -1,4 +1,4 @@
-AapiVersion: v1
+apiVersion: v1
 kind: Service
 metadata:
   name: jaeger
@@ -9,4 +9,4 @@ spec:
   ports:
     - port: 16686
       targetPort: 16686
-      nodePort: 31686
+      nodePort: 31687

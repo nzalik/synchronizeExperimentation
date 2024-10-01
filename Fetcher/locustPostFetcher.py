@@ -212,8 +212,10 @@ for start_datetime_str in date_list:
     start_datetime = datetime.strptime(start_datetime_str, "%Y-%m-%d %H:%M:%S.%f")
     start_timestamp = start_datetime.timestamp()
 
+    print("timestamp initial")
+    print(formatted_timestamp)
     print("start_timestamp", start_datetime)
-    end_datetime = start_datetime + timedelta(minutes=12)
+    end_datetime = start_datetime + timedelta(minutes= parameters['DURATION'])
 
     end_timestamp = end_datetime.timestamp()
     print("end_timestamp", end_datetime)

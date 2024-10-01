@@ -27,4 +27,4 @@ spec:
       relabelings:
         - sourceLabels: [__meta_kubernetes_service_name, __meta_kubernetes_endpoint_port_name]
           action: keep
-          regex: (istiod|mixer|pilot|galley|citadel|sidecar-injector);http-policy-monitoring
+          regex: (istiod|mixer|pilot|galley|citadel|sidecar-injector);http-policy-monitoring;http-monitoring

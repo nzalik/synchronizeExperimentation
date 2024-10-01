@@ -1,12 +1,14 @@
 # shellcheck disable=SC2045
 #/!/bin/bash
 
-for i in ../Load/profiles_2024-07-31/*.csv; do
+for i in ../Load/profiles_2024-09-18/*.csv; do
 #for i in $(ls ../Load/profiles_2024-07-31/*.csv); do
 			INTENSITY=$( basename ${i%.*} )
 			begin_t=$(date +%s)
 			end_t=$(date -d "+${duration} minutes" +%s)
 			now_t=$(date +%s)
+
+      echo $begin_t
 
 			echo "----- Starting workload with intensity $INTENSITY for $duration minutes -----"
 
