@@ -65,7 +65,7 @@ echo "##################### Sleeping before load ###############################
 
 result="$output_part.csv"
 
-time_obj=$(date +"%H:%M:%S.%3N")
+time_obj=$(date +"%H:%M:%S")
 echo $time_obj
 
 env INTENSITY_FILE=$file_name locust -f ~/synchronizeExperimentation/workload_generators/locust/teastore_locustfile-custom-scale.py --headless --csv=log --csv-full-history
