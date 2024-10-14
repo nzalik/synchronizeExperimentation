@@ -181,26 +181,26 @@ def sort_legend(legend_objects, legend_labels):
 
     return legend_objects_sorted, legend_labels_sorted
 
-elts = [180]
+elts = ["li_linear_10"]
 #elts = [180, 200, 250, 300, 350]
 #x = 1
 cpu_limit_max=1.2
 load_max=475
-memory_limit=6
-pod_limit=6
+memory_limit=5
+pod_limit=2
 
 
 #while x <= 1:
 for x in elts:
 
-    #fileToPlot = f"linear_{x}requests_per_sec.csv"
-    fileToPlot = f"output-linear_{x}requests_max_per_sec.csv"
+    fileToPlot = f"output_{x}"
+    #fileToPlot = f"output-linear_{x}requests_max_per_sec.csv"
     #fileToPlot = f"output-linear_80requests_max_per_sec.csv"
 
-    save_path = f"../locust/advanced/nantes/hyperthreading/128/linear/3nodes/linear/01-10-2024/experimentation2/data/metrics/experimentation-linear_{x}requests_max_per_sec.csv/"
+    save_path = f"../locust/advanced/nantes/hyperthreading/128/linear/3nodes/linear/14-10-2024/experimentation1/data/metrics/experimentation-{x}.csv/"
     #save_path = f"../nantes/hyperthreading/16-07-2024/data/metrics/experimentation-output-linear_80requests_max_per_sec.csv/"
 
-    save_graphics_at = f"../locust/advanced/nantes/hyperthreading/128/linear/3nodes/linear/01-10-2024/experimentation2/data/Plots"
+    save_graphics_at = f"../locust/advanced/nantes/hyperthreading/128/linear/3nodes/linear/14-10-2024/experimentation1/data/Plots"
 
     parameters = read_parameters_from_json(file_path)
 
@@ -278,6 +278,8 @@ for x in elts:
     directory2 = save_path + 'memory'
     for file_name in os.listdir(directory2):
         file_path = os.path.join(directory2, file_name)
+        print("lr chemon")
+        print(file_path)
         #for file_name in json_files1:
         file_parts = file_path.split("/")
         last_part = (file_parts[-1]).split(".")[0]

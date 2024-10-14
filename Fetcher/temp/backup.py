@@ -10,8 +10,7 @@ def read_parameters_from_json(file_path):
     return parameters
 
 file_path = '../teastore_grenoble.json'
-metrics_path = '../istio_metrics.json'
-
+metric_path="../istio_metrics.json"
 
 complete_storage_dir = ""
 formattedDate=""
@@ -22,15 +21,15 @@ if len(sys.argv) > 1:
 
 parameters = read_parameters_from_json(file_path)
 
-metric_parameters = read_parameters_from_json(metrics_path)
-print("les metriques")
-print(metric_parameters)
+metrics_parameters = read_parameters_from_json(metric_path)
 
 prometheus_url = parameters['PROMETHEUS_URL']
 
 current_date = datetime.now().strftime('%Y-%m-%d')
 
+
 start_datetime_str=  current_date +" "+ formattedDate
+
 
 start_datetime = datetime.strptime(start_datetime_str, "%Y-%m-%d %H:%M:%S.%f")
 end_datetime = start_datetime + timedelta(minutes=parameters['DURATION'])
@@ -41,6 +40,11 @@ end_dt = end_datetime.timestamp()
 namespace="default"
 time_step="1"
 step="1"
+
+dir_name = f"{complete_storage_dir}/data/metrics/latency"
+
+if not os.path.exists(dir_name):
+    os.makedirs(dir_name)
 
 def query_prometheus(prometheus_url, query, start_dt, end_dt, step):
     payload = {'query': query, 'start': start_dt, 'end': end_dt, 'step': step + 's'}
@@ -131,32 +135,23 @@ def query_for_service(self, prometheus_url, svc, start_dt, end_dt, step, datadir
 
     return res
 
-def _get_query_modifier(metric_parameter, destination_target):
+def _query_str(self, svc, dst_app="teastore", code="200", reporter="destination", job="kubernetes-pods"):
+    if "gen" in svc['pod']:
+        svc_name = svc['pod'].split("-")[0]
+        return self.query_modifier(
+            self.name + '{request_protocol="http", destination_app="' + dst_app + '", destination_workload="teastore-webui", reporter="source", job="' + job + '", source_app="gens", source_workload="' + svc_name + '"}')
 
-    if metric_parameter['aggregator'] == "histogram_quantile":
-        return f""" histogram_quantile(0.95, sum(rate(istio_request_duration_milliseconds_bucket{{reporter="source", destination_workload="{destination_target}"}}[30s])) by (le, source_workload))"""
-    elif metric_parameter['aggregator'] == "round":
-        return f""" round(sum(irate(istio_requests_total{{destination_workload="{destination_target}",reporter=~"source", source_workload=~"(teastore-webui|teastore-recommender|teastore-persistence|teastore-image|teastore-auth)",source_workload_namespace=~"default"}}[30s])) by (source_workload), 0.001)"""
-    elif metric_parameter['aggregator'] == "bytes":
-        return f"""histogram_quantile(0.95, sum(irate(istio_request_bytes_bucket{{reporter=~"source", destination_workload=~"{destination_target}", source_workload=~"(teastore-webui|teastore-recommender|teastore-persistence|teastore-image|teastore-auth)", source_workload_namespace=~"default"}}[30s])) by (le, source_workload))
-"""
-    elif metric_parameter['aggregator'] == "tcp":
-        return f"""round(sum(irate(istio_tcp_sent_bytes_total{{reporter=~"source", destination_workload=~"{destination_target}", source_workload=~"(teastore-webui|teastore-recommender|teastore-persistence|teastore-image|teastore-auth)"}}[30s])) by (source_workload), 0.001)
-"""
-    else:
-        return f""" round(sum(irate(istio_requests_total{{destination_workload="{destination_target}",reporter=~"source",source_workload=~"(teastore-webui|teastore-recommender|teastore-persistence|teastore-image|teastore-auth)",source_workload_namespace=~"default", response_code="400"}}[30s])) by (source_workload), 0.001)"""
+    svc_name = "-".join(svc['pod'].split("-")[:2])
+    return self.query_modifier(
+        self.name + '{request_protocol="http", destination_service="' + svc_name + '.default.svc.cluster.local", destination_app="' + dst_app + '", destination_workload="' + svc_name + '", reporter="destination", job="' + job + '", source_app="gens", source_workload="gen"}')
 
 
 def _save_as_json(source, destination, res, datadir):
     # Sauvegarder les métriques dans un fichier
-
-    dir_name = f"{complete_storage_dir}/data/metrics/{datadir}/"
-
-    if not os.path.exists(dir_name):
-        os.makedirs(dir_name)
+    print("Sauvegarde des données pour", source, "vers", destination)
 
     # Créer le chemin du fichier avec le nom du service source et destination
-    filename = f"{dir_name}{datadir}_to_{destination}.json"
+    filename = f"latencies_to_{destination}.json"
     filepath = os.path.join(datadir, filename)
 
     # Créer le répertoire s'il n'existe pas
@@ -166,40 +161,40 @@ def _save_as_json(source, destination, res, datadir):
     with open(filepath, 'w') as f:
         json.dump(res, f, ensure_ascii=False, indent=4)
 
+    print(f"Données sauvegardées dans {filepath}")
+
 
 services = query_svc_names(prometheus_url, namespace=namespace, start_dt=start_dt, end_dt=end_dt, step=time_step)
 
 services_names = ['-'.join(svc["pod"].split('-')[:-2]) for svc in services]
 
 
+#for source_workload in services:
 for destination_workload in services:
-    for metric in metric_parameters:
-        print("on etst entré")
-        dir_name = metric["name"]
-       # source = '-'.join(source_workload["pod"].split('-')[:-2])  # Adapter selon ta structure de données
-        destination = '-'.join(destination_workload["pod"].split('-')[:-2])
+   # source = '-'.join(source_workload["pod"].split('-')[:-2])  # Adapter selon ta structure de données
+    destination = '-'.join(destination_workload["pod"].split('-')[:-2])
 
-        # query_str = f"""
-        # histogram_quantile(0.95, sum(rate(istio_request_duration_milliseconds_bucket{{reporter="source",destination_workload="{destination}", source_workload="{source}"}}[30s])) by (le, destination_workload))
-        # """
-        query_str = _get_query_modifier(metric, destination)
+    # query_str = f"""
+    # histogram_quantile(0.95, sum(rate(istio_request_duration_milliseconds_bucket{{reporter="source",destination_workload="{destination}", source_workload="{source}"}}[30s])) by (le, destination_workload))
+    # """
+    query_str = f"""
 
-        payload = {'query': query_str, 'start': start_dt, 'end': end_dt, 'step': step + 's'}
+    """
+    payload = {'query': query_str, 'start': start_dt, 'end': end_dt, 'step': step + 's'}
 
-        url = prometheus_url + '/api/v1/query_range?'
+    url = prometheus_url + '/api/v1/query_range?'
+    res = None
+
+    try:
+        res = requests.post(url, headers={'Content-Type': 'application/x-www-form-urlencoded'}, data=payload).json()
+    except Exception as e:
+        print(e)
+        print("...Fail at Prometheus request.")
+
+    if res != None and 'error' in res:
+        print("ERROR ", res["error"])
         res = None
 
-        try:
-            res = requests.post(url, headers={'Content-Type': 'application/x-www-form-urlencoded'}, data=payload).json()
-            print(res)
-        except Exception as e:
-            print(e)
-            print("...Fail at Prometheus request.")
-
-        if res != None and 'error' in res:
-            print("ERROR ", res["error"])
-            res = None
-
-        elif res != None and len(res['data']['result']) > 0:
-            print("...saving data.")
-            _save_as_json(destination, destination, res, dir_name)
+    elif res != None and len(res['data']['result']) > 0:
+        print("...saving data.")
+        _save_as_json(destination, destination, res, dir_name)

@@ -1,0 +1,18 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: jaeger-servicemonitor
+  namespace: monitoring
+  labels:
+    release: kube-prometheus-stack
+spec:
+  selector:
+    matchLabels:
+      app: jaeger
+  namespaceSelector:
+    matchNames:
+      - default  # Remplace par le namespace de Jaeger
+  endpoints:
+  - port: jaeger-collector-prom  # Le nom du port exposant les métriques, assure-toi que c'est correct
+    interval: 15s       # Fréquence de scraping
+    path: /metrics      # Chemin vers les métriques de Jaeger

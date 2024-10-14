@@ -1,4 +1,4 @@
-#/!/bin/bash
+/!/bin/bash
 
 dir=$(pwd)
 gen_d="${dir}/workload_generators"

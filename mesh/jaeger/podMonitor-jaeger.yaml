@@ -1,0 +1,17 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: jaeger-podmonitor
+  labels:
+    release: prometheus-operator
+spec:
+  selector:
+    matchLabels:
+      app: jaeger  # Label des pods Jaeger
+  namespaceSelector:
+    matchNames:
+      - default  # Remplace par le namespace de Jaeger
+  podMetricsEndpoints:
+  - port: metrics  # Le nom du port exposant les métriques dans le pod Jaeger
+    interval: 15s  # Intervalle de scraping
+    path: /metrics

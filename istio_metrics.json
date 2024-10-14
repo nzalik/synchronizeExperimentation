@@ -1,6 +1,27 @@
 [
   {
-    "metric": "    histogram_quantile(0.95, sum(rate(istio_request_duration_milliseconds_bucket{{reporter=\"source\", destination_workload=\"{destination}\"}}[30s])) by (le, source_workload))",
-    "name": "latency"
-}
+    "metric": "istio_request_duration_milliseconds_bucket",
+    "name": "latency",
+    "aggregator": "histogram_quantile"
+},
+  {
+  "metric": "istio_requests_total",
+    "name": "request",
+    "aggregator": "round"
+  },
+  {
+  "metric": "istio_requests_total",
+    "name": "request",
+    "aggregator": "error"
+  },
+  {
+  "metric": "istio_tcp_sent_bytes_total",
+    "name": "tcp",
+    "aggregator": "tcp"
+  },
+  {
+  "metric": "istio_request_bytes_bucket",
+    "name": "bytes",
+    "aggregator": "bytes"
+  }
 ]
