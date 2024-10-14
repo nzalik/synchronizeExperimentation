@@ -87,7 +87,7 @@ def get_timestamp(time_str, date_str=None):
         date_str = date.today().strftime("%Y-%m-%d")
 
     datetime_str = date_str + " " + time_str
-    dt_obj = datetime.strptime(datetime_str, "%Y-%m-%d %H:%M:%S.%f")
+    dt_obj = datetime.strptime(datetime_str, "%Y-%m-%d %H:%M:%S")
     timestamp = dt_obj.timestamp()
     return timestamp
 
@@ -209,7 +209,7 @@ date_list = [
 
 for start_datetime_str in date_list:
 
-    start_datetime = datetime.strptime(start_datetime_str, "%Y-%m-%d %H:%M:%S.%f")
+    start_datetime = datetime.strptime(start_datetime_str, "%Y-%m-%d %H:%M:%S")
     start_timestamp = start_datetime.timestamp()
 
     print("timestamp initial")
