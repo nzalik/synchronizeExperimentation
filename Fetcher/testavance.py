@@ -32,7 +32,7 @@ current_date = datetime.now().strftime('%Y-%m-%d')
 
 start_datetime_str=  current_date +" "+ formattedDate
 
-start_datetime = datetime.strptime(start_datetime_str, "%Y-%m-%d %H:%M:%S.%f")
+start_datetime = datetime.strptime(start_datetime_str, "%Y-%m-%d %H:%M:%S")
 end_datetime = start_datetime + timedelta(minutes=parameters['DURATION'])
 
 start_dt = start_datetime.timestamp()

@@ -48,8 +48,8 @@ def process_csv_line(csv_file):
 
     # Formater le timestamp
     date_obj = datetime.strptime(date_str, '%d.%m.%Y')
-    time_obj = datetime.strptime(time_str, '%H:%M:%S%f')
-    timestamp_formatted = time_obj.strftime('%H:%M:%S.%f')[:-3]
+    time_obj = datetime.strptime(time_str, '%H:%M')
+    timestamp_formatted = time_obj.strftime('%H:%M')[:-3]
 
     print("dans un premier temps")
     print(timestamp_formatted)
