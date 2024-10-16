@@ -197,10 +197,10 @@ for x in elts:
     #fileToPlot = f"output-linear_{x}requests_max_per_sec.csv"
     #fileToPlot = f"output-linear_80requests_max_per_sec.csv"
 
-    save_path = f"../locust/advanced/nantes/hyperthreading/128/linear/3nodes/linear/16-10-2024/experimentation6/data/metrics/experimentation-{x}.csv/"
+    save_path = f"../locust/advanced/nantes/hyperthreading/128/linear/3nodes/linear/16-10-2024/experimentation2/data/metrics/experimentation-{x}.csv/"
     #save_path = f"../nantes/hyperthreading/16-07-2024/data/metrics/experimentation-output-linear_80requests_max_per_sec.csv/"
 
-    save_graphics_at = f"../locust/advanced/nantes/hyperthreading/128/linear/3nodes/linear/16-10-2024/experimentation6/data/Plots"
+    save_graphics_at = f"../locust/advanced/nantes/hyperthreading/128/linear/3nodes/linear/16-10-2024/experimentation2/data/Plots"
 
     parameters = read_parameters_from_json(file_path)
 

@@ -74,7 +74,7 @@ env INTENSITY_FILE=$file_name locust -f ~/PycharmProjects/synchronizeExperimenta
 sleep 60
 
 python3 ../Fetcher/locustPostFetcher.py "$result" $workload_dir $exp_folder_path $time_obj
-#python3 ../Fetcher/testavance.py $exp_folder_path $time_obj
+python3 ../Fetcher/testavance.py $exp_folder_path $time_obj
 
 #kubectl delete pods,deployments,services -l app=teastore
 
