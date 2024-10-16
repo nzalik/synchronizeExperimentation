@@ -85,7 +85,7 @@ def query_prometheus_with_payload(prometheus_url, query, start_dt, end_dt, step)
     return res
 
 def query_svc_names(prometheus_url, namespace='default', start_dt='', end_dt='', step='1'):
-    query_str = '/label/pod/values?match[]=kube_pod_container_info{namespace="' + namespace + '"}&start=' + str(
+    query_str = 'label/pod/values?match[]=kube_pod_container_info{namespace="' + namespace + '"}&start=' + str(
         start_dt) + '&end=' + str(end_dt)
     print("Querying existing services by " + query_str)
     res = query_prometheus(prometheus_url, query_str, start_dt, end_dt, step)

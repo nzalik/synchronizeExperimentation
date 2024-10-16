@@ -5,7 +5,6 @@ from random import randint, choice
 from locust import HttpUser, task, between, LoadTestShape
 
 GLOBAL_INTENSITY_FILE = os.environ.get("INTENSITY_FILE")
-GLOBAL_MIN_USERS           = 100
 
 if GLOBAL_INTENSITY_FILE:
     logging.info(f"Using intensity CSV file: {GLOBAL_INTENSITY_FILE}")
@@ -14,16 +13,9 @@ else:
 
 class LoadShape(LoadTestShape):
     row_offset = 0
-    #csv_list = []
 
     def tick(self):
-
-        csv_list = []
-
-        user_count = GLOBAL_MIN_USERS
         # Lire le fichier CSV
-       # if not self.csv_list:
-
         if not GLOBAL_INTENSITY_FILE:
             logging.error("INTENSITY_FILE environment variable not set.")
             return None
@@ -32,17 +24,20 @@ class LoadShape(LoadTestShape):
             csv_reader = csv.reader(intensity_csv, delimiter=',')
             csv_list = list(csv_reader)
 
-        # Obtenir le nombre d'utilisateurs à partir de la deuxième colonne
-        user_count = int(csv_list[self.row_offset][1])
-        self.row_offset += 1
+            # Ignorer la première ligne (en-têtes)
+        if self.row_offset == 0:
+            self.row_offset += 1  # Passer la première ligne
 
         # Vérifier si nous sommes en dehors des limites du CSV
         if self.row_offset >= len(csv_list):
             return None  # Fin du test
 
+        # Obtenir le nombre d'utilisateurs à partir de la deuxième colonne
+        user_count = int(csv_list[self.row_offset][1])
+        self.row_offset += 1
+
         # Retourner le nombre d'utilisateurs et un taux de création
-        #spawn_rate = max(1, user_count)  # Assurer un taux supérieur à zéro
-        spawn_rate = max(1, abs(user_count - self.get_current_user_count()))
+        spawn_rate = max(1, user_count)  # Assurer un taux supérieur à zéro
         return user_count, spawn_rate
 
 class UserBehavior(HttpUser):
