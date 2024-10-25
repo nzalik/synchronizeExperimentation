@@ -29,9 +29,9 @@ GLOBAL_WAIT_TIME           = between(1, 3)
 
 if COMPOSITION_OPTION == 'composePost':
     GLOBAL_COMPOSITIONS = [(100, 0, 0)]
-elif COMPOSITION_OPTION == 'readUserTimeline':
-    GLOBAL_COMPOSITIONS = [(0, 100, 0)]
 elif COMPOSITION_OPTION == 'readHomeTimeline':
+    GLOBAL_COMPOSITIONS = [(0, 100, 0)]
+elif COMPOSITION_OPTION == 'readUserTimeline':
     GLOBAL_COMPOSITIONS = [(0, 0, 100)]
 elif COMPOSITION_OPTION == 'mixed':
     GLOBAL_COMPOSITIONS = [(33, 33, 33)]
@@ -39,14 +39,12 @@ else:
     GLOBAL_COMPOSITIONS = [(5, 40, 55), (5, 45, 50), (5, 50, 45), (5, 55, 40), (10, 35, 55), (10, 40, 50), (10, 45, 45), (10, 50, 40), (10, 55, 35), (15, 35, 50), (15, 40, 45), (15, 45, 40), (15, 50, 35)]
 
 ####################################################################################################################################
-#prefix="/home/ykoagnenzali/Experimentations/synchronizeExperimentation/workload_generators/locust/datasets"
-prefix="/home/erods-chouette/PycharmProjects/synchronizeExperimentation/workload_generators/locust/datasets"
-texts = [text.replace('@', '') for text in list(open(prefix+'/fb-posts/news.txt'))]
-media = [os.path.join(prefix+'/inria-person', fname) for fname in os.listdir(prefix+'/inria-person')]
+texts = [text.replace('@', '') for text in list(open('./datasets/fb-posts/news.txt'))]
+media = [os.path.join('./datasets/inria-person', fname) for fname in os.listdir('./datasets/inria-person')]
 users = list(range(1, 963))
 cycle = 0
 active_users, inactive_users = [], list(range(1, 963))
-with open(prefix+'/social-graph/socfb-Reed98.mtx', 'r') as f:
+with open('./datasets/social-graph/socfb-Reed98.mtx', 'r') as f:
     friends = {}
     for edge in f.readlines():
         edge = list(map(int, edge.strip().split()))

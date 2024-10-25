@@ -10,14 +10,16 @@ random.seed(2021)  # deterministic random numbers
 async def upload_follow(session, addr, user_0, user_1):
     payload = {'user_id': user_0, 'followee_id': user_1}
     async with session.post(addr + "/wrk2-api/user/follow", data=payload) as resp:
-        return await resp.text()
+        response = await resp.text()
+        return response
 
 
 async def upload_register(session, addr, user):
     payload = {'first_name': 'first_name_' + user, 'last_name': 'last_name_' + user,
                'username': 'username_' + user, 'password': 'password_' + user, 'user_id': user}
     async with session.post(addr + "/wrk2-api/user/register", data=payload) as resp:
-        return await resp.text()
+        response = await resp.text()
+        return response
 
 
 def getNodes(file):

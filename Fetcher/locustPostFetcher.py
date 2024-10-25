@@ -19,8 +19,10 @@ if len(sys.argv) > 1:
     complete_storage_dir = sys.argv[3] #linear or constant
     formattedDate = sys.argv[4]
 
+    print("les paremetres")
     print(string_argument)
     print(repo_argument)
+    print(complete_storage_dir)
 
 file_path = '../teastore_grenoble.json'
 
@@ -61,11 +63,13 @@ def read_ini_file(file_path):
     return config
 
 def path_to_save(init_path):
-    output_path = f"{init_path}/experimentation-{string_argument}"
+    #output_path = f"{init_path}/experimentation-{string_argument}"
+    output_path = f"{init_path}"
     if os.path.exists(init_path):
         # Construire le nouveau nom de répertoire
         new_dir_name = f"data_{datetime.now().strftime('%H')}"
-        output_path = f"{init_path}/experimentation-{string_argument}"
+        #output_path = f"{init_path}/experimentation-{string_argument}"
+        output_path = f"{init_path}"
 
         if not os.path.exists(init_path):
             os.makedirs(init_path)
@@ -111,11 +115,13 @@ def query_prometheus(query):
     return res
 
 def query_svc_names(namespace='default'):
-    query_str = '/label/pod/values?match[]=kube_pod_container_info{namespace="' + namespace + '"}'
+    query_str = 'label/pod/values?match[]=kube_pod_container_info{namespace="' + namespace + '"}'
     res = query_prometheus(query_str)
     svc_names = []
     services = res['data']
     return services
+
+
 
 parameters = read_parameters_from_json(file_path)
 valueTime = parameters['DURATION']
@@ -138,7 +144,8 @@ today = date.today()
 date_str = today.strftime("%d-%m-%Y")
 
 #dir_name = f"../nantes/hyperthreading/{category}/{date_str}/data/metrics"
-dir_name = f"{complete_storage_dir}/data/metrics"
+dir_name = f"{complete_storage_dir}"
+#dir_name = f"{complete_storage_dir}/data/metrics"
 
 #dir_name = today.strftime("%d-%m-%Y")
 
@@ -149,14 +156,18 @@ if not os.path.exists(dir_name):
 
 cpu_step = "2m"
 step = "1s"
-def _init_metric_metadata(metric):
-
-
+def _init_metric_metadata(metric, pod_name):
 
     query_str = 'metadata?metric=' + metric
     url = prom_url + '/api/v1/' + query_str
 
     res = None
+
+    root_container_name = '-'.join(pod_name.split('-')[:-2])
+
+    print("le nom du pod")
+    print("le nom du service")
+    print(root_container_name)
 
     try:
         res = requests.get(url).json()
@@ -170,9 +181,9 @@ def _init_metric_metadata(metric):
         metadata = res['data'][metric][0]
 
         if (metadata['type'] == "gauge"):
-            return f"{metric}{{pod=\"{container_name}\", container!=\"\" }}"
+            return f"{metric}{{namespace=\"default\",pod=\"{pod_name}\", container=\"{root_container_name}\" }}"
         elif (metadata['type'] == "counter"):
-            return f"irate({metric}{{pod=\"{container_name}\", container!=\"\"}}[{cpu_step}])"
+            return f"irate({metric}{{namespace=\"default\",pod=\"{pod_name}\", container=\"{root_container_name}\"}}[{cpu_step}])"
         else:
             return f"{metric}{{namespace=\"default\"}}"
 
@@ -212,36 +223,39 @@ for start_datetime_str in date_list:
     start_datetime = datetime.strptime(start_datetime_str, "%Y-%m-%d %H:%M:%S")
     start_timestamp = start_datetime.timestamp()
 
-    print("timestamp initial")
-    print(formatted_timestamp)
-    print("start_timestamp", start_datetime)
     end_datetime = start_datetime + timedelta(minutes= parameters['DURATION'])
 
     end_timestamp = end_datetime.timestamp()
-    print("end_timestamp", end_datetime)
+
     new_timestampManual = start_timestamp
     target_timeManual = end_timestamp
 
     for section_name in config.sections():
         directory = ""
         for key, value in config.items(section_name):
-            directory = path_to_save(dir_name) + "/" + key
 
             for svc in all_services:
-
+                root_container_name = '-'.join(svc.split('-')[:-2])
+                directory = path_to_save(dir_name) + "/"+root_container_name + "/" + key
+                print("le directoryr")
+                print(directory)
                 container_name = svc
 
-                query_str = _init_metric_metadata(value)
+                query_str = _init_metric_metadata(value, container_name)
 
                 #payload = {'query': query_str, 'start': new_timestamp, 'end': current_timestamp, 'step': step}
                 payload = {'query': query_str, 'start': new_timestampManual, 'end': target_timeManual, 'step': step}
-
+                print("payload")
+                print(payload)
                 url = prom_url + '/api/v1/query_range?'
 
                 res = None
 
                 filename = svc + '.json'
-                query_str_file = os.path.join(directory, filename)
+                #query_str_file = os.path.join(directory, filename)
+                query_str_file = directory + "/" + filename
+                print("le chemin pour aller")
+                print(query_str_file)
                 # query_str_file = "nom_du_fichier.json"
                 os.makedirs(directory, exist_ok=True)
 
@@ -289,6 +303,13 @@ for start_datetime_str in date_list:
         filename4 = 'pod_restart.json'
 
         query_str_file = os.path.join(directory2, filename)
+        if os.path.exists(query_str_file):
+            base, ext = os.path.splitext(filename)
+            counter = 1
+            while os.path.exists(os.path.join(directory2, f"{base}_{counter}{ext}")):
+                counter += 1
+            query_str_file = os.path.join(directory2, f"{base}_{counter}{ext}")
+
         query_str_file2 = os.path.join(directory3, filename2)
         query_str_file3 = os.path.join(directory3, filename3)
         query_str_file4 = os.path.join(directory3, filename4)

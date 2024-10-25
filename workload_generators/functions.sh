@@ -1,4 +1,4 @@
-/!/bin/bash
+#/!/bin/bash
 
 dir=$(pwd)
 gen_d="${dir}/workload_generators"
@@ -26,8 +26,8 @@ teastore_load_generator() {
 	for REQUEST in teastore_browse; do
 		sed -i "$sed_str" $gen_d/httploadgenerator/$REQUEST.lua
 
-		for i in $(ls $gen_d/httploadgenerator/intensity_profiles/); do 
-		#for i in $(ls $gen_d/load-profiles/alibaba_loads_lower/*.csv); do 
+		#for i in $(ls $gen_d/httploadgenerator/intensity_profiles/); do 
+		for i in $(ls $gen_d/load-profiles/alibaba_loads_lower/*.csv); do 
 			INTENSITY=$( basename ${i%.*} )
 			begin_t=$(date +%s)
 			end_t=$(date -d "+${duration} minutes" +%s)
@@ -113,9 +113,6 @@ socialnetwork_load_generator() {
 	ip_port_split=(${3//:/ })
 	duration_s=$((60*duration))
 	
-	shift 6
-	generators="$@"
-
 	data_dir="$dir/data/socialnetwork/"
 	if [ ! -d "$data_dir" ]; then
 		mkdir -p $data_dir
@@ -125,12 +122,13 @@ socialnetwork_load_generator() {
 	cd $gen_d/locust
 	source venv/bin/activate
 	
-	python3 warmup.py --addr=$webui_addr
+	#python3 warmup.py --addr=$webui_addr
 	#for REQUEST in 'composePost' 'readHomeTimeline' 'readUserTimeline' 'mixed' 'std_comp'; do
 	for REQUEST in 'std_comp' ; do
 
-		#for i in $(ls intensity_profiles/*.csv); do 
-		for i in $(ls ../load-profiles/alibaba_loads/*.csv); do 
+		#for i in intensity_profiles/li_linear_1.csv; do
+		for i in intensity_profiles/*.csv; do
+		#for i in $(ls ../load-profiles/alibaba_loads/*.csv); do
 			INTENSITY=$( basename ${i%.*} ) 
 			begin_t=$(date +%s)
 			end_t=$(date -d "+${duration} minutes" +%s)
@@ -140,17 +138,11 @@ socialnetwork_load_generator() {
 
 				# Generate http requests based on API Composition
 				echo "----- Starting workload $REQUEST with intensity $INTENSITY for $duration minutes -----"
-				#env NGINX_ADDR=$webui_addr MEDIA_ADDR=$media_addr INTENSITY_FILE=$i COMP_OPT=$REQUEST locust -f locustfile-custom-scale.py --headless --csv=log --csv-full-history 
-				timeout -k 10 "$(($duration+1))"m ./run_locust_parallel.sh $webui_addr $media_addr $i $REQUEST $gen_d/locust $generators
-				python3 $fetch_d/prometheus_fetch.py $prometheus_url \
-					-N "socialnetwork_${REQUEST}_${INTENSITY}" -d "$data_dir" -p "node_dist_1/hw_spec_1/pod_spec_1/$REQUEST/$INTENSITY/" \
-					-t $duration -s $time_step -c $fetch_d/metrics.ini -n $namespace
-
-				mkdir -p $data_dir/locust-logs-test-test/$REQUEST/$INTENSITY/
-				mv $gen_d/locust/log_* 	$data_dir/locust-logs-test-test/$REQUEST/$INTENSITY/
-				mv $gen_d/locust/*.log 	$data_dir/locust-logs-test-test/$REQUEST/$INTENSITY/
-
-				sleep 35
+				env NGINX_ADDR=$webui_addr MEDIA_ADDR=$media_addr INTENSITY_FILE=$i COMP_OPT=$REQUEST locust -f experimental_compose_post.py --headless --csv=log --csv-full-history
+#				python3 $fetch_d/prometheus_fetch.py $prometheus_url \
+#					-N "socialnetwork_${REQUEST}_${INTENSITY}" -d "$data_dir" -p "node_dist_1/hw_spec_1/pod_spec_1/$REQUEST/$INTENSITY/" \
+#					-t $duration -s $time_step -c $fetch_d/metrics.ini -n $namespace
+				sleep 5
 				now_t=$(date +%s)
 	
 			done

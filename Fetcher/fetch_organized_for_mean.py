@@ -22,7 +22,7 @@ if len(sys.argv) > 1:
     print(string_argument)
     print(repo_argument)
 
-file_path = '../teastore_grenoble.json'
+file_path = sys.argv[5]
 
 def process_csv_line(csv_file):
     """
@@ -61,11 +61,13 @@ def read_ini_file(file_path):
     return config
 
 def path_to_save(init_path):
-    output_path = f"{init_path}/experimentation-{string_argument}"
+    #output_path = f"{init_path}/experimentation-{string_argument}"
+    output_path = f"{init_path}"
     if os.path.exists(init_path):
         # Construire le nouveau nom de répertoire
         new_dir_name = f"data_{datetime.now().strftime('%H')}"
-        output_path = f"{init_path}/experimentation-{string_argument}"
+        #output_path = f"{init_path}/experimentation-{string_argument}"
+        output_path = f"{init_path}"
 
         if not os.path.exists(init_path):
             os.makedirs(init_path)
@@ -174,7 +176,8 @@ today = date.today()
 date_str = today.strftime("%d-%m-%Y")
 
 #dir_name = f"../nantes/hyperthreading/{category}/{date_str}/data/metrics"
-dir_name = f"{complete_storage_dir}/data/metrics"
+dir_name = f"{complete_storage_dir}"
+#dir_name = f"{complete_storage_dir}/data/metrics"
 
 #dir_name = today.strftime("%d-%m-%Y")
 
@@ -276,9 +279,11 @@ print(pod_names)
 for section_name in config.sections():
     directory = ""
     for key, value in config.items(section_name):
-        directory = path_to_save(dir_name) + "/" + key
 
         for svc in pod_names:
+
+            root_container_name = '-'.join(svc.split('-')[:-2])
+            directory = path_to_save(dir_name) + "/" + root_container_name + "/" + key
 
             container_name = svc
 
@@ -293,7 +298,7 @@ for section_name in config.sections():
             res = None
 
             filename = svc + '.json'
-            query_str_file = os.path.join(directory, filename)
+            query_str_file = directory + "/" + filename
             # query_str_file = "nom_du_fichier.json"
             os.makedirs(directory, exist_ok=True)
 
@@ -341,6 +346,13 @@ for section_name in config.sections():
     filename4 = 'pod_restart.json'
 
     query_str_file = os.path.join(directory2, filename)
+    if os.path.exists(query_str_file):
+        base, ext = os.path.splitext(filename)
+        counter = 1
+        while os.path.exists(os.path.join(directory2, f"{base}_{counter}{ext}")):
+            counter += 1
+        query_str_file = os.path.join(directory2, f"{base}_{counter}{ext}")
+
     query_str_file2 = os.path.join(directory3, filename2)
     query_str_file3 = os.path.join(directory3, filename3)
     query_str_file4 = os.path.join(directory3, filename4)

@@ -17,13 +17,6 @@ def noise_f(value, scale, ceil, floor):
     return new_value 
 
 
-def pareto_noise_f(value):
-    a = 1.161
-    new_value = value + random.default_rng().pareto(a, 1) * 20
-
-    return new_value
-
-
 def sin_f(x, ceil=100, floor=0, peak_nb=4, d=1800, h_offset=0, noise=False):
     f = peak_nb / d
     fun_freq = 2 * math.pi * f
@@ -33,8 +26,7 @@ def sin_f(x, ceil=100, floor=0, peak_nb=4, d=1800, h_offset=0, noise=False):
     v = amp * math.sin(fun_freq * x + h_offset) + v_offset
 
     if noise:
-        #v = noise_f(v, 0.1 * amp, ceil, floor)
-        v = pareto_noise_f(v)
+        v = noise_f(v, 0.1 * amp, ceil, floor)
 
     return v
 
@@ -48,8 +40,7 @@ def abs_sin_f(x, ceil=100, floor=0, peak_nb=4, d=1800, h_offset=0, noise=False):
     v = abs( amp * math.sin(fun_freq * x + h_offset)) + v_offset
 
     if noise:
-        #v = noise_f(v, 0.1 * amp, ceil, floor)
-        v = pareto_noise_f(v)
+        v = noise_f(v, 0.1 * amp, ceil, floor)
 
     return v
 
@@ -63,8 +54,7 @@ def cos_f(x, ceil=100, floor=0, peak_nb=4, d=1800, h_offset=0, noise=False):
     v = amp * math.cos(fun_freq * x + h_offset) + v_offset
 
     if noise:
-        #v = noise_f(v, 0.1 * amp, ceil, floor)
-        v = pareto_noise_f(v)
+        v = noise_f(v, 0.1 * amp, ceil, floor)
 
     return v
 
@@ -78,8 +68,7 @@ def abs_cos_f(x, ceil=100, floor=0, peak_nb=4, d=1800, h_offset=0, noise=False):
     v = abs( amp * math.cos(fun_freq * x + h_offset)) + v_offset
 
     if noise:
-        #v = noise_f(v, 0.1 * amp, ceil, floor)
-        v = pareto_noise_f(v)
+        v = noise_f(v, 0.1 * amp, ceil, floor)
 
     return v
 
@@ -87,16 +76,13 @@ def abs_cos_f(x, ceil=100, floor=0, peak_nb=4, d=1800, h_offset=0, noise=False):
 def linear_f(x, a=0.1, ceil=250, floor=5, noise=False):
     v =  a * x + floor
 
-    #if (noise and a > 0):
-    #    v = noise_f(v, 10*a, ceil, floor)
-    #elif (noise and a < 0):
-    #    v = noise_f(v, -10*a, floor, ceil)
+    if (noise and a > 0):
+        v = noise_f(v, 10*a, ceil, floor)
+    elif (noise and a < 0):
+        v = noise_f(v, -10*a, floor, ceil)
 
-    #if (v > ceil and a > 0) or (v < ceil and a < 0):
-    #    v = ceil
-
-    if noise:
-        v = pareto_noise_f(v)
+    if (v > ceil and a > 0) or (v < ceil and a < 0):
+        v = ceil
 
     return v
 
@@ -130,29 +116,18 @@ def bell_f(x, ceil=100, floor=5):
 def rd_jump(x, ceil=100, floor=5, duration=1800):
     np.random.seed(int(time.time()))
 
-    jump_duration = int(np.random.uniform(duration//10, duration//3))
-    nb_jumps = int(np.random.uniform(1, duration // jump_duration - 1))
-
-    jump_list = []
-    for i in range(nb_jumps):
-        if i > 0:
-            jump_start = np.random.uniform(jump_list[i-1][1] + 1, duration - (nb_jumps-i)*jump_duration -2)
-        else:
-            jump_start = np.random.uniform(1, duration // 10) 
-
-        jump_end = jump_start + jump_duration
-        jump_list.append((jump_start, jump_end))
+    jump_start = np.random.uniform(0, duration//2)
+    jump_end = jump_start + duration // 3
 
     ret = floor
-    for jump in jump_list:
-        if x >= jump[0] and x <= jump[1]:
-            ret = ceil
+    if x >= jump_start and x <= jump_end:
+        ret = ceil
 
     return ret
 
 
 def rd_stairs(x, ceil=100, floor=5, duration=1800, nb_steps=5):
-    np.random.seed(int(time.time()))
+    np.random.seed(1)
 
     step_size = duration // nb_steps
 

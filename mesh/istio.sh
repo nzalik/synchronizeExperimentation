@@ -5,14 +5,14 @@
 
 # Télécharger et extraire Istio
 #curl -L https://istio.io/downloadIstio | sh -
-cd istio-1.23.2
+cd istio-1.23.1
 
 # Ajouter Istio au PATH
 export PATH=$PWD/bin:$PATH
 
 # Installer Istio
-#istioctl install --set profile=demo -y
-istioctl install -f samples/bookinfo/demo-profile-no-gateways.yaml -y
+istioctl install --set profile=demo -y
+#istioctl install -f samples/bookinfo/demo-profile-no-gateways.yaml -y
 
 # Activer l'injection automatique d'Istio sur le namespace par défaut
 kubectl label namespace default istio-injection=enabled

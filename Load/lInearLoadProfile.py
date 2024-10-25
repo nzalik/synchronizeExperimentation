@@ -42,9 +42,9 @@ def generate_linear_profile(duration, step_size, start_value, end_values):
             print(f"Profil de charge linéaire généré: {file_name}")
 
 # Paramètres de configuration
-DURATION = 599.5  # Durée totale du profil de charge (en secondes)
+DURATION = 299.5  # Durée totale du profil de charge (en secondes)
 STEP_SIZE = 1.0
 START_VALUE = 1.0  # Valeur de départ modifiée à 1.0
-END_VALUE = [1500, 2000]  # Valeur finale
+END_VALUE = [100]  # Valeur finale
 
 generate_linear_profile(DURATION, STEP_SIZE, START_VALUE, END_VALUE)

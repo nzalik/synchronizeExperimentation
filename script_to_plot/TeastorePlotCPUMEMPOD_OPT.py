@@ -9,7 +9,9 @@ import pandas as pd
 
 cpu_step = "2m"
 
-file_path = '../teastore.json'
+plot_limit = 301  # Replace with your preferred plot limit value
+
+file_path_json = '../teastore.json'
 
 def smooth(values, w_size=5):
     new_values = []
@@ -73,50 +75,109 @@ def get_color_for_service(service_name):
 
     return color, base_name
 
-def plot_json(file_name, label):
+def open_file(file_name):
     with open(file_name, 'r') as file:
+        #for file_name in files:
+        #with open(file_name, 'r') as file:
         json_data = json.load(file)
+        return json_data
 
-    if len(json_data['data']['result']) > 0:
-        datas = json_data['data']['result'][0]['values']
+def plot_json(file_path, file_name):
+    label = file_name
+    list_element = os.listdir(file_path)
 
-        timestamps = np.array([int(ts) for ts, _ in datas])
 
-        given_value = 0.0  # Replace with your desired value
-        # given_value = 1716985520.148 # Replace with your desired value
+    json_data_file1 = open_file(os.path.join(file_path, list_element[0]))
+    json_data_file2 = open_file(os.path.join(file_path, list_element[1]))
+    json_data_file3 = open_file(os.path.join(file_path, list_element[2]))
 
-        greater_than_value = timestamps[timestamps > given_value]
-        less_than_value = timestamps[timestamps <= given_value]
+    # json_data_file1 = open_file(os.path.join(directory,file_name, listElement[0]))
+    # json_data_file2 = open_file(os.path.join(directory, file_name, listElement[1]))
+    # json_data_file3 = open_file(os.path.join(directory, file_name, listElement[2]))
 
-        values = [float(value) for _, value in datas]
+    if len(json_data_file1['data']['result']) > 0 and len(json_data_file2['data']['result']) > 0 and len(
+            json_data_file3['data']['result']) > 0:
+        datas1 = json_data_file1['data']['result'][0]['values']
+        datas2 = json_data_file2['data']['result'][0]['values']
+        datas3 = json_data_file3['data']['result'][0]['values']
 
-        last_ten_values = values[-(len(greater_than_value)):]
+        data_lengths = [len(datas1), len(datas2), len(datas3)]
+        avg_length = sum(data_lengths) / len(data_lengths)
 
-        greater_than_valueReduce = greater_than_value
-        last_ten_valuesReduce = last_ten_values
+        if avg_length >= plot_limit:
+            timestamps = np.array([int(ts) for ts, _ in datas1])
 
-        # lissageValues = smooth(last_ten_valuesReduce)
-        lissageValues = last_ten_valuesReduce
+            given_value = 0.0  # Replace with your desired value
+            # given_value = 1716985520.148 # Replace with your desired value
 
-        # color = get_color_for_service(label)
-        color, base_name = get_color_for_service(label)
+            greater_than_value = timestamps[timestamps > given_value]
+            less_than_value = timestamps[timestamps <= given_value]
 
-        current_line = plt.plot([], [], color=color, label="")[0]
-        legend_objectsCpu.append(current_line)
-        legend_labelsCpu.append(base_name)
+            values1 = [float(value) for _, value in datas1]
+            values2 = [float(value) for _, value in datas2]
+            values3 = [float(value) for _, value in datas3]
 
-        plt.plot(greater_than_valueReduce, lissageValues, color=color, label=base_name)
-        return greater_than_valueReduce
+            longueur_max = max(len(liste) for liste in [values1, values2, values3])
+
+            print(f"taille liste longue  {longueur_max}")
+            print(len(values1))
+            print(len(values2))
+            print(len(values3))
+            print("afterwards")
+            for liste in [values1, values2, values3]:
+                while len(liste) < longueur_max:
+                    liste.append(0)
+
+            values1 = np.array(values1)
+            values2 = np.array(values2)
+            values3 = np.array(values3)
+
+            print(len(values1))
+            print(len(values2))
+            print(len(values3))
+
+            meanValues = np.mean([values1, values2, values3], axis=0)
+
+            last_ten_values = meanValues[-(len(greater_than_value)):]
+
+            greater_than_valueReduce = greater_than_value
+
+            new_timestamps = np.arange(0, plot_limit)
+
+            last_ten_valuesReduce = last_ten_values
+
+            # lissageValues = smooth(last_ten_valuesReduce)
+            lissageValues = last_ten_valuesReduce
+
+            # color = get_color_for_service(label)
+            color = get_color_for_serviceInit(label)
+
+            current_line = plt.plot([], [], color=color, label="")[0]
+            legend_objectsCpu.append(current_line)
+            legend_labelsCpu.append(label)
+
+            plt.plot(new_timestamps, lissageValues, color=color, label=label)
+            return new_timestamps, lissageValues
     return []
 
-def plot_jsonMemory(file_name, label):
-    with open(file_name, 'r') as file:
-        json_data = json.load(file)
+def plot_jsonMemory(file_path, file_name):
+    label = file_name
+    list_element = os.listdir(file_path)
 
-    if len(json_data['data']['result']) > 0:
-        datas = json_data['data']['result'][0]['values']
+    json_data_file1 = open_file(os.path.join(file_path, list_element[0]))
+    json_data_file2 = open_file(os.path.join(file_path, list_element[1]))
+    json_data_file3 = open_file(os.path.join(file_path, list_element[2]))
 
-        timestamps = np.array([int(ts) for ts, _ in datas])
+    # json_data_file1 = open_file(filesMem[0])
+    # json_data_file2 = open_file(filesMem[1])
+    # json_data_file3 = open_file(filesMem[2])
+
+    if len(json_data_file1['data']['result']) > 0:
+        datas1 = json_data_file1['data']['result'][0]['values']
+        datas2 = json_data_file2['data']['result'][0]['values']
+        datas3 = json_data_file3['data']['result'][0]['values']
+
+        timestamps = np.array([int(ts) for ts, _ in datas1])
 
         given_value = 0.0  # Replace with your desired value
         # given_value = 1716985520.148 # Replace with your desired value
@@ -124,11 +185,33 @@ def plot_jsonMemory(file_name, label):
         greater_than_value = timestamps[timestamps > given_value]
         less_than_value = timestamps[timestamps <= given_value]
 
-        values = [float(value) for _, value in datas]
+        values1 = [float(value) for _, value in datas1]
+        values2 = [float(value) for _, value in datas2]
+        values3 = [float(value) for _, value in datas3]
+
+        print("avant avant")
+        print(len(values1))
+        print(len(values2))
+        print(len(values3))
+        longueur_max = max(len(liste) for liste in [values1, values2, values3])
+        for liste in [values1, values2, values3]:
+            while len(liste) < longueur_max:
+                liste.append(0)
+
+        values1 = np.array(values1)
+        values2 = np.array(values2)
+        values3 = np.array(values3)
+
+        print("Après après 33333333333333333333333333")
+        print(len(values1))
+        print(len(values2))
+        print(len(values3))
+
+        meanValues = np.mean([values1, values2, values3], axis=0)
 
         # Normaliser les valeurs en gibibytes (GiB)
         normalized_values = []
-        for value in values:
+        for value in meanValues:
             value_in_bytes = value  # Convertir en octets
             value_in_gib = value_in_bytes / (1000 ** 3)  # Convertir en GiB
             normalized_values.append(value_in_gib)  # Arrondir à 2 décimales
@@ -139,25 +222,27 @@ def plot_jsonMemory(file_name, label):
         greater_than_valueReduce = greater_than_value
         last_ten_valuesReduce = last_ten_values
 
+        new_timestamps = np.arange(0, plot_limit)
+
         # lissageValues = smooth(last_ten_valuesReduce)
         lissageValues = last_ten_valuesReduce
 
-        color, base_name = get_color_for_service(label)
+        #color, base_name = get_color_for_service(label)
+        color = get_color_for_serviceInit(label)
 
         current_line = plt.plot([], [], color=color, label="")[0]
         legend_objectsMemory.append(current_line)
-        legend_labelsMemory.append(base_name)
+        legend_labelsMemory.append(label)
 
-        plt.plot(greater_than_valueReduce, lissageValues, color=color, label=base_name)
+        plt.plot(new_timestamps, lissageValues, color=color, label=label)
 
-        return greater_than_valueReduce
+        return new_timestamps
     return []
 
 def read_parameters_from_json(file_path):
     with open(file_path, 'r') as file:
         parameters = json.load(file)
     return parameters
-
 
 def sort_legend(legend_objects, legend_labels):
     """
@@ -181,7 +266,9 @@ def sort_legend(legend_objects, legend_labels):
 
     return legend_objects_sorted, legend_labels_sorted
 
-elts = ["si_sin_2"]
+elts = ["rd_stairs_2"]
+#elts = ["rd_stairs_2","rd_jump_2","li_stairsu_2","li_stairsd_2","linear_100"]
+#elts = ["si_sin_2","si_cos_2","si_abssin_2","rd_stairs_2","rd_jump_2","li_stairsu_2","li_stairsd_2"]
 #elts = [180, 200, 250, 300, 350]
 #x = 1
 cpu_limit_max=1.2
@@ -190,19 +277,19 @@ memory_limit=5
 pod_limit=2
 
 
-#while x <= 1:
 for x in elts:
 
     fileToPlot = f"output_{x}"
     #fileToPlot = f"output-linear_{x}requests_max_per_sec.csv"
     #fileToPlot = f"output-linear_80requests_max_per_sec.csv"
-
-    save_path = f"../locust/advanced/nantes/hyperthreading/128/linear/3nodes/linear/21-10-2024/1/experimentation8/data/metrics/experimentation-{x}.csv/"
+    save_path = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/organised/nantes/hyperthreading/128/linear/3nodes/linear/24-10-2024/{x}/"
+    #save_path = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/advanced/nantes/hyperthreading/128/linear/3nodes/linear/mean_calculation/{x}/"
     #save_path = f"../nantes/hyperthreading/16-07-2024/data/metrics/experimentation-output-linear_80requests_max_per_sec.csv/"
 
-    save_graphics_at = f"../locust/advanced/nantes/hyperthreading/128/linear/3nodes/linear/21-10-2024/1/experimentation8/data/metrics/experimentation-{x}.csv/data/Plots"
+    #save_graphics_at = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/advanced/nantes/hyperthreading/128/linear/3nodes/linear/mean_calculation/{x}/Plots"
+    save_graphics_at = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/organised/nantes/hyperthreading/128/linear/3nodes/linear/24-10-2024/{x}/Plots"
 
-    parameters = read_parameters_from_json(file_path)
+    parameters = read_parameters_from_json(file_path_json)
 
     #cpu_step = parameters['CPU_STEP']
 
@@ -214,6 +301,7 @@ for x in elts:
     # Plot the first set of data
     plt.subplot(3, 1, 1)
     all_timestamps = []
+    all_values = []
 
     today = date.today()
     dir_name = today.strftime("%d-%m-%Y")
@@ -226,17 +314,24 @@ for x in elts:
 
     legend_objectsCpu = []
     legend_labelsCpu = []
-    directory = save_path + 'cpu'
-    for file_name in os.listdir(directory):
-        file_path = os.path.join(directory, file_name)
+
+    directoryS = save_path + 'cpu/'
+
+    listElement = os.listdir(directoryS)
+
+    for element in listElement:
+        directory = save_path + f"cpu/{element}/"
+        #for file_name in os.listdir(directory):
+        file_path = os.path.join(directory, element)
         #for file_name in json_files1:
         file_parts = file_path.split("/")
         last_part = (file_parts[-1]).split(".")[0]
         result = re.split(r'-\d+', last_part)[0]
-        timestamps = plot_json(file_path, last_part)
-        print(len(timestamps))
+        timestamps, values = plot_json(directory, element)
+
         if len(timestamps) > 0:
             all_timestamps.append(timestamps)
+            all_values.append(values)
 
     # Concatenate all timestamps
     all_timestamps = np.concatenate(all_timestamps)
@@ -245,12 +340,11 @@ for x in elts:
     start_time = min(all_timestamps)
     end_time = max(all_timestamps)
 
-    # Generate a list of ticks every 20 seconds
+    # Generate a list of ticks every plot_window seconds
     ticks = np.arange(start_time, end_time + 1, plot_window)
 
     # Set ticks on the x-axis
     ticks_seconds = [((ts - start_time) // plot_window) * plot_window for ts in ticks]
-
 
     plt.axhline(y=1, color='r', linestyle='--')
     plt.xticks(ticks, ticks_seconds)
@@ -275,16 +369,20 @@ for x in elts:
     legend_objectsMemory = []
     legend_labelsMemory = []
 
-    directory2 = save_path + 'memory'
-    for file_name in os.listdir(directory2):
-        file_path = os.path.join(directory2, file_name)
+    directoryS2 = save_path + 'memory/'
+
+    listElement = os.listdir(directoryS2)
+
+    for element in listElement:
+        directory2 = save_path + f"memory/{element}/"
+        file_path = os.path.join(directory2, element)
         print("lr chemon")
         print(file_path)
         #for file_name in json_files1:
         file_parts = file_path.split("/")
         last_part = (file_parts[-1]).split(".")[0]
         result = re.split(r'-\d+', last_part)[0]
-        timestamps2 = plot_jsonMemory(file_path, last_part)
+        timestamps2 = plot_jsonMemory(directory2, last_part)
 
         if len(timestamps2) > 0:
             all_timestamps2.append(timestamps2)
@@ -383,7 +481,7 @@ for x in elts:
 
     files = os.listdir(save_graphics_at)
     data_count = sum(1 for f in files if f.startswith("output") and f.endswith(".png"))
-    my_string = f"{save_graphics_at}/output{str(data_count + 1)}-{fileToPlot}.png"
+    my_string = f"{save_graphics_at}/output{str(data_count + 1)}-{x}.png"
     print(my_string)
     plt.savefig(my_string)
     plt.show()
