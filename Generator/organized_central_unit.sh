@@ -28,11 +28,11 @@ export KUBECONFIG=~/admin_kube5k.conf
 kubectl create secret docker-registry docker-registry-secret --docker-server=https://gricad-registry.univ-grenoble-alpes.fr --docker-username=chouette --docker-password=esVsrrxsLA9sJ_nzPurJ
 
 
-for i in {1..5}; do
+
   #number=$((number + 1))
   #new_folder_path="${new_folder_path1}/${number}"
   for file_name in ../Load/teastore_loads/*.csv; do
-
+  for i in {1..3}; do
   root_file_name=$(basename "$file_name" .csv)
 
   # Compter le nombre de fichiers dans le répertoire $date_str
@@ -82,7 +82,7 @@ for i in {1..5}; do
   sleep 60
 
   python3 ../Fetcher/fetch_organized_for_mean.py "$result" $workload_dir $exp_folder_path $time_obj $metric_path
-  python3 ../Fetcher/istio_metric_fetch.py "$new_folder_path1" "$time_obj" $metric_path $istio_path
+  python3 ../Fetcher/istio_metric_fetch.py "$new_folder_path1" "$time_obj" $metric_path $istio_path $root_file_name
 
   kubectl delete pods,deployments,services -l app=teastore
 

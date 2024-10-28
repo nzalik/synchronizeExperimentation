@@ -21,6 +21,7 @@ if len(sys.argv) > 1:
 
 file_path = sys.argv[3]
 metrics_path = sys.argv[4]
+profile = sys.argv[5]
 
 parameters = read_parameters_from_json(file_path)
 
@@ -155,12 +156,13 @@ def _save_as_json(source, destination, res, datadir):
     #root_container_name = '-'.join(svc.split('-')[:-2])
 
     dir_name = f"{complete_storage_dir}/{datadir}/{destination}/"
+    #profile = complete_storage_dir.split('/')[-1]
 
     if not os.path.exists(dir_name):
         os.makedirs(dir_name)
 
     # Créer le chemin du fichier avec le nom du service source et destination
-    filename = f"{dir_name}{datadir}_to_{destination}.json"
+    filename = f"{dir_name}{datadir}_to_{destination}_{profile}.json"
     filepath = os.path.join(datadir, filename)
     if os.path.exists(filepath):
         base, ext = os.path.splitext(filename)

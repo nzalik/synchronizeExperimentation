@@ -283,7 +283,7 @@ for section_name in config.sections():
         for svc in pod_names:
 
             root_container_name = '-'.join(svc.split('-')[:-2])
-            directory = path_to_save(dir_name) + "/" + root_container_name + "/" + key
+            directory = path_to_save(dir_name) + "/" + key + "/" + root_container_name
 
             container_name = svc
 
@@ -337,14 +337,47 @@ for section_name in config.sections():
     directory2 = path_to_save(dir_name) + "/pod_info"
     directory3 = path_to_save(dir_name) + "/aggregation"
 
+    os.makedirs(directory2, exist_ok=True)
+    os.makedirs(directory3, exist_ok=True)
+    
     print("url pour save")
     print(directory3)
 
+    # The name of the current experimentation file
+    profile = dir_name.split('/')[-1]
     filename = container_name + '.json'
-    filename2 = 'aggregation.json'
-    filename3 = 'aggregation_memory.json'
-    filename4 = 'pod_restart.json'
+    filename2 = f'aggregation_{profile}.json'
+    filename3 = f'aggregation_memory_{profile}.json'
+    filename4 = f'pod_restart_{profile}.json'
 
+    query_str_file2 = os.path.join(directory3, filename2)
+
+    if os.path.exists(query_str_file2):
+        base, ext = os.path.splitext(filename2)
+        counter = 1
+        while os.path.exists(os.path.join(directory3, f"{base}_{counter}{ext}")):
+            counter += 1
+        query_str_file2 = os.path.join(directory3, f"{base}_{counter}{ext}")
+
+    query_str_file3 = os.path.join(directory3, filename3)
+    if os.path.exists(query_str_file3):
+        base, ext = os.path.splitext(filename3)
+        counter = 1
+        while os.path.exists(os.path.join(directory3, f"{base}_{counter}{ext}")):
+            counter += 1
+        query_str_file3 = os.path.join(directory3, f"{base}_{counter}{ext}")
+
+    query_str_file4 = os.path.join(directory3, filename4)
+    if os.path.exists(query_str_file4):
+        base, ext = os.path.splitext(filename4)
+        counter = 1
+        while os.path.exists(os.path.join(directory3, f"{base}_{counter}{ext}")):
+            counter += 1
+        query_str_file4 = os.path.join(directory3, f"{base}_{counter}{ext}")
+
+    # query_str_file = "nom_du_fichier.json"
+   
+    
     query_str_file = os.path.join(directory2, filename)
     if os.path.exists(query_str_file):
         base, ext = os.path.splitext(filename)
@@ -353,12 +386,8 @@ for section_name in config.sections():
             counter += 1
         query_str_file = os.path.join(directory2, f"{base}_{counter}{ext}")
 
-    query_str_file2 = os.path.join(directory3, filename2)
-    query_str_file3 = os.path.join(directory3, filename3)
-    query_str_file4 = os.path.join(directory3, filename4)
-    # query_str_file = "nom_du_fichier.json"
-    os.makedirs(directory2, exist_ok=True)
-    os.makedirs(directory3, exist_ok=True)
+
+  
     # Query Prometheus
     try:
         # res = requests.get(url, headers={'Content-Type': 'application/x-www-form-urlencoded'}).json()
