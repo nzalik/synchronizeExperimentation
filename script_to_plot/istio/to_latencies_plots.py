@@ -5,8 +5,8 @@ import os
 import numpy as np
 # Exemple de données JSON (remplace par tes données réelles)
 name='teastore-auth'
-
-    json_filename = '/home/erods-chouette/Documents/synchronizeExperimentation/Fetcher/temp/datadir2bis/latencies_to_'+name+'.json'
+for elt in ["teastore-auth", "teastore-recommender", "teastore-image", "teastore-persistence"]:
+    json_filename = '/home/erods-chouette/Documents/synchronizeExperimentation/Fetcher/temp/datadir2bis/latencies_to_'+elt+'.json'
     #/home/erods-chouette/Documents/synchronizeExperimentation/Fetcher/temp/datadir2bis
 
     # Charger le JSON depuis un fichier
@@ -73,7 +73,18 @@ name='teastore-auth'
         plt.ylabel('Latency (ms)')
         plt.title('Latency from others services to '+name)
         plt.legend()
-        output_filename = os.path.splitext(json_filename)[0] + '.png'
+        racine= os.path.dirname(json_filename)+"/Plots"
+
+        file_racine,_= os.path.splitext(os.path.basename(json_filename))
+        resultat = f"/{file_racine}.png"
+
+        os.makedirs(racine, exist_ok=True)
+        output_filename = racine + resultat
+
+        print("on save" )
+        print(output_filename)
+        print(resultat)
+        print(racine)
         # Afficher le graphique
         plt.xticks(rotation=45)
         plt.tight_layout()
