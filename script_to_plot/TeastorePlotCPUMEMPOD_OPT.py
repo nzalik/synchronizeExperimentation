@@ -266,7 +266,7 @@ def sort_legend(legend_objects, legend_labels):
 
     return legend_objects_sorted, legend_labels_sorted
 
-elts = ["rd_stairs_2"]
+elts = ["linear_100"]
 #elts = ["rd_stairs_2","rd_jump_2","li_stairsu_2","li_stairsd_2","linear_100"]
 #elts = ["si_sin_2","si_cos_2","si_abssin_2","rd_stairs_2","rd_jump_2","li_stairsu_2","li_stairsd_2"]
 #elts = [180, 200, 250, 300, 350]
@@ -282,12 +282,12 @@ for x in elts:
     fileToPlot = f"output_{x}"
     #fileToPlot = f"output-linear_{x}requests_max_per_sec.csv"
     #fileToPlot = f"output-linear_80requests_max_per_sec.csv"
-    save_path = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/organised/nantes/hyperthreading/128/linear/3nodes/linear/24-10-2024/{x}/"
+    save_path = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/variation/3replicas/nantes/hyperthreading/128/linear/3nodes/linear/29-10-2024/{x}/"
     #save_path = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/advanced/nantes/hyperthreading/128/linear/3nodes/linear/mean_calculation/{x}/"
     #save_path = f"../nantes/hyperthreading/16-07-2024/data/metrics/experimentation-output-linear_80requests_max_per_sec.csv/"
 
     #save_graphics_at = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/advanced/nantes/hyperthreading/128/linear/3nodes/linear/mean_calculation/{x}/Plots"
-    save_graphics_at = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/organised/nantes/hyperthreading/128/linear/3nodes/linear/24-10-2024/{x}/Plots"
+    save_graphics_at = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/variation/3replicas/nantes/hyperthreading/128/linear/3nodes/linear/29-10-2024/{x}/Plots"
 
     parameters = read_parameters_from_json(file_path_json)
 
@@ -483,5 +483,5 @@ for x in elts:
     data_count = sum(1 for f in files if f.startswith("output") and f.endswith(".png"))
     my_string = f"{save_graphics_at}/output{str(data_count + 1)}-{x}.png"
     print(my_string)
-    plt.savefig(my_string)
+    #plt.savefig(my_string)
     plt.show()

@@ -11,7 +11,7 @@ date_str=$(date +"%d-%m-%Y")
 category="128/linear/3nodes/linear"
 
 # Chemin complet du nouveau dossier
-new_folder_path1="$parent_dir/locust/organised/nantes/hyperthreading/$category/$date_str"
+new_folder_path1="$parent_dir/locust/log/nantes/hyperthreading/$category/$date_str"
 
 istio_path="../istio_metrics.json"
 metric_path="../teastore_grenoble.json"
@@ -31,8 +31,8 @@ kubectl create secret docker-registry docker-registry-secret --docker-server=htt
 
   #number=$((number + 1))
   #new_folder_path="${new_folder_path1}/${number}"
-  for file_name in ../Load/teastore_loads/*.csv; do
-  for i in {1..3}; do
+  for file_name in ../Load/load1/*.csv; do
+  for i in {1..1}; do
   root_file_name=$(basename "$file_name" .csv)
 
   # Compter le nombre de fichiers dans le répertoire $date_str
@@ -66,9 +66,9 @@ kubectl create secret docker-registry docker-registry-secret --docker-server=htt
   #for warmp in ../warmUp/*.csv; do
   #Lancer le générateur de charge HTTP
   #env INTENSITY_FILE=$warm locust -f ~/PycharmProjects/synchronizeExperimentation/workload_generators/locust/teastore_locustfile-custom-scale.py --headless --csv=log --csv-full-history
-  env INTENSITY_FILE=$warm locust -f /home/erods-chouette/Documents/synchronizeExperimentation/workload_generators/locust/teastore_locustfile-custom-scale.py --headless --csv=log --csv-full-history
+  #env INTENSITY_FILE=$warm locust -f /home/erods-chouette/Documents/synchronizeExperimentation/workload_generators/locust/teastore_locustfile-custom-scale.py --headless --csv=log --csv-full-history
 
-  sleep 120
+  #sleep 120
 
   echo "##################### Sleeping before load ##################################################"
 
@@ -77,16 +77,16 @@ kubectl create secret docker-registry docker-registry-secret --docker-server=htt
   time_obj=$(date +"%H:%M:%S")
   echo $time_obj
 
-  env INTENSITY_FILE=$file_name locust -f /home/erods-chouette/Documents/synchronizeExperimentation/workload_generators/locust/teastore_locustfile-custom-scale.py --headless --csv=log --csv-full-history
+  env INTENSITY_FILE=$file_name locust -f /home/erods-chouette/Documents/synchronizeExperimentation/workload_generators/locust/teastore_locustfile-custom-scale.py --headless --csv $exp_folder_path --csv-full-history
 
-  sleep 60
-
-  python3 ../Fetcher/fetch_organized_for_mean.py "$result" $workload_dir $exp_folder_path $time_obj $metric_path
-  python3 ../Fetcher/istio_metric_fetch.py "$new_folder_path1" "$time_obj" $metric_path $istio_path $root_file_name
-
-  kubectl delete pods,deployments,services -l app=teastore
-
-  sleep 120
+#  sleep 60
+#
+#  python3 ../Fetcher/fetch_organized_for_mean.py "$result" $workload_dir $exp_folder_path $time_obj $metric_path
+#  python3 ../Fetcher/istio_metric_fetch.py "$new_folder_path1" "$time_obj" $metric_path $istio_path $root_file_name
+#
+#  kubectl delete pods,deployments,services -l app=teastore
+#
+#  sleep 120
 
   done
 done

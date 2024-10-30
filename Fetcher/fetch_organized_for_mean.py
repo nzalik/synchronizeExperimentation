@@ -299,6 +299,14 @@ for section_name in config.sections():
 
             filename = svc + '.json'
             query_str_file = directory + "/" + filename
+            #query_str_file = os.path.join(directory2, filename)
+            if os.path.exists(query_str_file):
+                base, ext = os.path.splitext(filename)
+                counter = 1
+                while os.path.exists(os.path.join(directory, f"{base}_{counter}{ext}")):
+                    counter += 1
+                query_str_file = os.path.join(directory, f"{base}_{counter}{ext}")
+
             # query_str_file = "nom_du_fichier.json"
             os.makedirs(directory, exist_ok=True)
 

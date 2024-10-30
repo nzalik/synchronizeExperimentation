@@ -1,0 +1,499 @@
+---
+# Jaeger Deployment and Service.
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jaeger
+  labels:
+    app: jaeger
+    app.kubernetes.io/name: jaeger
+    app.kubernetes.io/component: all-in-one
+spec:
+  selector:
+    matchLabels:
+      app: jaeger
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: jaeger
+        app.kubernetes.io/name: jaeger
+        app.kubernetes.io/component: all-in-one
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "16686"
+    spec:
+      containers:
+        - env:
+            - name: COLLECTOR_ZIPKIN_HTTP_PORT
+              value: "9411"
+          image: gricad-registry.univ-grenoble-alpes.fr/nzalikoy/scaler-task/jaegertracing-all-in-one
+          name: jaeger
+          ports:
+            - containerPort: 5775
+              protocol: UDP
+            - containerPort: 6831
+              protocol: UDP
+            - containerPort: 6832
+              protocol: UDP
+            - containerPort: 5778
+              protocol: TCP
+            - containerPort: 16686
+              protocol: TCP
+            - containerPort: 9411
+              protocol: TCP
+          readinessProbe:
+            httpGet:
+              path: "/"
+              port: 14269
+            initialDelaySeconds: 5
+      imagePullSecrets:
+        - name: docker-registry-secret
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: jaeger-query
+  labels:
+    app: jaeger
+    app.kubernetes.io/name: jaeger
+    app.kubernetes.io/component: query
+spec:
+  type: NodePort
+  ports:
+    - name: query-http
+      port: 16686
+      protocol: TCP
+      nodePort: 32688
+  selector:
+    app.kubernetes.io/name: jaeger
+    app.kubernetes.io/component: all-in-one
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: jaeger-collector
+  labels:
+    app: jaeger
+    app.kubernetes.io/name: jaeger
+    app.kubernetes.io/component: collector
+spec:
+  ports:
+    - name: jaeger-collector-tchannel
+      port: 14267
+      protocol: TCP
+      targetPort: 14267
+    - name: jaeger-collector-http
+      port: 14268
+      protocol: TCP
+      targetPort: 14268
+    - name: jaeger-collector-zipkin
+      port: 9411
+      protocol: TCP
+      targetPort: 9411
+  selector:
+    app.kubernetes.io/name: jaeger
+    app.kubernetes.io/component: all-in-one
+  type: ClusterIP
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: jaeger
+  labels:
+    app: jaeger
+    app.kubernetes.io/name: jaeger
+    app.kubernetes.io/component: agent
+spec:
+  ports:
+    - name: agent-zipkin-thrift
+      port: 5775
+      protocol: UDP
+      targetPort: 5775
+    - name: agent-compact
+      port: 6831
+      protocol: UDP
+      targetPort: 6831
+    - name: agent-binary
+      port: 6832
+      protocol: UDP
+      targetPort: 6832
+    - name: agent-config
+      port: 5778
+      protocol: TCP
+      targetPort: 5778
+  clusterIP: None
+  selector:
+    app.kubernetes.io/name: jaeger
+    app.kubernetes.io/component: all-in-one
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: zipkin
+  labels:
+    app: jaeger
+    app.kubernetes.io/name: jaeger
+    app.kubernetes.io/component: zipkin
+spec:
+  ports:
+    - name: jaeger-collector-zipkin
+      port: 9411
+      protocol: TCP
+      targetPort: 9411
+  clusterIP: None
+  selector:
+    app.kubernetes.io/name: jaeger
+    app.kubernetes.io/component: all-in-one
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: teastore-db
+  labels:
+    app: teastore
+    run: teastore-db
+spec:
+  selector:
+    matchLabels:
+      app: teastore
+      run: teastore-db
+  template:
+    metadata:
+      labels:
+        app: teastore
+        run: teastore-db
+    spec:
+      containers:
+        - name: teastore-db
+          image: gricad-registry.univ-grenoble-alpes.fr/nzalikoy/scaler-task/teastore-db:dev
+          ports:
+            - containerPort: 3306
+          env:
+            - name: JAEGER_AGENT_HOST
+              value: "jaeger"
+            - name: JAEGER_AGENT_PORT
+              value: "6831"
+      imagePullSecrets:
+        - name: docker-registry-secret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: teastore-db
+  labels:
+    app: teastore
+    run: teastore-db
+spec:
+  ports:
+    - port: 3306
+      protocol: TCP
+  selector:
+    run: teastore-db
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: teastore-registry
+  labels:
+    app: teastore
+    run: teastore-registry
+spec:
+  selector:
+    matchLabels:
+      app: teastore
+      run: teastore-registry
+  template:
+    metadata:
+      labels:
+        app: teastore
+        run: teastore-registry
+    spec:
+      containers:
+        - name: teastore-registry
+          image: gricad-registry.univ-grenoble-alpes.fr/nzalikoy/scaler-task/teastore-registry:dev
+          ports:
+            - containerPort: 8080
+          env:
+            - name: JAEGER_AGENT_HOST
+              value: "jaeger"
+            - name: JAEGER_AGENT_PORT
+              value: "6831"
+      imagePullSecrets:
+        - name: docker-registry-secret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: teastore-registry
+  labels:
+    app: teastore
+    run: teastore-registry
+spec:
+  ports:
+    - port: 8080
+      protocol: TCP
+  selector:
+    run: teastore-registry
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: teastore-persistence
+  labels:
+    app: teastore
+    run: teastore-persistence
+spec:
+  selector:
+    matchLabels:
+      app: teastore
+      run: teastore-persistence
+  template:
+    metadata:
+      labels:
+        app: teastore
+        run: teastore-persistence
+    spec:
+      containers:
+        - name: teastore-persistence
+          image: gricad-registry.univ-grenoble-alpes.fr/nzalikoy/scaler-task/teastore-persistence:dev
+          ports:
+            - containerPort: 8080
+          env:
+            - name: HOST_NAME
+              value: "teastore-persistence"
+            - name: REGISTRY_HOST
+              value: "teastore-registry"
+            - name: DB_HOST
+              value: "teastore-db"
+            - name: DB_PORT
+              value: "3306"
+            - name: JAEGER_AGENT_HOST
+              value: "jaeger"
+            - name: JAEGER_AGENT_PORT
+              value: "6831"
+      imagePullSecrets:
+        - name: docker-registry-secret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: teastore-persistence
+  labels:
+    app: teastore
+    run: teastore-persistence
+spec:
+  ports:
+    - port: 8080
+      protocol: TCP
+  selector:
+    run: teastore-persistence
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: teastore-auth
+  labels:
+    app: teastore
+    run: teastore-auth
+spec:
+  selector:
+    matchLabels:
+      app: teastore
+      run: teastore-auth
+  template:
+    metadata:
+      labels:
+        app: teastore
+        run: teastore-auth
+    spec:
+      containers:
+        - name: teastore-auth
+          image: gricad-registry.univ-grenoble-alpes.fr/nzalikoy/scaler-task/teastore-auth:dev
+          ports:
+            - containerPort: 8080
+          env:
+            - name: HOST_NAME
+              value: "teastore-auth"
+            - name: REGISTRY_HOST
+              value: "teastore-registry"
+            - name: JAEGER_AGENT_HOST
+              value: "jaeger"
+            - name: JAEGER_AGENT_PORT
+              value: "6831"
+      imagePullSecrets:
+        - name: docker-registry-secret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: teastore-auth
+  labels:
+    app: teastore
+    run: teastore-auth
+spec:
+  ports:
+    - port: 8080
+      protocol: TCP
+  selector:
+    run: teastore-auth
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: teastore-image
+  labels:
+    app: teastore
+    run: teastore-image
+spec:
+  selector:
+    matchLabels:
+      app: teastore
+      run: teastore-image
+  template:
+    metadata:
+      labels:
+        app: teastore
+        run: teastore-image
+    spec:
+      containers:
+        - name: teastore-image
+          image: gricad-registry.univ-grenoble-alpes.fr/nzalikoy/scaler-task/teastore-image:dev
+          ports:
+            - containerPort: 8080
+          env:
+            - name: HOST_NAME
+              value: "teastore-image"
+            - name: REGISTRY_HOST
+              value: "teastore-registry"
+            - name: JAEGER_AGENT_HOST
+              value: "jaeger"
+            - name: JAEGER_AGENT_PORT
+              value: "6831"
+      imagePullSecrets:
+        - name: docker-registry-secret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: teastore-image
+  labels:
+    app: teastore
+    run: teastore-image
+spec:
+  ports:
+    - port: 8080
+      protocol: TCP
+  selector:
+    run: teastore-image
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: teastore-recommender
+  labels:
+    app: teastore
+    run: teastore-recommender
+spec:
+  selector:
+    matchLabels:
+      app: teastore
+      run: teastore-recommender
+  template:
+    metadata:
+      labels:
+        app: teastore
+        run: teastore-recommender
+    spec:
+      containers:
+        - name: teastore-recommender
+          image: gricad-registry.univ-grenoble-alpes.fr/nzalikoy/scaler-task/teastore-recommender:dev
+          ports:
+            - containerPort: 8080
+          env:
+            - name: HOST_NAME
+              value: "teastore-recommender"
+            - name: REGISTRY_HOST
+              value: "teastore-registry"
+            - name: JAEGER_AGENT_HOST
+              value: "jaeger"
+            - name: JAEGER_AGENT_PORT
+              value: "6831"
+      imagePullSecrets:
+        - name: docker-registry-secret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: teastore-recommender
+  labels:
+    app: teastore
+    run: teastore-recommender
+spec:
+  ports:
+    - port: 8080
+      protocol: TCP
+  selector:
+    run: teastore-recommender
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: teastore-webui
+  labels:
+    app: teastore
+    run: teastore-webui
+spec:
+  selector:
+    matchLabels:
+      app: teastore
+      run: teastore-webui
+  template:
+    metadata:
+      labels:
+        app: teastore
+        run: teastore-webui
+    spec:
+      containers:
+        - name: teastore-webui
+          image: gricad-registry.univ-grenoble-alpes.fr/nzalikoy/scaler-task/teastore-webui:dev
+          ports:
+            - containerPort: 8080
+          env:
+            - name: HOST_NAME
+              value: "teastore-webui"
+            - name: REGISTRY_HOST
+              value: "teastore-registry"
+            - name: JAEGER_AGENT_HOST
+              value: "jaeger"
+            - name: JAEGER_AGENT_PORT
+              value: "6831"
+      imagePullSecrets:
+        - name: docker-registry-secret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: teastore-webui
+  labels:
+    app: teastore
+    run: teastore-webui
+spec:
+  type: NodePort
+  ports:
+    - port: 8080
+      nodePort: 30080
+      protocol: TCP
+  selector:
+    run: teastore-webui

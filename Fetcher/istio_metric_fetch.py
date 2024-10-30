@@ -137,17 +137,17 @@ def query_for_service(self, prometheus_url, svc, start_dt, end_dt, step, datadir
 def _get_query_modifier(metric_parameter, destination_target):
 
     if metric_parameter['aggregator'] == "histogram_quantile":
-        return f""" histogram_quantile(0.95, sum(rate(istio_request_duration_milliseconds_bucket{{reporter="source", destination_workload="{destination_target}"}}[30s])) by (le, source_workload))"""
+        return f""" histogram_quantile(0.95, sum(rate(istio_request_duration_milliseconds_bucket{{reporter="destination", destination_workload="{destination_target}"}}[30s])) by (le, source_workload))"""
     elif metric_parameter['aggregator'] == "round":
-        return f""" round(sum(irate(istio_requests_total{{destination_workload="{destination_target}",reporter=~"source", source_workload=~"(teastore-webui|teastore-recommender|teastore-persistence|teastore-image|teastore-auth)",source_workload_namespace=~"default"}}[30s])) by (source_workload), 0.001)"""
+        return f""" round(sum(irate(istio_requests_total{{destination_workload="{destination_target}",reporter=~"destination", source_workload=~"(teastore-webui|teastore-recommender|teastore-persistence|teastore-image|teastore-auth|teastore-registry|unknown)"}}[30s])) by (source_workload, destination_workload), 0.001)"""
     elif metric_parameter['aggregator'] == "bytes":
-        return f"""histogram_quantile(0.95, sum(irate(istio_request_bytes_bucket{{reporter=~"source", destination_workload=~"{destination_target}", source_workload=~"(teastore-webui|teastore-recommender|teastore-persistence|teastore-image|teastore-auth)", source_workload_namespace=~"default"}}[30s])) by (le, source_workload))
+        return f"""histogram_quantile(0.95, sum(irate(istio_request_bytes_bucket{{reporter=~"destination", destination_workload=~"{destination_target}", source_workload=~"(teastore-webui|teastore-recommender|teastore-persistence|teastore-image|teastore-auth|teastore-registry|unknown)"}}[30s])) by (le, source_workload, destination_workload))
 """
     elif metric_parameter['aggregator'] == "tcp":
-        return f"""round(sum(irate(istio_tcp_sent_bytes_total{{reporter=~"source", destination_workload=~"{destination_target}", source_workload=~"(teastore-webui|teastore-recommender|teastore-persistence|teastore-image|teastore-auth)"}}[30s])) by (source_workload), 0.001)
+        return f"""round(sum(irate(istio_tcp_sent_bytes_total{{reporter=~"destination", destination_workload=~"{destination_target}", source_workload=~"(teastore-webui|teastore-recommender|teastore-persistence|teastore-image|teastore-auth|teastore-registry|unknown)"}}[30s])) by (source_workload, destination_workload), 0.001)
 """
     else:
-        return f""" round(sum(irate(istio_requests_total{{destination_workload="{destination_target}",reporter=~"source",source_workload=~"(teastore-webui|teastore-recommender|teastore-persistence|teastore-image|teastore-auth)",source_workload_namespace=~"default", response_code="400"}}[30s])) by (source_workload), 0.001)"""
+        return f""" round(sum(irate(istio_requests_total{{destination_workload="{destination_target}",reporter=~"destination",source_workload=~"(teastore-webui|teastore-recommender|teastore-persistence|teastore-image|teastore-auth|teastore-registry|unknown)", response_code="400"}}[30s])) by (source_workload, destination_workload), 0.001)"""
 
 
 def _save_as_json(source, destination, res, datadir):
@@ -155,7 +155,7 @@ def _save_as_json(source, destination, res, datadir):
 
     #root_container_name = '-'.join(svc.split('-')[:-2])
 
-    dir_name = f"{complete_storage_dir}/{datadir}/{destination}/"
+    dir_name = f"{complete_storage_dir}/{datadir}/{destination}/{profile}/"
     #profile = complete_storage_dir.split('/')[-1]
 
     if not os.path.exists(dir_name):
