@@ -21,7 +21,7 @@ COMPOSITION_OPTION         = os.environ.get("COMP_OPT")
 
 #GLOBAL_EXPERIMENT_DURATION = 3600    # None = Run forever, 43200 = 12 hour
 #GLOBAL_SECONDS_PER_DAY     = 3600    # 3600 = 1 hour
-GLOBAL_MIN_USERS           = 100
+GLOBAL_MIN_USERS           = 1
 #GLOBAL_PEAKS               = [140, 160, 180, 200]
 GLOBAL_RANDOMNESS          = 0.20
 GLOBAL_WAIT_TIME           = between(1, 3)

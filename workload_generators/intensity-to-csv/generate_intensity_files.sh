@@ -1,9 +1,9 @@
 #!/bin/bash
 
 duration=300
-max_req=200
-min_req=30
-nb_files_per_func=2
+max_req=50
+min_req=10
+nb_files_per_func=1
 nb_f_offset=2
 
 touch csv_gen.out
@@ -48,23 +48,23 @@ for ((i=nb_f_offset; i<nb_files_per_func+nb_f_offset; i++));do
 	echo "abscos_$i: ceil=$rand_ceil | floor=$rand_floor | peaks=$peaks" >> csv_gen.out
 done
 
-# Log profiles
-#echo "- Log files" >> csv_gen.out
-#for ((i=nb_f_offset; i<nb_files_per_func+nb_f_offset; i++));do
-#	rand_ceil=$((RANDOM % (max_req - min_req + 1) + min_req))
-#	rand_floor=$((RANDOM % (rand_ceil - min_req + 1) + min_req))
-#	multiplier=$((RANDOM % 21 - 10))
-#	python3 gen_load_intensity_csv.py -f "./intensity_profiles/si_log_$i.csv" -g log -t $duration --ceil $rand_ceil --floor $rand_floor -a $multiplier -n
-#	echo "log_$i: ceil=$rand_ceil | floor=$rand_floor | a=$multiplier" >> csv_gen.out
-#done
+ #Log profiles
+echo "- Log files" >> csv_gen.out
+for ((i=nb_f_offset; i<nb_files_per_func+nb_f_offset; i++));do
+	rand_ceil=$((RANDOM % (max_req - min_req + 1) + min_req))
+	rand_floor=$((RANDOM % (rand_ceil - min_req + 1) + min_req))
+	multiplier=$((RANDOM % 21 - 10))
+	python3 gen_load_intensity_csv.py -f "./intensity_profiles/si_log_$i.csv" -g log -t $duration --ceil $rand_ceil --floor $rand_floor -a $multiplier -n
+	echo "log_$i: ceil=$rand_ceil | floor=$rand_floor | a=$multiplier" >> csv_gen.out
+done
 # Bell profiles
-#echo "- Bell files" >> csv_gen.out
-#for ((i=nb_f_offset; i<nb_files_per_func+nb_f_offset; i++));do
-#	rand_ceil=$((RANDOM % (max_req - min_req + 1) + min_req))
-#	rand_floor=$((RANDOM % (rand_ceil - min_req + 1) + min_req))
-#	python3 gen_load_intensity_csv.py -f "./intensity_profiles/rd_bell_$i.csv" -g bell -t $duration --ceil $rand_ceil --floor $rand_floor
-#	echo "bell_$i: ceil=$rand_ceil | floor=$rand_floor" >> csv_gen.out
-#done
+echo "- Bell files" >> csv_gen.out
+for ((i=nb_f_offset; i<nb_files_per_func+nb_f_offset; i++));do
+	rand_ceil=$((RANDOM % (max_req - min_req + 1) + min_req))
+	rand_floor=$((RANDOM % (rand_ceil - min_req + 1) + min_req))
+	python3 gen_load_intensity_csv.py -f "./intensity_profiles/rd_bell_$i.csv" -g bell -t $duration --ceil $rand_ceil --floor $rand_floor
+	echo "bell_$i: ceil=$rand_ceil | floor=$rand_floor" >> csv_gen.out
+done
 
 # Random Stairs profiles
 echo "- Random Stairs files" >> csv_gen.out
@@ -84,12 +84,12 @@ done
 
 
 # Const profiles
-#echo "- Const files" >> csv_gen.out
-#for ((i=nb_f_offset; i<nb_files_per_func+nb_f_offset; i++));do
-#	rand_ceil=$((RANDOM % (max_req - min_req + 1) + min_req))
-#	python3 gen_load_intensity_csv.py -f "./intensity_profiles/li_const_$i.csv" -g const -t $duration --ceil $rand_ceil
-#	echo "const_$i: ceil=$rand_ceil" >> csv_gen.out
-#done
+echo "- Const files" >> csv_gen.out
+for ((i=nb_f_offset; i<nb_files_per_func+nb_f_offset; i++));do
+	rand_ceil=$((RANDOM % (max_req - min_req + 1) + min_req))
+	python3 gen_load_intensity_csv.py -f "./intensity_profiles/li_const_$i.csv" -g const -t $duration --ceil $rand_ceil
+	echo "const_$i: ceil=$rand_ceil" >> csv_gen.out
+done
 
 # Linear profiles
 echo "- Linear files" >> csv_gen.out

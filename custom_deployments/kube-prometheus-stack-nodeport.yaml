@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    meta.helm.sh/release-name: kube-prometheus-stack
+    meta.helm.sh/release-namespace: monitoring
+  labels:
+    app: kube-prometheus-stack-prometheus
+    app.kubernetes.io/instance: kube-prometheus-stack
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: kube-prometheus-stack
+    app.kubernetes.io/version: 65.1.1
+    chart: kube-prometheus-stack-65.1.1
+    heritage: Helm
+    release: kube-prometheus-stack
+    self-monitor: "true"
+  name: kube-prometheus-stack-prometheus-nodeport
+  namespace: monitoring
+spec:
+  type: NodePort
+  ports:
+  - name: http-web
+    port: 9090
+    protocol: TCP
+    targetPort: 9090
+    nodePort: 30090  # Vous pouvez spécifier un NodePort spécifique ou le laisser vide pour l'assignation automatique
+  selector:
+    app.kubernetes.io/name: prometheus
+    operator.prometheus.io/name: kube-prometheus-stack-prometheus

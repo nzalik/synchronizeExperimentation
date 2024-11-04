@@ -1,7 +1,7 @@
 import datetime
 
 # La date à convertir (format : 'YYYY-MM-DD HH:MM:SS')
-date_str = "2024-10-01 10:14:57"
+date_str = "2024-10-31 10:15:00"
 
 # Conversion de la chaîne de caractères en objet datetime
 date_obj = datetime.datetime.strptime(date_str, '%Y-%m-%d %H:%M:%S')

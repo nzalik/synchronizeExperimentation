@@ -1,21 +1,31 @@
 #!/bin/bash
 
+parent_dir=$(dirname $(pwd))
+
 # Définir le KUBECONFIG
 #export KUBECONFIG=/home/erods-chouette/socialNetwork/admin_k8s_soc.conf
 
+#Install serviceMonitor to script data to kube-prometheus-stack
+kubectl create -f "$parent_dir/mesh/istio"
+kubectl create -f $parent_dir/custom_deployments/kube-prometheus-stack-nodeport.yaml
 # Télécharger et extraire Istio
 #curl -L https://istio.io/downloadIstio | sh -
-cd istio-1.23.1
+cd "$parent_dir/mesh/istio-1.23.2"
 
 # Ajouter Istio au PATH
 export PATH=$PWD/bin:$PATH
 
 # Installer Istio
-istioctl install --set profile=demo -y
-#istioctl install -f samples/bookinfo/demo-profile-no-gateways.yaml -y
+#istioctl install --set profile=demo -y
+istioctl install -f samples/bookinfo/demo-profile-no-gateways.yaml -y
 
 # Activer l'injection automatique d'Istio sur le namespace par défaut
 kubectl label namespace default istio-injection=enabled
+
+# Attendre que tous les déploiements dans le namespace monitoring soient en cours d'exécution
+for deployment in $(kubectl get deployments -n monitoring -o jsonpath='{.items[*].metadata.name}'); do
+  kubectl rollout status deployment/$deployment -n monitoring
+done
 
 # Déployer l'exemple d'application Bookinfo
 #kubectl apply -f samples/bookinfo/platform/kube/bookinfo.yaml

@@ -11,6 +11,11 @@
   },
   {
   "metric": "istio_requests_total",
+    "name": "request_aggr",
+    "aggregator": "round_aggr"
+  },
+  {
+  "metric": "istio_requests_total",
     "name": "request",
     "aggregator": "error"
   },

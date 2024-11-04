@@ -138,6 +138,8 @@ def _get_query_modifier(metric_parameter, destination_target):
 
     if metric_parameter['aggregator'] == "histogram_quantile":
         return f""" histogram_quantile(0.95, sum(rate(istio_request_duration_milliseconds_bucket{{reporter="destination", destination_workload="{destination_target}"}}[30s])) by (le, source_workload))"""
+    elif metric_parameter['aggregator'] == "round_aggr":
+        return f""" round(sum(irate(istio_requests_total{{destination_workload="{destination_target}",reporter=~"destination"}}[30s])) by (destination_workload), 0.001)"""
     elif metric_parameter['aggregator'] == "round":
         return f""" round(sum(irate(istio_requests_total{{destination_workload="{destination_target}",reporter=~"destination", source_workload=~"(teastore-webui|teastore-recommender|teastore-persistence|teastore-image|teastore-auth|teastore-registry|unknown)"}}[30s])) by (source_workload, destination_workload), 0.001)"""
     elif metric_parameter['aggregator'] == "bytes":
