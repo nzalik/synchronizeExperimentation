@@ -15,14 +15,14 @@ import pandas as pd
 from utils.constants import get_color_for_serviceInit, normalization, line_styles, plot_limit, smooth, open_file, \
     read_parameters_from_json, sort_legend, cpu_limit_max, memory_limit
 
-metric_to_plot="request" #latency or request
+#metric_to_plot="request" #latency or request
 harmonization=False
 
 file_path_json = '../teastore.json'
 
 csv_file_path = "/home/erods-chouette/Documents/synchronizeExperimentation/Load/teastore_loads/"
 
-latency_path = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/weekend/nantes/hyperthreading/128/linear/3nodes/linear/02-11-2024/{metric_to_plot}/"
+latency_path = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/weekend/nantes/hyperthreading/128/linear/3nodes/linear/02-11-2024/"
 
 
 def plot_json_generic(file_path, file_name, data_type='cpu'):
@@ -140,7 +140,7 @@ def plot_json_generic(file_path, file_name, data_type='cpu'):
         #return new_timestamps, lissageValues if is_cpu else new_timestamps
     return []
 
-def plot_metrics(data, elt, current_metric=""):
+def plot_metrics(data, elt, metric_to_plot=""):
     global timestamps
     results = data['data']['result']
 
@@ -180,7 +180,7 @@ def plot_metrics(data, elt, current_metric=""):
                 label=f'{source_workload_txt + str(position + 1)} → {destination_txt + str(position + 1)}{multiplier_note}',
                 linestyle=line_styles[position])
 
-        #if(current_metric=="request"):
+
 
 
     # start_time = min(timestamps)
@@ -201,7 +201,8 @@ def plot_metrics(data, elt, current_metric=""):
     #     #plt.set_title(f'Request duration to {elt}')
     #
     # plt.set_ylim(0, max_value)
-        plt.legend(loc='upper left', frameon=False)
+
+
     return ticks
 
 
@@ -403,7 +404,7 @@ for x in elts:
     for idx, svc in enumerate(
             ["teastore-auth", "teastore-recommender", "teastore-image", "teastore-persistence",
              "teastore-registry", "teastore-webui"]):
-        json_file_path = os.path.join(latency_path, svc, x)
+        json_file_path = os.path.join(latency_path,"request", svc, x)
         json_filenames = sorted([os.path.join(json_file_path, file) for file in
                           os.listdir(json_file_path)[:3]])  # Take the first 3 elements
 
@@ -435,7 +436,7 @@ for x in elts:
         "------------------------------------------------------------------------------------------------------------------------")
     for idx, svc in enumerate(
             ["teastore-webui"]):
-        json_file_path = os.path.join(latency_path, svc, x)
+        json_file_path = os.path.join(latency_path, "request", svc, x)
 
         # json_filenames = sorted([os.path.join(json_file_path, file) for file in
         #                   os.listdir(json_file_path)[:1]])  # Take the first 3 elements
@@ -456,8 +457,26 @@ for x in elts:
 
             timestamps = []
 
-            plot_metrics(data, svc)
+            plot_metrics(data, svc, "request")
 
+        time = []
+        values = []
+        try:
+            df = pd.read_csv(csv_file_path + x + ".csv", sep=",")
+            time = df.iloc[:, 0].tolist()
+            values = df.iloc[:, 1].tolist()
+        except FileNotFoundError:
+            # print(f"Le fichier {file_name} n'a pas été trouvé dans le chemin {plot_path}")
+            # Vous pouvez également faire d'autres traitements ici, comme retourner un DataFrame vide
+            df = pd.DataFrame()
+
+        # Data
+        # time = [0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5, 8.5, 9.5]
+        # values = [132, 129, 132, 132, 132, 125, 128, 130, 129, 128]
+
+        # Create the plot for 'Evolution of pods'
+        plt.plot(time, values, color='#8ECAE6', label='Load Intensity')
+        plt.legend(loc='upper left', frameon=False)
     plt.subplot(5, 1, 5)
 
     # fig, axes = plt.subplots(2, 3, figsize=(15, 10))
@@ -472,7 +491,7 @@ for x in elts:
     for idx, svc in enumerate(
             ["teastore-auth", "teastore-recommender", "teastore-image", "teastore-persistence",
              "teastore-registry", "teastore-webui"]):
-        json_file_path = os.path.join(latency_path, svc, x)
+        json_file_path = os.path.join(latency_path, "latency", svc, x)
         json_filenames = sorted([os.path.join(json_file_path, file) for file in
                                  os.listdir(json_file_path)[:3]])  # Take the first 3 elements
 
@@ -504,7 +523,7 @@ for x in elts:
         "------------------------------------------------------------------------------------------------------------------------")
     for idx, svc in enumerate(
             ["teastore-webui"]):
-        json_file_path = os.path.join(latency_path, svc, x)
+        json_file_path = os.path.join(latency_path, "latency", svc, x)
 
         # json_filenames = sorted([os.path.join(json_file_path, file) for file in
         #                   os.listdir(json_file_path)[:1]])  # Take the first 3 elements
@@ -530,7 +549,7 @@ for x in elts:
     plt.tight_layout()
     os.makedirs(save_path, exist_ok=True)
     chemin = ""
-    if harmonization and metric_to_plot == "latency":
+    if harmonization:
         chemin = save_path + "/" + file_name + "_harmonization.png"
     else:
         chemin = save_path + "/" + file_name + "_combined.png"
