@@ -15,7 +15,7 @@ import pandas as pd
 from utils.constants import get_color_for_serviceInit, normalization, line_styles, plot_limit, smooth, open_file, \
     read_parameters_from_json, sort_legend, cpu_limit_max, memory_limit
 
-#metric_to_plot="request" #latency or request
+#metric_to_plot="request_aggr" #latency or request
 harmonization=False
 
 file_path_json = '../teastore.json'
@@ -24,27 +24,25 @@ csv_file_path = "/home/erods-chouette/Documents/synchronizeExperimentation/Load/
 
 latency_path = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/weekend/nantes/hyperthreading/128/linear/3nodes/linear/02-11-2024/"
 
+services = ["teastore-auth", "teastore-recommender", "teastore-image", "teastore-persistence", "teastore-registry", "teastore-webui"]
 
 def plot_json_generic(file_path, file_name, data_type='cpu'):
     is_cpu = data_type == 'cpu'
     label = file_name
     list_element = sorted(os.listdir(file_path))
 
-    print("***************************************************alignement")
-    print(list_element)
-
-    print(list_element[0])
+    #print(list_element[0])
     json_data_file1 = open_file(os.path.join(file_path, list_element[0]))
-    print(list_element[1])
+    #print(list_element[1])
     json_data_file2 = open_file(os.path.join(file_path, list_element[1]))
-    print(list_element[2])
+    #print(list_element[2])
     json_data_file3 = open_file(os.path.join(file_path, list_element[2]))
     #json_data_file4 = open_file(os.path.join(file_path, list_element[3]))
     #json_data_file5 = open_file(os.path.join(file_path, list_element[4]))
-
-    print(json_data_file1)
-    print(json_data_file2)
-    print(json_data_file3)
+    #
+    # print(json_data_file1)
+    # print(json_data_file2)
+    # print(json_data_file3)
     #print(json_data_file4)
 
     if len(json_data_file1['data']['result']) > 0 and len(json_data_file2['data']['result']) > 0 and len(
@@ -74,13 +72,12 @@ def plot_json_generic(file_path, file_name, data_type='cpu'):
         #values4 = [float(value) for _, value in datas4]
         #values5 = [float(value) for _, value in datas5]
 
-        print("###########les valeurs#######################")
-        print(values1)
-        print(values2)
-        print(values3)
+        # print("###########les valeurs#######################")
+        # print(values1)
+        # print(values2)
+        # print(values3)
         #print(values4)
 
-        print("******************completion*************************")
         longueur_max = plot_limit
         # longueur_max = max(len(liste) for liste in [values1, values2, values3])
         for liste in [values1, values2, values3]:
@@ -99,9 +96,9 @@ def plot_json_generic(file_path, file_name, data_type='cpu'):
         #values4 = np.array(values4)
         #values5 = np.array(values5)
 
-        print(len(values1))
-        print(len(values2))
-        print(len(values3))
+        # print(len(values1))
+        # print(len(values2))
+        # print(len(values3))
         #print(len(values4))
         #print(len(values5))
 
@@ -158,7 +155,8 @@ def plot_metrics(data, elt, metric_to_plot=""):
                       result['values'][:plot_limit]] + [0] * (
                              plot_limit - min(plot_limit, len(
                          result['values'])))  # Remplacer NaN par 0 et compléter avec des 0 si nécessaire
-
+        print("la valeur max ")
+        print(max(valuesInit))
         multiplier_note = ''
         if harmonization and metric_to_plot == "latency":
             if destination != 'teastore-webui' and metric_to_plot == "latency":
@@ -168,10 +166,6 @@ def plot_metrics(data, elt, metric_to_plot=""):
                 multiplier_note = ''
 
 
-        print("la tialle ##############################""")
-        print(len(valuesInit))
-        print("###########################################")
-
         values = smooth(valuesInit)
         heures = [datetime.fromtimestamp(ts).strftime('%M') for ts in timestamps]
 
@@ -179,8 +173,6 @@ def plot_metrics(data, elt, metric_to_plot=""):
         plt.plot(timestamps, values, color=color,
                 label=f'{source_workload_txt + str(position + 1)} → {destination_txt + str(position + 1)}{multiplier_note}',
                 linestyle=line_styles[position])
-
-
 
 
     # start_time = min(timestamps)
@@ -254,10 +246,10 @@ for x in elts:
 
     directoryS = save_path + 'cpu/'
 
-    listElement = ["teastore-webui"]
+    listElement = ["teastore-persistence"]
     #listElement = os.listdir(directoryS)
-    print("all les elements")
-    print(listElement)
+   # print("all les elements")
+    #print(listElement)
 
     for element in listElement:
         directory = save_path + f"cpu/{element}/"
@@ -312,14 +304,11 @@ for x in elts:
 
     directoryS2 = save_path + 'memory/'
 
-    listElement = ['teastore-webui']
+    listElement = ['teastore-persistence']
 
     for element in listElement:
         directory2 = save_path + f"memory/{element}/"
         file_path = os.path.join(directory2, element)
-        print("lr chemon")
-        print(file_path)
-        #for file_name in json_files1:
         file_parts = file_path.split("/")
         last_part = (file_parts[-1]).split(".")[0]
         result = re.split(r'-\d+', last_part)[0]
@@ -369,15 +358,9 @@ for x in elts:
         time = df.iloc[:, 0].tolist()
         values = df.iloc[:, 1].tolist()
     except FileNotFoundError:
-        # print(f"Le fichier {file_name} n'a pas été trouvé dans le chemin {plot_path}")
-        # Vous pouvez également faire d'autres traitements ici, comme retourner un DataFrame vide
+
         df = pd.DataFrame()
 
-    # Data
-    #time = [0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5, 8.5, 9.5]
-    #values = [132, 129, 132, 132, 132, 125, 128, 130, 129, 128]
-
-    # Create the plot for 'Evolution of pods'
     plt.plot(time, values, color='#8ECAE6', label='Load Intensity')
 
     # Set labels and title
@@ -392,29 +375,17 @@ for x in elts:
 
     plt.subplot(5, 1, 4)
 
-    #fig, axes = plt.subplots(2, 3, figsize=(15, 10))
-    #axes = axes.flatten()
-    #save_path = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/warm_equal_load/nantes/hyperthreading/128/linear/3nodes/linear/31-10-2024/{json_file}/Plots/{metric_to_plot}"
-
     max_value=0
 
     json_filenames = []
 
     # retrieve the max size to pyt ylim for all plots
-    for idx, svc in enumerate(
-            ["teastore-auth", "teastore-recommender", "teastore-image", "teastore-persistence",
-             "teastore-registry", "teastore-webui"]):
-        json_file_path = os.path.join(latency_path,"request", svc, x)
+    for idx, svc in enumerate(services):
+        json_file_path = os.path.join(latency_path,"request_aggr", svc, x)
         json_filenames = sorted([os.path.join(json_file_path, file) for file in
                           os.listdir(json_file_path)[:3]])  # Take the first 3 elements
 
-        print(json_filenames)
-        print(len(json_filenames[0]))
-        print(len(json_filenames[1]))
-        print(len(json_filenames[2]))
-
         for json_filename in json_filenames:
-            print(json_filename)
             with open(json_filename) as f:
                 source = json.load(f)
             data_list = source['data']['result']
@@ -427,26 +398,21 @@ for x in elts:
                     if max(values) > max_value:
                         max_value = max(values)
 
-    # max_value = 10000
-    print("on est la pour")
-    print(x)
-    print(max_value)
-
-    print(
-        "------------------------------------------------------------------------------------------------------------------------")
     for idx, svc in enumerate(
-            ["teastore-webui"]):
-        json_file_path = os.path.join(latency_path, "request", svc, x)
+            ["teastore-persistence"]):
 
-        # json_filenames = sorted([os.path.join(json_file_path, file) for file in
-        #                   os.listdir(json_file_path)[:1]])  # Take the first 3 elements
-        # print(json_filenames)
+
+        json_file_path = os.path.join(latency_path, "request_aggr", svc, x)
+
+        json_filenames = sorted([os.path.join(json_file_path, file) for file in
+                          os.listdir(json_file_path)[:3]])
+
         max_value = math.ceil(max_value / 100) * 100
 
+        print("apres arrondi")
+        print(max_value)
+
         for json_filename in json_filenames:
-            print("***************************************************")
-            print(json_filenames)
-            print(len(json_filename))
             position = json_filenames.index(json_filename)
             file_name_with_extension = os.path.basename(json_filename)
             file_name, _ = os.path.splitext(file_name_with_extension)
@@ -457,7 +423,7 @@ for x in elts:
 
             timestamps = []
 
-            plot_metrics(data, svc, "request")
+            plot_metrics(data, svc, "request_aggr")
 
         time = []
         values = []
@@ -470,38 +436,25 @@ for x in elts:
             # Vous pouvez également faire d'autres traitements ici, comme retourner un DataFrame vide
             df = pd.DataFrame()
 
-        # Data
-        # time = [0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5, 8.5, 9.5]
-        # values = [132, 129, 132, 132, 132, 125, 128, 130, 129, 128]
 
-        # Create the plot for 'Evolution of pods'
         plt.plot(time, values, color='#8ECAE6', label='Load Intensity')
         plt.legend(loc='upper left', frameon=False)
+        
+        
     plt.subplot(5, 1, 5)
-
-    # fig, axes = plt.subplots(2, 3, figsize=(15, 10))
-    # axes = axes.flatten()
-    # save_path = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/warm_equal_load/nantes/hyperthreading/128/linear/3nodes/linear/31-10-2024/{json_file}/Plots/{metric_to_plot}"
 
     max_value = 0
 
     json_filenames = []
 
     # retrieve the max size to pyt ylim for all plots
-    for idx, svc in enumerate(
-            ["teastore-auth", "teastore-recommender", "teastore-image", "teastore-persistence",
-             "teastore-registry", "teastore-webui"]):
+    for idx, svc in enumerate(services):
         json_file_path = os.path.join(latency_path, "latency", svc, x)
         json_filenames = sorted([os.path.join(json_file_path, file) for file in
                                  os.listdir(json_file_path)[:3]])  # Take the first 3 elements
 
-        print(json_filenames)
-        print(len(json_filenames[0]))
-        print(len(json_filenames[1]))
-        print(len(json_filenames[2]))
-
         for json_filename in json_filenames:
-            print(json_filename)
+            #print(json_filename)
             with open(json_filename) as f:
                 source = json.load(f)
             data_list = source['data']['result']
@@ -510,33 +463,27 @@ for x in elts:
                 # values = [float(x[1]) for x in result["values"]]
                 values = [float(x[1]) for x in result["values"] if x[1] != "NaN"]
                 if values:  # Check if values is not empty
-                    print(max(values))
+                    #print(max(values))
                     if max(values) > max_value:
                         max_value = max(values)
 
-    # max_value = 10000
-    print("on est la pour")
-    print(x)
-    print(max_value)
 
-    print(
-        "------------------------------------------------------------------------------------------------------------------------")
     for idx, svc in enumerate(
-            ["teastore-webui"]):
+            ["teastore-persistence"]):
         json_file_path = os.path.join(latency_path, "latency", svc, x)
 
-        # json_filenames = sorted([os.path.join(json_file_path, file) for file in
-        #                   os.listdir(json_file_path)[:1]])  # Take the first 3 elements
-        # print(json_filenames)
+        json_filenames = sorted([os.path.join(json_file_path, file) for file in
+                                 os.listdir(json_file_path)[:3]])
         max_value = math.ceil(max_value / 100) * 100
 
         for json_filename in json_filenames:
-            print("***************************************************")
-            print(json_filenames)
-            print(len(json_filename))
+           # print("***************************************************")
+            #print(json_filenames)
+            #print(len(json_filename))
             position = json_filenames.index(json_filename)
             file_name_with_extension = os.path.basename(json_filename)
             file_name, _ = os.path.splitext(file_name_with_extension)
+
 
             # Charger le JSON depuis un fichier
             with open(json_filename) as f:
@@ -544,7 +491,7 @@ for x in elts:
 
             timestamps = []
 
-            plot_metrics(data, svc)
+            plot_metrics(data, svc, "latency")
 
     plt.tight_layout()
     os.makedirs(save_path, exist_ok=True)
@@ -557,7 +504,7 @@ for x in elts:
     plt.show()
     #plt.close(fig)  # Closing the figure to avoid overlap with the next iteration
 
-    print("*********************************iteration*********************************************************")
+    #print("*********************************iteration*********************************************************")
 
     #plt.legend(legend_objects, legend_labels, loc='upper center', ncol=2)
 
