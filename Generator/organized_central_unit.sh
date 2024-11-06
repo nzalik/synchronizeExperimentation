@@ -45,7 +45,7 @@ kubectl create secret docker-registry docker-registry-secret --docker-server=htt
   #number=$((number + 1))
   #new_folder_path="${new_folder_path1}/${number}"
   for file_name in ../Load/load3/*.csv; do
-    for i in {1..2}; do
+    for i in {1..3}; do
       root_file_name=$(basename "$file_name" .csv)
 
       # Compter le nombre de fichiers dans le répertoire $date_str
