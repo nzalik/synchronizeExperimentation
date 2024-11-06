@@ -1,0 +1,64 @@
+#!/bin/bash
+export PATH="$HOME/.local/bin:$PATH"
+# Obtenir le répertoire parent
+parent_dir=$(dirname $(pwd))
+# Obtenir la date actuelle
+date_str=$(date +"%d-%m-%Y")
+category="128/linear/3nodes/linear"
+# Chemin complet du nouveau dossier
+istio_path="../istio_metrics.json"
+#metric_path="../teastore.json"
+metric_path="../teastore_grenoble.json"
+
+workload_date=$(date +"%Y-%m-%d")
+#workload_dir="../Load/profiles_$workload_date"
+workload_dir="../Load/profiles_2024-07-31"
+
+workload_files=($(ls "$workload_dir"/*.csv))
+#export KUBECONFIG=~/admin_web.conf
+export KUBECONFIG=~/admin_kube5k.conf
+kubectl create secret docker-registry docker-registry-secret --docker-server=https://gricad-registry.univ-grenoble-alpes.fr --docker-username=chouette --docker-password=esVsrrxsLA9sJ_nzPurJ
+
+for replicas in {2..4}; do
+  
+  new_folder_path1="$parent_dir/locust/variation/${replicas}replicas/nantes/hyperthreading/$category/$date_str"
+
+  for i in {1..6}; do
+    for file_name in ../Load/teastore_loads/*.csv; do
+      root_file_name=$(basename "$file_name" .csv)
+      # Compter le nombre de fichiers dans le répertoire $date_str
+      file_count=$(ls -1 "$new_folder_path1" | wc -l)
+      echo "le nombre de fichier"
+      echo $file_count
+      # Créer le sous-répertoire "experimentation" avec le numéro
+      exp_folder_path="$new_folder_path1/$root_file_name"
+      echo $root_file_name
+      input_string=$file_name
+      output_part=$(basename "$input_string" .csv)
+      output_part="${output_part#profiles_}"
+      echo "$output_part"
+      echo "##################### Initialisation ##################################################"
+      # Créer le déploiement Kubernetes pour les autres services
+      kubectl create -f ../custom_deployments/gricard-teastore.yaml
+      #kubectl create -f ../custom_deployments/teastore-clusterip-1cpu-5giga.yaml
+      sleep 240
+       echo "##################### Initialisation du déploiement teastore-webui avec $replicas réplicas #####################"
+      kubectl scale deployment teastore-webui --replicas=$replicas
+      echo "##################### Sleeping before warmup ##################################################"
+      warm="../warmUp/const_linear_30requests_per_sec.csv"
+      # Lancer le générateur de charge HTTP
+      env INTENSITY_FILE=$warm locust -f /home/erods-chouette/Documents/synchronizeExperimentation/workload_generators/locust/teastore_locustfile-custom-scale-webui.py --headless --csv=log --csv-full-history
+      sleep 120
+      echo "##################### Sleeping before load ##################################################"
+      result="$output_part.csv"
+      time_obj=$(date +"%H:%M:%S")
+      echo $time_obj
+      env INTENSITY_FILE=$file_name locust -f /home/erods-chouette/Documents/synchronizeExperimentation/workload_generators/locust/teastore_locustfile-custom-scale-webui.py --headless --csv=log --csv-full-history
+      sleep 60
+      python3 ../Fetcher/fetch_organized_for_mean.py "$result" $workload_dir $exp_folder_path $time_obj $metric_path
+      python3 ../Fetcher/istio_metric_fetch.py "$new_folder_path1" "$time_obj" $metric_path $istio_path
+      kubectl delete pods,deployments,services -l app=teastore
+      sleep 120
+    done
+  done
+done
