@@ -1,0 +1,135 @@
+- Sin files
+sin_1: ceil=289 | floor=64 | peaks=2
+sin_2: ceil=176 | floor=74 | peaks=3
+sin_3: ceil=481 | floor=327 | peaks=2
+sin_4: ceil=30 | floor=23 | peaks=2
+sin_5: ceil=108 | floor=88 | peaks=3
+sin_6: ceil=516 | floor=434 | peaks=1
+- Cos files
+cos_1: ceil=71 | floor=43 | peaks=1
+cos_2: ceil=388 | floor=99 | peaks=1
+cos_3: ceil=583 | floor=191 | peaks=3
+cos_4: ceil=499 | floor=269 | peaks=1
+cos_5: ceil=344 | floor=132 | peaks=2
+cos_6: ceil=314 | floor=274 | peaks=3
+- AbsSin files
+abssin_1: ceil=277 | floor=214 | peaks=3
+abssin_2: ceil=17 | floor=13 | peaks=2
+abssin_3: ceil=398 | floor=272 | peaks=2
+abssin_4: ceil=27 | floor=26 | peaks=3
+abssin_5: ceil=123 | floor=112 | peaks=1
+abssin_6: ceil=151 | floor=20 | peaks=2
+- AbsCos files
+abscos_1: ceil=561 | floor=14 | peaks=1
+abscos_2: ceil=369 | floor=253 | peaks=1
+abscos_3: ceil=22 | floor=8 | peaks=2
+abscos_4: ceil=347 | floor=221 | peaks=3
+abscos_5: ceil=380 | floor=280 | peaks=2
+abscos_6: ceil=151 | floor=96 | peaks=1
+- Random Stairs files
+rdstairs_1: ceil=320 | floor=5
+rdstairs_2: ceil=80 | floor=5
+rdstairs_3: ceil=468 | floor=5
+rdstairs_4: ceil=55 | floor=5
+rdstairs_5: ceil=129 | floor=5
+rdstairs_6: ceil=45 | floor=5
+- Random Jump files
+rdjump_1: ceil=559 | floor=5
+rdjump_2: ceil=197 | floor=5
+rdjump_3: ceil=517 | floor=5
+rdjump_4: ceil=275 | floor=5
+rdjump_5: ceil=139 | floor=5
+rdjump_6: ceil=129 | floor=5
+- Linear files
+linear_1: ceil=505 | floor=99 | a=2
+linear_2: ceil=269 | floor=77 | a=1
+linear_3: ceil=599 | floor=122 | a=1
+linear_4: ceil=552 | floor=320 | a=1
+linear_5: ceil=265 | floor=231 | a=1
+linear_6: ceil=40 | floor=20 | a=2
+- Stairs Up files
+stairsu_1: ceil=300 | floor=5
+stairsu_2: ceil=272 | floor=5
+stairsu_3: ceil=453 | floor=5
+stairsu_4: ceil=287 | floor=5
+stairsu_5: ceil=359 | floor=5
+stairsu_6: ceil=58 | floor=5
+- Stairs Down files
+stairsd_1: ceil=406 | floor=5
+stairsd_2: ceil=383 | floor=5
+stairsd_3: ceil=525 | floor=5
+stairsd_4: ceil=584 | floor=5
+stairsd_5: ceil=440 | floor=5
+stairsd_6: ceil=201 | floor=5
+- Sin files
+sin_7: ceil=11 | floor=10 | peaks=2
+sin_8: ceil=272 | floor=266 | peaks=3
+sin_9: ceil=126 | floor=118 | peaks=3
+- Cos files
+cos_7: ceil=200 | floor=71 | peaks=2
+cos_8: ceil=7 | floor=5 | peaks=3
+cos_9: ceil=233 | floor=201 | peaks=2
+- AbsSin files
+abssin_7: ceil=204 | floor=65 | peaks=1
+abssin_8: ceil=224 | floor=181 | peaks=2
+abssin_9: ceil=72 | floor=68 | peaks=2
+- AbsCos files
+abscos_7: ceil=175 | floor=51 | peaks=2
+abscos_8: ceil=221 | floor=192 | peaks=2
+abscos_9: ceil=19 | floor=13 | peaks=3
+- Random Stairs files
+rdstairs_7: ceil=188 | floor=5
+rdstairs_8: ceil=62 | floor=5
+rdstairs_9: ceil=166 | floor=5
+- Random Jump files
+rdjump_7: ceil=286 | floor=5
+rdjump_8: ceil=32 | floor=5
+rdjump_9: ceil=102 | floor=5
+- Linear files
+linear_7: ceil=116 | floor=5 | a=2
+linear_8: ceil=239 | floor=27 | a=1
+linear_9: ceil=242 | floor=9 | a=1
+- Stairs Up files
+stairsu_7: ceil=203 | floor=5
+stairsu_8: ceil=190 | floor=5
+stairsu_9: ceil=232 | floor=5
+- Stairs Down files
+stairsd_7: ceil=34 | floor=5
+stairsd_8: ceil=277 | floor=5
+stairsd_9: ceil=70 | floor=5
+- Sin files
+sin_10: ceil=532 | floor=477 | peaks=2
+sin_11: ceil=482 | floor=450 | peaks=2
+sin_12: ceil=528 | floor=469 | peaks=3
+- Cos files
+cos_10: ceil=384 | floor=372 | peaks=2
+cos_11: ceil=463 | floor=317 | peaks=3
+cos_12: ceil=495 | floor=375 | peaks=2
+- AbsSin files
+abssin_10: ceil=359 | floor=315 | peaks=1
+abssin_11: ceil=520 | floor=371 | peaks=1
+abssin_12: ceil=333 | floor=309 | peaks=1
+- AbsCos files
+abscos_10: ceil=452 | floor=336 | peaks=2
+abscos_11: ceil=511 | floor=482 | peaks=2
+abscos_12: ceil=323 | floor=309 | peaks=3
+- Random Stairs files
+rdstairs_10: ceil=457 | floor=300
+rdstairs_11: ceil=367 | floor=300
+rdstairs_12: ceil=350 | floor=300
+- Random Jump files
+rdjump_10: ceil=361 | floor=300
+rdjump_11: ceil=550 | floor=300
+rdjump_12: ceil=531 | floor=300
+- Linear files
+linear_10: ceil=564 | floor=393 | a=1
+linear_11: ceil=513 | floor=416 | a=1
+linear_12: ceil=582 | floor=551 | a=2
+- Stairs Up files
+stairsu_10: ceil=511 | floor=300
+stairsu_11: ceil=370 | floor=300
+stairsu_12: ceil=434 | floor=300
+- Stairs Down files
+stairsd_10: ceil=460 | floor=300
+stairsd_11: ceil=598 | floor=300
+stairsd_12: ceil=434 | floor=300
