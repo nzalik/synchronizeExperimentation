@@ -219,6 +219,7 @@ def _init_metric_metadata(metric, pod_name):
 
 
 file_path = '../config.ini'
+
 config = read_ini_file(file_path)
 
 prometheus_url = prom_url + "/api/v1/query?query="
