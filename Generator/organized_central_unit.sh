@@ -38,7 +38,7 @@ root_prefix="/home/ykoagnenzali/"
 prefix_folder="${root_prefix}Documents/synchronizeExperimentation"
 
 # Complete relative path for data storage
-new_folder_base="$parent_dir/synchronizeExperimentation/locust/gab/nantes/hyperthreading/$category/$date_str"
+new_folder_base="$parent_dir/synchronizeExperimentation/locust/grid/nantes/hyperthreading/$category/$date_str"
 new_folder_path1="$new_folder_base"
 new_folder_path_backup="$new_folder_base/backup"
 
