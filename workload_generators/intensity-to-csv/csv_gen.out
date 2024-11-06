@@ -140,3 +140,11 @@ stairsu_2: ceil=20 | floor=5
 stairsd_2: ceil=20 | floor=5
 - Const files
 const_2: ceil=20
+- Sin files
+sin_2: ceil=10 | floor=1 | peaks=3
+- Stairs Up files
+stairsu_2: ceil=10 | floor=1
+- Stairs Down files
+stairsd_2: ceil=10 | floor=1
+- Const files
+const_2: ceil=10
