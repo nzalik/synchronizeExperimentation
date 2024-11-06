@@ -30,7 +30,7 @@ def get_color_for_serviceInit(service_name):
         case 'teastore-recommender':
             return '#9c23c2'
         case _:
-            return '#295F98'
+            return '#adb5bd'
 
 def normalization(value):
     return value / (1000 ** 3)

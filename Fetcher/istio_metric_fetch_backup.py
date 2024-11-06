@@ -26,6 +26,8 @@ profile = sys.argv[5]
 parameters = read_parameters_from_json(file_path)
 
 metric_parameters = read_parameters_from_json(metrics_path)
+print("les metriques")
+print(metric_parameters)
 
 prometheus_url = parameters['PROMETHEUS_URL']
 
@@ -42,7 +44,6 @@ end_dt = end_datetime.timestamp()
 namespace="default"
 time_step="1"
 step="1"
-interval = "120s"
 
 def query_prometheus(prometheus_url, query, start_dt, end_dt, step):
     payload = {'query': query, 'start': start_dt, 'end': end_dt, 'step': step + 's'}
@@ -136,27 +137,19 @@ def query_for_service(self, prometheus_url, svc, start_dt, end_dt, step, datadir
 def _get_query_modifier(metric_parameter, destination_target):
 
     if metric_parameter['aggregator'] == "histogram_quantile":
-        return f""" histogram_quantile(0.95, sum(rate(istio_request_duration_milliseconds_bucket{{reporter=~"destination", destination_workload="{destination_target}"}}[{interval}])) by (le, destination_workload))"""
+        return f""" histogram_quantile(0.95, sum(rate(istio_request_duration_milliseconds_bucket{{reporter="destination", destination_workload="{destination_target}"}}[30s])) by (le, source_workload))"""
     elif metric_parameter['aggregator'] == "round_aggr":
-        return f""" round(sum(irate(istio_requests_total{{destination_workload="{destination_target}",reporter=~"destination"}}[{interval}])) by (destination_workload), 0.001)"""
+        return f""" round(sum(irate(istio_requests_total{{destination_workload="{destination_target}",reporter=~"destination"}}[30s])) by (destination_workload), 0.001)"""
     elif metric_parameter['aggregator'] == "round":
-        return f""" round(sum(irate(istio_requests_total{{destination_workload="{destination_target}",reporter=~"destination"}}[{interval}])) by (destination_workload), 0.001)"""
-    elif metric_parameter['aggregator'] == "request_success":
-        return f""" round(sum(irate(istio_requests_total{{destination_workload="{destination_target}",reporter=~"destination", response_code=~"2.."}}[{interval}])) by (destination_workload), 0.001)"""
-    elif metric_parameter['aggregator'] == "client_error":
-        return f""" round(sum(irate(istio_requests_total{{destination_workload="{destination_target}",reporter=~"destination", response_code=~"4.."}}[{interval}])) by (destination_workload), 0.001)"""
-    elif metric_parameter['aggregator'] == "server_error":
-        return f""" round(sum(irate(istio_requests_total{{destination_workload="{destination_target}",reporter=~"destination", response_code=~"5.."}}[{interval}])) by (destination_workload), 0.001)"""
-    elif metric_parameter['aggregator'] == "redirection":
-        return f""" round(sum(irate(istio_requests_total{{destination_workload="{destination_target}",reporter=~"destination", response_code=~"3.."}}[{interval}])) by (destination_workload), 0.001)"""
+        return f""" round(sum(irate(istio_requests_total{{destination_workload="{destination_target}",reporter=~"destination", source_workload=~"(teastore-webui|teastore-recommender|teastore-persistence|teastore-image|teastore-auth|teastore-registry|unknown)"}}[30s])) by (source_workload, destination_workload), 0.001)"""
     elif metric_parameter['aggregator'] == "bytes":
-        return f"""histogram_quantile(0.95, sum(irate(istio_request_bytes_bucket{{reporter=~"destination", destination_workload=~"{destination_target}"}}[{interval}])) by (le, source_workload, destination_workload))
+        return f"""histogram_quantile(0.95, sum(irate(istio_request_bytes_bucket{{reporter=~"destination", destination_workload=~"{destination_target}", source_workload=~"(teastore-webui|teastore-recommender|teastore-persistence|teastore-image|teastore-auth|teastore-registry|unknown)"}}[30s])) by (le, source_workload, destination_workload))
 """
     elif metric_parameter['aggregator'] == "tcp":
-        return f"""round(sum(irate(istio_tcp_sent_bytes_total{{reporter=~"destination", destination_workload=~"{destination_target}"}}[{interval}])) by (destination_workload), 0.001)
+        return f"""round(sum(irate(istio_tcp_sent_bytes_total{{reporter=~"destination", destination_workload=~"{destination_target}", source_workload=~"(teastore-webui|teastore-recommender|teastore-persistence|teastore-image|teastore-auth|teastore-registry|unknown)"}}[30s])) by (source_workload, destination_workload), 0.001)
 """
     else:
-        return f""" round(sum(irate(istio_requests_total{{reporter=~"destination", destination_workload="{destination_target}", response_code="400"}}[{interval}])) by (destination_workload), 0.001)"""
+        return f""" round(sum(irate(istio_requests_total{{destination_workload="{destination_target}",reporter=~"destination",source_workload=~"(teastore-webui|teastore-recommender|teastore-persistence|teastore-image|teastore-auth|teastore-registry|unknown)", response_code="400"}}[30s])) by (source_workload, destination_workload), 0.001)"""
 
 
 def _save_as_json(source, destination, res, datadir):
@@ -200,7 +193,7 @@ for destination_workload in services:
         destination = '-'.join(destination_workload["pod"].split('-')[:-2])
 
         # query_str = f"""
-        # histogram_quantile(0.95, sum(rate(istio_request_duration_milliseconds_bucket{{reporter="source",destination_workload="{destination}", source_workload="{source}"}}[{interval}])) by (le, destination_workload))
+        # histogram_quantile(0.95, sum(rate(istio_request_duration_milliseconds_bucket{{reporter="source",destination_workload="{destination}", source_workload="{source}"}}[30s])) by (le, destination_workload))
         # """
         query_str = _get_query_modifier(metric, destination)
 

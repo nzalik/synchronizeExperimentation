@@ -13,6 +13,25 @@
   "metric": "istio_requests_total",
     "name": "request_aggr",
     "aggregator": "round_aggr"
+  }, {
+  "metric": "istio_requests_total",
+    "name": "request_success",
+    "aggregator": "request_success"
+  },
+  {
+  "metric": "istio_requests_total",
+    "name": "client_error",
+    "aggregator": "client_error"
+  },
+  {
+  "metric": "istio_requests_total",
+    "name": "redirection",
+    "aggregator": "redirection"
+  },
+  {
+  "metric": "istio_requests_total",
+    "name": "server_error",
+    "aggregator": "server_error"
   },
   {
   "metric": "istio_requests_total",

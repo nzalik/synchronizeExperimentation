@@ -11,7 +11,8 @@ date_str=$(date +"%d-%m-%Y")
 category="128/linear/3nodes/linear"
 
 # Chemin complet du nouveau dossier
-new_folder_path1="$parent_dir/locust/weekend/nantes/hyperthreading/$category/$date_str"
+new_folder_path1="$parent_dir/locust/gab/nantes/hyperthreading/$category/$date_str"
+new_folder_path_backup="$parent_dir/locust/gab/nantes/hyperthreading/$category/$date_str/backup"
 
 istio_path="../istio_metrics.json"
 metric_path="../teastore_grenoble.json"
@@ -20,38 +21,34 @@ workload_date=$(date +"%Y-%m-%d")
 #workload_dir="../Load/profiles_$workload_date"
 workload_dir="../Load/profiles_2024-07-31"
 
-host="http://econome-20.nantes.grid5000.fr:30080/tools.descartes.teastore.webui"
+host="http://econome-5.nantes.grid5000.fr:30080/tools.descartes.teastore.webui"
 
 workload_files=($(ls "$workload_dir"/*.csv))
 
 export KUBECONFIG=~/admin_collect-data.conf
 
-  #/bin/bash "$parent_dir/mesh/istio.sh"
+  /bin/bash "$parent_dir/mesh/istio.sh"
 
-  #kubectl create secret docker-registry docker-registry-secret --docker-server=https://gricad-registry.univ-grenoble-alpes.fr --docker-username=chouette --docker-password=esVsrrxsLA9sJ_nzPurJ
+  kubectl create secret docker-registry docker-registry-secret --docker-server=https://gricad-registry.univ-grenoble-alpes.fr --docker-username=chouette --docker-password=esVsrrxsLA9sJ_nzPurJ
 
   #number=$((number + 1))
   #new_folder_path="${new_folder_path1}/${number}"
-  for file_name in ../Load/load2/*.csv; do
+  for file_name in ../Load/load1/*.csv; do
   for i in {1..4}; do
   root_file_name=$(basename "$file_name" .csv)
 
   # Compter le nombre de fichiers dans le répertoire $date_str
   file_count=$(ls -1 "$new_folder_path1" | wc -l)
 
-  echo "le nombre de fichier"
-  echo $file_count
-
   # Créer le sous-répertoire "experimentation" avec le numéro
   exp_folder_path="$new_folder_path1/$root_file_name"
-  log_exp_folder_path="${new_folder_path1}/output/${root_file_name}"
+  log_exp_folder_path="${new_folder_path1}/output/${root_file_name}_$i"
 
   echo $root_file_name
 
   input_string=$file_name
   output_part=$(basename "$input_string" .csv)
   output_part="${output_part#profiles_}"
-  echo "$output_part"
 
   echo "##################### Initialisation ##################################################"
 
@@ -85,6 +82,7 @@ export KUBECONFIG=~/admin_collect-data.conf
 
   python3 ../Fetcher/fetch_organized_for_mean.py "$result" $workload_dir $exp_folder_path $time_obj $metric_path
   python3 ../Fetcher/istio_metric_fetch.py "$new_folder_path1" "$time_obj" $metric_path $istio_path $root_file_name
+  python3 ../Fetcher/istio_metric_fetch_backup.py "$new_folder_path_backup" "$time_obj" $metric_path $istio_path $root_file_name
 
   kubectl delete pods,deployments,services -l app=teastore
 
