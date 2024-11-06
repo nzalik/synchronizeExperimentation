@@ -10,6 +10,9 @@ date_str=$(date +"%d-%m-%Y")
 
 category="128/linear/3nodes/linear"
 
+#prefix_folder="/home/erods-chouette/Documents"
+prefix_folder = "~"
+
 # Chemin complet du nouveau dossier
 new_folder_path1="$parent_dir/locust/gab/nantes/hyperthreading/$category/$date_str"
 new_folder_path_backup="$parent_dir/locust/gab/nantes/hyperthreading/$category/$date_str/backup"
@@ -21,7 +24,7 @@ workload_date=$(date +"%Y-%m-%d")
 #workload_dir="../Load/profiles_$workload_date"
 workload_dir="../Load/profiles_2024-07-31"
 
-host="http://econome-5.nantes.grid5000.fr:30080/tools.descartes.teastore.webui"
+host="http://econome-22.nantes.grid5000.fr:30080/tools.descartes.teastore.webui"
 
 workload_files=($(ls "$workload_dir"/*.csv))
 
@@ -33,8 +36,8 @@ export KUBECONFIG=~/admin_collect-data.conf
 
   #number=$((number + 1))
   #new_folder_path="${new_folder_path1}/${number}"
-  for file_name in ../Load/load1/*.csv; do
-  for i in {1..4}; do
+  for file_name in ../Load/load3/*.csv; do
+  for i in {1..1}; do
   root_file_name=$(basename "$file_name" .csv)
 
   # Compter le nombre de fichiers dans le répertoire $date_str
@@ -65,7 +68,7 @@ export KUBECONFIG=~/admin_collect-data.conf
   #for warmp in ../warmUp/*.csv; do
   #Lancer le générateur de charge HTTP
   #env INTENSITY_FILE=$warm locust -f ~/PycharmProjects/synchronizeExperimentation/workload_generators/locust/teastore_locustfile-custom-scale.py --headless --csv=log --csv-full-history
-  env INTENSITY_FILE=$warm locust -f /home/erods-chouette/Documents/synchronizeExperimentation/workload_generators/locust/teastore_locustfile-custom-scale.py --headless --host $host
+  env INTENSITY_FILE=$warm locust -f $prefix_folder/synchronizeExperimentation/workload_generators/locust/teastore_locustfile-custom-scale.py --headless --host $host
 
   sleep 120
 
@@ -76,7 +79,7 @@ export KUBECONFIG=~/admin_collect-data.conf
   time_obj=$(date +"%H:%M:%S")
   echo $time_obj
 
-  env INTENSITY_FILE=$file_name locust -f /home/erods-chouette/Documents/synchronizeExperimentation/workload_generators/locust/teastore_locustfile-custom-scale.py --headless --csv $log_exp_folder_path --host $host
+  env INTENSITY_FILE=$file_name locust -f $prefix_folder/synchronizeExperimentation/workload_generators/locust/teastore_locustfile-custom-scale.py --headless --csv $log_exp_folder_path --host $host
 
   sleep 60
 

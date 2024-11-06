@@ -10,6 +10,12 @@ memory_limit=5
 pod_limit=2
 cpu_step = "2m"
 
+colors_table = [
+    "#FF5733",  # Rouge orangé
+    "#33FF57",  # Vert Lime
+    "#3357FF"  # Bleu Foncé
+]
+
 def get_color_for_serviceInit(service_name):
     service_name = service_name.lower()
 
