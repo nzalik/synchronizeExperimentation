@@ -197,11 +197,6 @@ def _init_metric_metadata(metric, pod_name):
 
     root_container_name = '-'.join(pod_name.split('-')[:-2])
 
-    print("le nom du pod")
-    print("le nom du service")
-    print(root_container_name)
-
-
     try:
         res = requests.get(url).json()
     except Exception as e:
