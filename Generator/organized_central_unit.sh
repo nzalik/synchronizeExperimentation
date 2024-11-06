@@ -82,10 +82,10 @@ export KUBECONFIG="${root_prefix}admin_collect-data.conf"
       echo "$file_name"
 
       # Créer le déploiement Kubernetes
-      kubectl create -f $prefix_folder/custom_deployments/gricard-teastore.yaml
+      #kubectl create -f $prefix_folder/custom_deployments/gricard-teastore.yaml
       #kubectl create -f ../custom_deployments/teastore-clusterip-1cpu-5giga.yaml
 
-      sleep 240 # This wait time is necessary because the application after being deployed, need some time to
+      #sleep 240 # This wait time is necessary because the application after being deployed, need some time to
                 # be ready to process requests
 
       echo "##################### Sleeping befor240e warmup ##################################################"
