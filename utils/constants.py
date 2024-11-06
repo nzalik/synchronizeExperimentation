@@ -1,5 +1,9 @@
+import configparser
 import json
+import os
 from datetime import datetime
+import requests
+
 
 line_styles=["solid","dotted","dashed","dashdot"]
 
@@ -8,7 +12,6 @@ cpu_limit_max=1.2
 load_max=475
 memory_limit=5
 pod_limit=2
-cpu_step = "2m"
 
 colors_table = [
     "#FF5733",  # Rouge orangé
@@ -179,3 +182,112 @@ def plot_metrics(data, ax):
     ax.set_ylim(0, max_value)
     ax.legend(loc='upper left', frameon=False)
     return ticks
+
+
+###################################################Fetcher#############################
+
+
+cpu_step = "2m"
+step = "1s"
+
+def read_ini_file(file_path):
+    config = configparser.ConfigParser()
+    config.read(file_path)
+    return config
+
+def path_to_save(init_path):
+    #output_path = f"{init_path}/experimentation-{string_argument}"
+    output_path = f"{init_path}"
+    if os.path.exists(init_path):
+        # Construire le nouveau nom de répertoire
+        new_dir_name = f"data_{datetime.now().strftime('%H')}"
+        #output_path = f"{init_path}/experimentation-{string_argument}"
+        output_path = f"{init_path}"
+
+        if not os.path.exists(init_path):
+            os.makedirs(init_path)
+
+    return output_path
+
+def query_prometheus(query, prom_url):
+    my_url = prom_url + '/api/v1/' + query
+    res = None
+
+    try:
+        res = requests.get(my_url).json()
+    except Exception as e:
+        print(e)
+
+    if res != None and 'error' in res:
+        res = None
+
+    return res
+
+def query_prometheus_with_payload(prometheus_url, query, start_dt, end_dt, step):
+    #payload = {'query': query, 'start': start_dt, 'end': end_dt, 'step': step + 's'}
+    payload = {'query': query, 'start': start_dt, 'end': end_dt, 'step': step}
+
+    url = prometheus_url + '/api/v1/query_range?'
+    print("Querying " + url + " with payload " + str(payload))
+    res = None
+
+    # Query Prometheus
+    try:
+        res = requests.post(url, headers={'Content-Type': 'application/x-www-form-urlencoded'}, data=payload).json()
+    #    print(res)
+    except Exception as e:
+        print(e)
+        print("...Fail at Prometheus request.")
+
+    if res != None and 'error' in res:
+        print(res["error"])
+        res = None
+
+    return res
+
+def query_svc_names(namespace='default', start_dt="", end_dt="", prom_url=""):
+    #query_str = 'label/pod/values?match[]=kube_pod_container_info{namespace="' + namespace + '"}'
+    query_str = 'label/pod/values?match[]=kube_pod_container_info{namespace="' + namespace + '"}&start=' + str(
+        start_dt) + '&end=' + str(end_dt)
+    res = query_prometheus(query_str, prom_url)
+    services = []
+    if res != None:
+        svc_names = res['data']
+        for name in svc_names:
+            # query_str = '/query?query=container_last_seen{namespace="' + namespace + '", pod="' + name + '"}'
+            query_str = 'container_last_seen{namespace="' + namespace + '", pod="' + name + '"}'
+            res = query_prometheus_with_payload(prom_url, query_str, start_dt, end_dt, step)
+            if res != None and len(res['data']['result']) > 0:
+                instance = res['data']['result'][0]['metric']['instance'].split(':')[0]
+                # node = res['data']['result'][0]['metric']['node']
+                service_obj = {'pod': name, 'instance': instance}
+                services.append(service_obj)
+
+    return services
+
+def init_metric_metadata(metric, pod_name, prom_url):
+
+    query_str = 'metadata?metric=' + metric
+    url = prom_url + '/api/v1/' + query_str
+
+    res = None
+
+    root_container_name = '-'.join(pod_name.split('-')[:-2])
+
+    try:
+        res = requests.get(url).json()
+    except Exception as e:
+        print(e)
+
+    if res != None and 'error' in res:
+        print(res["error"])
+        res = None
+    elif res != None and res['data']:
+        metadata = res['data'][metric][0]
+
+        if (metadata['type'] == "gauge"):
+            return f"{metric}{{namespace=\"default\",pod=\"{pod_name}\", container=\"{root_container_name}\" }}"
+        elif (metadata['type'] == "counter"):
+            return f"irate({metric}{{namespace=\"default\",pod=\"{pod_name}\", container=\"{root_container_name}\"}}[{cpu_step}])"
+        else:
+            return f"{metric}{{namespace=\"default\"}}"

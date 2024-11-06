@@ -1,6 +1,6 @@
 #!/bin/bash
 
-parent_dir=$(dirname $(pwd))
+parent_dir=$1
 
 # Définir le KUBECONFIG
 #export KUBECONFIG=/home/erods-chouette/socialNetwork/admin_k8s_soc.conf
@@ -17,7 +17,7 @@ export PATH=$PWD/bin:$PATH
 
 # Installer Istio
 #istioctl install --set profile=demo -y
-istioctl install -f samples/bookinfo/demo-profile-no-gateways.yaml -y
+istioctl install -f ./samples/bookinfo/demo-profile-no-gateways.yaml -y
 
 # Activer l'injection automatique d'Istio sur le namespace par défaut
 kubectl label namespace default istio-injection=enabled

@@ -19,22 +19,26 @@ if len(sys.argv) > 1:
 # file_path = '../teastore_grenoble.json'
 # metrics_path = '../istio_metrics.json'
 
-file_path = sys.argv[3]
-metrics_path = sys.argv[4]
-profile = sys.argv[5]
+#metrics_path = sys.argv[3]
+prometheus_url = sys.argv[4]
+duration = sys.argv[5]
+profile = sys.argv[6]
 
-parameters = read_parameters_from_json(file_path)
+parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
+metrics_path = f"{parent_dir}/istio_metrics.json"
+
+#parameters = read_parameters_from_json(file_path)
 
 metric_parameters = read_parameters_from_json(metrics_path)
 
-prometheus_url = parameters['PROMETHEUS_URL']
+#prometheus_url = parameters['PROMETHEUS_URL']
 
 current_date = datetime.now().strftime('%Y-%m-%d')
 
 start_datetime_str=  current_date +" "+ formattedDate
 
 start_datetime = datetime.strptime(start_datetime_str, "%Y-%m-%d %H:%M:%S")
-end_datetime = start_datetime + timedelta(minutes=parameters['DURATION'])
+end_datetime = start_datetime + timedelta(minutes=int(duration))
 
 start_dt = start_datetime.timestamp()
 end_dt = end_datetime.timestamp()

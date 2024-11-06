@@ -73,3 +73,28 @@ linear_2: ceil=30 | floor=26 | a=2
 stairsu_2: ceil=26 | floor=10
 - Stairs Down files
 stairsd_2: ceil=38 | floor=10
+- Sin files
+sin_2: ceil=58 | floor=58 | peaks=3
+- Sin files
+sin_2: ceil=40 | floor=26 | peaks=3
+- Sin files
+sin_2: ceil=22 | floor=12 | peaks=2
+- Sin files
+sin_2: ceil=144 | floor=82 | peaks=2
+- Sin files
+sin_2: ceil=28 | floor=11 | peaks=3
+- Sin files
+sin_2: ceil= | floor= | peaks=
+- Sin files
+sin_2: ceil=140 | floor=37 | peaks=1
+- Sin files
+sin_2: ceil=50 | floor=10 | peaks=3
+- Sin files
+- Stairs Up files
+stairsu_2: ceil=10 | floor=10
+- Sin files
+- Stairs Up files
+stairsu_2: ceil=50 | floor=10
+- Sin files
+- Stairs Down files
+stairsd_2: ceil=50 | floor=10
