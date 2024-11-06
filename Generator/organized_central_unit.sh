@@ -97,7 +97,7 @@ export KUBECONFIG="${root_prefix}admin_collect-data.conf"
       #env INTENSITY_FILE=$warm locust -f ~/PycharmProjects/synchronizeExperimentation/workload_generators/locust/teastore_locustfile-custom-scale.py --headless --csv=log --csv-full-history
       env INTENSITY_FILE="$prefix_folder$WARMUP_FILE" locust -f $prefix_folder/workload_generators/locust/teastore_locustfile-custom-scale.py --headless --host $host
 
-      sleep 120
+      #sleep 120
 
       echo "##################### Sleeping before load ##################################################"
 
@@ -114,7 +114,7 @@ export KUBECONFIG="${root_prefix}admin_collect-data.conf"
       #python3 $prefix_folder/Fetcher/istio_metric_fetch.py "$new_folder_path1" "$time_obj" "$istio_path" "$PROMETHEUS_URL" "$DURATION" "$root_file_name"
       #python3 ../Fetcher/istio_metric_fetch_backup.py "$new_folder_path_backup" "$time_obj" $metric_path $istio_path $root_file_name
 
-      kubectl delete pods,deployments,services -l app=teastore
+      #kubectl delete pods,deployments,services -l app=teastore
 
       sleep 120
 
