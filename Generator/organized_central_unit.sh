@@ -11,7 +11,7 @@ date_str=$(date +"%d-%m-%Y")
 category="128/linear/3nodes/linear"
 
 #prefix_folder="/home/erods-chouette/Documents"
-prefix_folder = "~"
+prefix_folder = "/home/ykoagnenzali"
 
 # Chemin complet du nouveau dossier
 new_folder_path1="$parent_dir/locust/gab/nantes/hyperthreading/$category/$date_str"
