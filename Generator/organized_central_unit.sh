@@ -32,10 +32,10 @@ category="128/linear/3nodes/linear"
 
 # This is to give an indication to the script from where the script is executed
 # From the home environment or from the Grid
-#root_prefix="/home/erods-chouette/"
+#root_prefix="/home/erods-chouette/Documents/"
 root_prefix="/home/ykoagnenzali/"
 
-prefix_folder="${root_prefix}Documents/synchronizeExperimentation"
+prefix_folder="${root_prefix}synchronizeExperimentation"
 
 # Complete relative path for data storage
 new_folder_base="$parent_dir/synchronizeExperimentation/locust/grid/nantes/hyperthreading/$category/$date_str"
