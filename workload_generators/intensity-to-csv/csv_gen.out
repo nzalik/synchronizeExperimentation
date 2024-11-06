@@ -98,3 +98,45 @@ stairsu_2: ceil=50 | floor=10
 - Sin files
 - Stairs Down files
 stairsd_2: ceil=50 | floor=10
+- Sin files
+sin_2: ceil=max_req | floor=min_req | peaks=3
+- Stairs Up files
+stairsu_2: ceil=max_req | floor=10
+- Stairs Down files
+stairsd_2: ceil=max_req | floor=10
+- Const files
+const_2: ceil=max_req
+- Sin files
+sin_2: ceil=max_req | floor=min_req | peaks=3
+- Stairs Up files
+stairsu_2: ceil=max_req | floor=10
+- Stairs Down files
+stairsd_2: ceil=max_req | floor=10
+- Const files
+const_2: ceil=max_req
+- Sin files
+sin_2: ceil=max_req | floor=min_req | peaks=3
+- Sin files
+sin_2: ceil=100 | floor=min_req | peaks=3
+- Sin files
+- Stairs Down files
+stairsd_2: ceil=50 | floor=10
+- Sin files
+- Stairs Down files
+stairsd_2: ceil=max_req | floor=10
+- Sin files
+sin_2: ceil=30 | floor=5 | peaks=3
+- Stairs Up files
+stairsu_2: ceil=30 | floor=5
+- Stairs Down files
+stairsd_2: ceil=30 | floor=5
+- Const files
+const_2: ceil=30
+- Sin files
+sin_2: ceil=20 | floor=5 | peaks=3
+- Stairs Up files
+stairsu_2: ceil=20 | floor=5
+- Stairs Down files
+stairsd_2: ceil=20 | floor=5
+- Const files
+const_2: ceil=20

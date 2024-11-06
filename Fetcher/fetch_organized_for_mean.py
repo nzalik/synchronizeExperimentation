@@ -7,10 +7,10 @@ import os
 parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
 print(f"Parent Directory: {parent_dir}")
 
-sys.path.append(parent_dir)#sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), 'utils')))
+sys.path.append(parent_dir)  # sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), 'utils')))
 
 from utils.constants import (read_ini_file, query_svc_names, path_to_save,
-                              step, cpu_step, init_metric_metadata)
+                             step, cpu_step, init_metric_metadata)
 
 file_path_init = f"{parent_dir}/config.ini"
 
