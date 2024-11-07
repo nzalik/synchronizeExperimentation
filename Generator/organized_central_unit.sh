@@ -32,13 +32,14 @@ category="128/linear/3nodes/linear"
 
 # This is to give an indication to the script from where the script is executed
 # From the home environment or from the Grid
-#root_prefix="/home/erods-chouette/Documents/"
-root_prefix="/home/ykoagnenzali/"
+root_prefix="/home/erods-chouette/Documents/"
+init_root_prefix="/home/erods-chouette/"
+#root_prefix="/home/ykoagnenzali/"
 
 prefix_folder="${root_prefix}synchronizeExperimentation"
 
 # Complete relative path for data storage
-new_folder_base="$parent_dir/synchronizeExperimentation/locust/grid/nantes/hyperthreading/$category/$date_str"
+new_folder_base="$parent_dir/synchronizeExperimentation/locust/grid5000/nantes/hyperthreading/$category/$date_str"
 new_folder_path1="$new_folder_base"
 new_folder_path_backup="$new_folder_base/backup"
 
@@ -53,11 +54,12 @@ host="$WEBUI/tools.descartes.teastore.webui"
 
 # The kubernetes credentials to used for entering the cluster
 #export KUBECONFIG=~/admin_collect-data.conf
-export KUBECONFIG="${root_prefix}admin_collect-data.conf"
-# This script deployed every necessary configuration for istio mesh
-#/bin/bash "$prefix_folder/mesh/istio.sh" $prefix_folder
+export KUBECONFIG="${init_root_prefix}admin_collect-data.conf"
 
-#kubectl create secret docker-registry docker-registry-secret --docker-server=https://gricad-registry.univ-grenoble-alpes.fr --docker-username=chouette --docker-password=esVsrrxsLA9sJ_nzPurJ
+# This script deployed every necessary configuration for istio mesh
+/bin/bash "$prefix_folder/mesh/istio.sh" $prefix_folder
+
+kubectl create secret docker-registry docker-registry-secret --docker-server=https://gricad-registry.univ-grenoble-alpes.fr --docker-username=chouette --docker-password=esVsrrxsLA9sJ_nzPurJ
 
   #number=$((number + 1))
   #new_folder_path="${new_folder_path1}/${number}"
@@ -82,10 +84,10 @@ export KUBECONFIG="${root_prefix}admin_collect-data.conf"
       echo "$file_name"
 
       # Créer le déploiement Kubernetes
-      #kubectl create -f $prefix_folder/custom_deployments/gricard-teastore.yaml
+      kubectl create -f $prefix_folder/custom_deployments/gricard-teastore.yaml
       #kubectl create -f ../custom_deployments/teastore-clusterip-1cpu-5giga.yaml
 
-      #sleep 120 # This wait time is necessary because the application after being deployed, need some time to
+      sleep 120 # This wait time is necessary because the application after being deployed, need some time to
                 # be ready to process requests
 
       echo "##################### Sleeping befor240e warmup ##################################################"
@@ -106,7 +108,7 @@ export KUBECONFIG="${root_prefix}admin_collect-data.conf"
       time_obj=$(date +"%H:%M:%S")
       echo $time_obj
 
-      env INTENSITY_FILE="$file_name" locust -f $prefix_folder/workload_generators/locust/teastore_locustfile-custom-scale.py --headless --csv $log_exp_folder_path --host $host
+      env INTENSITY_FILE="$prefix_folder$WARMUP_FILE" locust -f $prefix_folder/workload_generators/locust/teastore_locustfile-custom-scale.py --headless --csv $log_exp_folder_path --host $host
 
       #sleep 60
 

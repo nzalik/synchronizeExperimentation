@@ -16,8 +16,8 @@ cd "$parent_dir/mesh/istio-1.23.2"
 export PATH=$PWD/bin:$PATH
 
 # Installer Istio
-#istioctl install --set profile=demo -y
-istioctl install -f ./samples/bookinfo/demo-profile-no-gateways.yaml -y
+istioctl install --set profile=demo -y
+#istioctl install -f ./samples/bookinfo/demo-profile-no-gateways.yaml -y
 
 # Activer l'injection automatique d'Istio sur le namespace par défaut
 kubectl label namespace default istio-injection=enabled
