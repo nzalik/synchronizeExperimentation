@@ -4,3 +4,5 @@ json
 datetime
 os
 configparser
+aiohttp
+tqdm
