@@ -55,7 +55,7 @@ export KUBECONFIG="${init_root_prefix}admin_collect-data.conf"
 # This script deployed every necessary configuration for istio mesh
 #/bin/bash "$prefix_folder/mesh/istio.sh" $prefix_folder
 
-kubectl create secret docker-registry docker-registry-secret --docker-server=https://gricad-registry.univ-grenoble-alpes.fr --docker-username=chouette --docker-password=esVsrrxsLA9sJ_nzPurJ
+#kubectl create secret docker-registry docker-registry-secret --docker-server=https://gricad-registry.univ-grenoble-alpes.fr --docker-username=chouette --docker-password=esVsrrxsLA9sJ_nzPurJ
 
   #number=$((number + 1))
   #new_folder_path="${new_folder_path1}/${number}"
