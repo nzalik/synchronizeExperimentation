@@ -106,7 +106,7 @@ export KUBECONFIG="${root_prefix}admin_collect-data.conf"
       time_obj=$(date +"%H:%M:%S")
       echo $time_obj
 
-      env INTENSITY_FILE="$prefix_folder$WARMUP_FILE" locust -f $prefix_folder/workload_generators/locust/teastore_locustfile-custom-scale.py --headless --csv $log_exp_folder_path --host $host
+      env INTENSITY_FILE="$file_name" locust -f $prefix_folder/workload_generators/locust/teastore_locustfile-custom-scale.py --headless --csv $log_exp_folder_path --host $host
 
       #sleep 60
 
