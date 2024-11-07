@@ -1,7 +1,7 @@
 {
-    "WEBUI_ADDR": "http:///econome-20.nantes.grid5000.fr:30080/",
-    "PROMETHEUS_URL": "http://econome-20.nantes.grid5000.fr:32683",
-    "PROMETHEUS_URL_istio": "http:///econome-20.nantes.grid5000.fr:32683",
+    "WEBUI_ADDR": "http:///econome-5.nantes.grid5000.fr:30080/",
+    "PROMETHEUS_URL": "http://econome-5.nantes.grid5000.fr:30090",
+    "PROMETHEUS_URL_istio": "http:///econome-5.nantes.grid5000.fr:30090",
     "DURATION": 5,
     "DURATION_UNIT": "minutes",
     "STEP"    : "1s"
