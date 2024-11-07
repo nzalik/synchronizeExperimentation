@@ -18,28 +18,6 @@ colors_table = [
     "#3357FF"  # Bleu Foncé
 ]
 
-def get_color_for_service_init(service_name):
-    service_name = service_name.lower()
-
-    # Switch case avec 7 cas différents
-    match service_name:
-        case 'teastore-webui':
-            return '#8ECAE6'
-        case 'teastore-persistence':
-            return '#eb014f'
-        case 'teastore-db':
-            return '#126782'
-        case 'teastore-registry':
-            return '#023047'
-        case 'teastore-auth':
-            return '#FFB703'
-        case 'teastore-image':
-            return '#067d4a'
-        case 'teastore-recommender':
-            return '#9c23c2'
-        case _:
-            return '#adb5bd'
-
 def normalization(value):
     return value / (1000 ** 3)
 
@@ -118,6 +96,28 @@ def sort_legend(legend_objects, legend_labels):
     legend_objects_sorted, legend_labels_sorted = zip(*legend_pairs_sorted)
 
     return legend_objects_sorted, legend_labels_sorted
+
+def get_color_for_service_init(service_name):
+    service_name = service_name.lower()
+
+    # Switch case avec 7 cas différents
+    match service_name:
+        case 'teastore-webui':
+            return '#8ECAE6'
+        case 'teastore-persistence':
+            return '#eb014f'
+        case 'teastore-db':
+            return '#126782'
+        case 'teastore-registry':
+            return '#023047'
+        case 'teastore-auth':
+            return '#FFB703'
+        case 'teastore-image':
+            return '#067d4a'
+        case 'teastore-recommender':
+            return '#9c23c2'
+        case _:
+            return '#adb5bd'
 
 # def plot_metrics(data, ax):
 #     global timestamps

@@ -82,10 +82,10 @@ export KUBECONFIG="${root_prefix}admin_collect-data.conf"
       echo "$file_name"
 
       # Créer le déploiement Kubernetes
-      kubectl create -f $prefix_folder/custom_deployments/gricard-teastore.yaml
+      #kubectl create -f $prefix_folder/custom_deployments/gricard-teastore.yaml
       #kubectl create -f ../custom_deployments/teastore-clusterip-1cpu-5giga.yaml
 
-      sleep 120 # This wait time is necessary because the application after being deployed, need some time to
+      #sleep 120 # This wait time is necessary because the application after being deployed, need some time to
                 # be ready to process requests
 
       echo "##################### Sleeping befor240e warmup ##################################################"
@@ -95,7 +95,7 @@ export KUBECONFIG="${root_prefix}admin_collect-data.conf"
       #for warmp in ../warmUp/*.csv; do
       #Lancer le générateur de charge HTTP
       #env INTENSITY_FILE=$warm locust -f ~/PycharmProjects/synchronizeExperimentation/workload_generators/locust/teastore_locustfile-custom-scale.py --headless --csv=log --csv-full-history
-      env INTENSITY_FILE="$prefix_folder$WARMUP_FILE" locust -f $prefix_folder/workload_generators/locust/teastore_locustfile-custom-scale.py --headless --host $host
+      #env INTENSITY_FILE="$prefix_folder$WARMUP_FILE" locust -f $prefix_folder/workload_generators/locust/teastore_locustfile-custom-scale.py --headless --host $host
 
       #sleep 120
 
