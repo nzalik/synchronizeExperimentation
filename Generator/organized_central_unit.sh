@@ -10,12 +10,6 @@ fi
 config_file="$1"
 source "$config_file"
 
-echo "on verifie les parametre"
-echo "Paramètre 1: $BENCHMARK"
-echo "Paramètre 2: $WEBUI"
-echo "Paramètre 3: $PROMETHEUS_URL"
-echo "Paramètre 3: $DURATION"
-
 export PATH="$HOME/.local/bin:$PATH"
 
 # The parent dir of the current file that will be used to create all following folders
@@ -25,7 +19,6 @@ parent_dir=$(dirname $(pwd))
 # The date is used to version the experiemntations and to know which experimentation
 # has been done on which day
 date_str=$(date +"%d-%m-%Y")
-
 
 # The relative path for storing experiments data
 category="128/linear/3nodes/linear"
@@ -42,7 +35,7 @@ root_prefix="/home/ykoagnenzali/"
 prefix_folder="${root_prefix}synchronizeExperimentation"
 
 # Complete relative path for data storage
-new_folder_base="$parent_dir/synchronizeExperimentation/locust/grid5000/nantes/hyperthreading/$category/$date_str"
+new_folder_base="$parent_dir/synchronizeExperimentation/locust/low_10/nantes/hyperthreading/$category/$date_str"
 new_folder_path1="$new_folder_base"
 new_folder_path_backup="$new_folder_base/backup"
 
@@ -66,8 +59,8 @@ export KUBECONFIG="${init_root_prefix}admin_collect-data.conf"
 
   #number=$((number + 1))
   #new_folder_path="${new_folder_path1}/${number}"
-  for file_name in $prefix_folder/Load/load3/*.csv; do
-    for i in {1..1}; do
+  for file_name in $prefix_folder/Load/load1/*.csv; do
+    for i in {1..3}; do
       root_file_name=$(basename "$file_name" .csv)
 
       # Compter le nombre de fichiers dans le répertoire $date_str
@@ -87,10 +80,9 @@ export KUBECONFIG="${init_root_prefix}admin_collect-data.conf"
       echo "$file_name"
 
       # Créer le déploiement Kubernetes
-      #kubectl create -f $prefix_folder/custom_deployments/gricard-teastore.yaml
-      #kubectl create -f ../custom_deployments/teastore-clusterip-1cpu-5giga.yaml
+      kubectl create -f $prefix_folder/custom_deployments/gricard-teastore.yaml
 
-      #sleep 120 # This wait time is necessary because the application after being deployed, need some time to
+      sleep 240 # This wait time is necessary because the application after being deployed, need some time to
                 # be ready to process requests
 
       echo "##################### Sleeping befor240e warmup ##################################################"
@@ -100,9 +92,9 @@ export KUBECONFIG="${init_root_prefix}admin_collect-data.conf"
       #for warmp in ../warmUp/*.csv; do
       #Lancer le générateur de charge HTTP
       #env INTENSITY_FILE=$warm locust -f ~/PycharmProjects/synchronizeExperimentation/workload_generators/locust/teastore_locustfile-custom-scale.py --headless --csv=log --csv-full-history
-      #env INTENSITY_FILE="$prefix_folder$WARMUP_FILE" locust -f $prefix_folder/workload_generators/locust/teastore_locustfile-custom-scale.py --headless --host $host
+      env INTENSITY_FILE="$prefix_folder$WARMUP_FILE" locust -f $prefix_folder/workload_generators/locust/teastore_locustfile-custom-scale.py --headless --host $host
 
-      #sleep 120
+      sleep 120
 
       echo "##################### Sleeping before load ##################################################"
 
@@ -113,13 +105,13 @@ export KUBECONFIG="${init_root_prefix}admin_collect-data.conf"
 
       env INTENSITY_FILE="$file_name" locust -f $prefix_folder/workload_generators/locust/teastore_locustfile-custom-scale.py --headless --csv $log_exp_folder_path --host $host
 
-      #sleep 60
+      sleep 60
 
       python3 $prefix_folder/Fetcher/fetch_organized_for_mean.py "$result" "$workload_dir" "$exp_folder_path" "$time_obj" "$PROMETHEUS_URL" "$DURATION" "$prefix_folder"
       python3 $prefix_folder/Fetcher/istio_metric_fetch.py "$new_folder_path1" "$time_obj" "$istio_path" "$PROMETHEUS_URL" "$DURATION" "$root_file_name"
-      #python3 ../Fetcher/istio_metric_fetch_backup.py "$new_folder_path_backup" "$time_obj" $metric_path $istio_path $root_file_name
+      python3 $prefix_folder/Fetcher/istio_metric_fetch_backup.py "$new_folder_path_backup" "$time_obj" $metric_path $istio_path $root_file_name
 
-      #kubectl delete pods,deployments,services -l app=teastore
+      kubectl delete pods,deployments,services -l app=teastore
 
       sleep 120
 
