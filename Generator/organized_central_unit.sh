@@ -106,9 +106,9 @@ export KUBECONFIG="${root_prefix}admin_collect-data.conf"
       time_obj=$(date +"%H:%M:%S")
       echo $time_obj
 
-      env INTENSITY_FILE="$file_name" locust -f $prefix_folder/workload_generators/locust/teastore_locustfile-custom-scale.py --headless --csv $log_exp_folder_path --host $host
+      #env INTENSITY_FILE="$file_name" locust -f $prefix_folder/workload_generators/locust/teastore_locustfile-custom-scale.py --headless --csv $log_exp_folder_path --host $host
 
-      sleep 60
+      #sleep 60
 
       python3 $prefix_folder/Fetcher/fetch_organized_for_mean.py "$result" "$workload_dir" "$exp_folder_path" "$time_obj" "$PROMETHEUS_URL" "$DURATION" "$prefix_folder"
       #python3 $prefix_folder/Fetcher/istio_metric_fetch.py "$new_folder_path1" "$time_obj" "$istio_path" "$PROMETHEUS_URL" "$DURATION" "$root_file_name"
