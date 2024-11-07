@@ -1,8 +1,5 @@
-sys
 requests
-json
 datetime
-os
 configparser
 aiohttp
 tqdm
