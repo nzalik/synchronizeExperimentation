@@ -58,7 +58,7 @@ warm="../warmUp/const_linear_30requests_per_sec.csv"
 #Lancer le générateur de charge HTTP
 #env INTENSITY_FILE=$warm locust -f ~/PycharmProjects/synchronizeExperimentation/workload_generators/locust/teastore_locustfile-custom-scale.py --headless --csv=log --csv-full-history
 
-python3 ../workload_generators/locust/warmup.py --graph ../workload_generators/locust/datasets/social-graph/socfb-Reed98.mtx --addr http://econome-5.nantes.grid5000.fr:30081
+#python3 ../workload_generators/locust/warmup.py --graph ../workload_generators/locust/datasets/social-graph/socfb-Reed98.mtx --addr http://econome-5.nantes.grid5000.fr:30081
 
 #sleep 120
 
