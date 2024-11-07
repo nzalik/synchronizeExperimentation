@@ -10,14 +10,13 @@ kubectl create -f "$parent_dir/mesh/istio"
 kubectl create -f $parent_dir/custom_deployments/kube-prometheus-stack-nodeport.yaml
 # Télécharger et extraire Istio
 #curl -L https://istio.io/downloadIstio | sh -
-cd "$parent_dir/mesh/istio-1.23.2"
+cd "$parent_dir/mesh/istio-1.23.3"
 
 # Ajouter Istio au PATH
 export PATH=$PWD/bin:$PATH
 
 # Installer Istio
-istioctl install --set profile=demo -y
-#istioctl install -f ./samples/bookinfo/demo-profile-no-gateways.yaml -y
+istioctl install -f samples/bookinfo/demo-profile-no-gateways.yaml -y
 
 # Activer l'injection automatique d'Istio sur le namespace par défaut
 kubectl label namespace default istio-injection=enabled
