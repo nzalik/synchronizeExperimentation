@@ -22,7 +22,7 @@ def generate_linear_profile(duration, step_sizes, start_value):
 
         with open(file_path, 'w', newline='') as csv_file:
             writer = csv.writer(csv_file)
-            writer.writerow(['timestamp', 'requests'])
+            #writer.writerow(['timestamp', 'requests'])
 
             current_timestamp = start_value
             while current_timestamp <= duration:
@@ -33,7 +33,7 @@ def generate_linear_profile(duration, step_sizes, start_value):
 
 # Paramètres de configuration
 DURATION = 60.5  # Durée totale du profil de charge (en secondes)
-STEP_SIZES = [30]  # Tailles de progression à utiliser
-START_VALUE = 0.5  # Valeur de départ
+STEP_SIZES = [900]  # Tailles de progression à utiliser
+START_VALUE = 1.5  # Valeur de départ
 
 generate_linear_profile(DURATION, STEP_SIZES, START_VALUE)

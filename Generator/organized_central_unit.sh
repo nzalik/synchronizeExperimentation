@@ -35,7 +35,7 @@ root_prefix="/home/ykoagnenzali/"
 prefix_folder="${root_prefix}synchronizeExperimentation"
 
 # Complete relative path for data storage
-new_folder_base="$parent_dir/synchronizeExperimentation/locust/low_10/nantes/hyperthreading/$category/$date_str"
+new_folder_base="$parent_dir/synchronizeExperimentation/locust/low_20/nantes/hyperthreading/$category/$date_str"
 new_folder_path1="$new_folder_base"
 new_folder_path_backup="$new_folder_base/backup"
 
@@ -53,14 +53,14 @@ host="$WEBUI/tools.descartes.teastore.webui"
 export KUBECONFIG="${init_root_prefix}admin_collect-data.conf"
 
 # This script deployed every necessary configuration for istio mesh
-#/bin/bash "$prefix_folder/mesh/istio.sh" $prefix_folder
+/bin/bash "$prefix_folder/mesh/istio.sh" $prefix_folder
 
-#kubectl create secret docker-registry docker-registry-secret --docker-server=https://gricad-registry.univ-grenoble-alpes.fr --docker-username=chouette --docker-password=esVsrrxsLA9sJ_nzPurJ
+kubectl create secret docker-registry docker-registry-secret --docker-server=https://gricad-registry.univ-grenoble-alpes.fr --docker-username=chouette --docker-password=esVsrrxsLA9sJ_nzPurJ
 
   #number=$((number + 1))
   #new_folder_path="${new_folder_path1}/${number}"
-  for file_name in $prefix_folder/Load/load1/*.csv; do
-    for i in {1..3}; do
+  for file_name in $prefix_folder/Load/load2/*.csv; do
+    for i in {1..4}; do
       root_file_name=$(basename "$file_name" .csv)
 
       # Compter le nombre de fichiers dans le répertoire $date_str

@@ -57,9 +57,9 @@ host="$WEBUI/tools.descartes.teastore.webui"
 export KUBECONFIG="${initial_root_prefix}admin_load3.conf"
 
 # This script deployed every necessary configuration for istio mesh
-/bin/bash "$prefix_folder/mesh/istio.sh" $prefix_folder
+#/bin/bash "$prefix_folder/mesh/istio.sh" $prefix_folder
 
-kubectl create secret docker-registry docker-registry-secret --docker-server=https://gricad-registry.univ-grenoble-alpes.fr --docker-username=chouette --docker-password=esVsrrxsLA9sJ_nzPurJ
+#kubectl create secret docker-registry docker-registry-secret --docker-server=https://gricad-registry.univ-grenoble-alpes.fr --docker-username=chouette --docker-password=esVsrrxsLA9sJ_nzPurJ
 
   #number=$((number + 1))
   #new_folder_path="${new_folder_path1}/${number}"
@@ -84,20 +84,20 @@ kubectl create secret docker-registry docker-registry-secret --docker-server=htt
       echo "$file_name"
 
       # Créer le déploiement Kubernetes
-      helm install socialnetwork $prefix_folder/benchmarks/DeathStarBench/socialNetwork/helm-chart/socialnetwork/
-      kubectl rollout status deployment nginx-thrift
-      kubectl apply -f $prefix_folder/socialNetwork/nginx-thrift-nodeport.yaml
-      kubectl apply -f $prefix_folder/socialNetwork/media-frontend-nodeport.yaml
+#      helm install socialnetwork $prefix_folder/benchmarks/DeathStarBench/socialNetwork/helm-chart/socialnetwork/
+#      kubectl rollout status deployment nginx-thrift
+#      kubectl apply -f $prefix_folder/socialNetwork/nginx-thrift-nodeport.yaml
+#      kubectl apply -f $prefix_folder/socialNetwork/media-frontend-nodeport.yaml
 
 
-      sleep 180 # This wait time is necessary because the application after being deployed, need some time to
+      #sleep 180 # This wait time is necessary because the application after being deployed, need some time to
                 # be ready to process requests
 
       echo "##################### Sleeping befor240e warmup ##################################################"
 
-     python3 $prefix_folder/workload_generators/locust/warmup.py --graph $prefix_folder/workload_generators/locust/datasets/social-graph/socfb-Reed98.mtx --addr $WEBUI_ADDR
+     #python3 $prefix_folder/workload_generators/locust/warmup.py --graph $prefix_folder/workload_generators/locust/datasets/social-graph/socfb-Reed98.mtx --addr $WEBUI_ADDR
 
-      sleep 120
+      #sleep 120
 
       echo "##################### Sleeping before load ##################################################"
 
@@ -107,7 +107,7 @@ kubectl create secret docker-registry docker-registry-secret --docker-server=htt
 
       echo $time_obj
 
-      #env NGINX_ADDR=$WEBUI_ADDR MEDIA_ADDR=$MEDIA_ADDR INTENSITY_FILE=$file_name COMP_OPT=$REQUEST locust -f $prefix_folder/workload_generators/locust/locustfile-custom-scale.py --headless --csv=log --csv-full-history
+      env NGINX_ADDR=$WEBUI_ADDR MEDIA_ADDR=$MEDIA_ADDR INTENSITY_FILE=$file_name COMP_OPT=$REQUEST locust -f $prefix_folder/workload_generators/locust/locustfile-custom-scale.py --headless --csv=log --csv-full-history
 
       #sleep 60
 
