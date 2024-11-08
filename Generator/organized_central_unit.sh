@@ -56,13 +56,12 @@ kubectl create secret docker-registry docker-registry-secret --docker-server=htt
   #number=$((number + 1))
   #new_folder_path="${new_folder_path1}/${number}"
   for element in load1 load2
-
-    # Complete relative path for data storage
-    new_folder_base="$parent_dir/synchronizeExperimentation/locust/$element/nantes/hyperthreading/$category/$date_str"
-    new_folder_path1="$new_folder_base"
-    new_folder_path_backup="$new_folder_base/backup"
-
     do
+      # Complete relative path for data storage
+      new_folder_base="$parent_dir/synchronizeExperimentation/locust/$element/nantes/hyperthreading/$category/$date_str"
+      new_folder_path1="$new_folder_base"
+      new_folder_path_backup="$new_folder_base/backup"
+
       for file_name in $prefix_folder/Load/$element/*.csv; do
         for i in {1..8}; do
           root_file_name=$(basename "$file_name" .csv)
