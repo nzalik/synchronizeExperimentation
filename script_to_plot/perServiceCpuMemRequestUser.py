@@ -13,18 +13,19 @@ import numpy as np
 import pandas as pd
 
 from utils.constants import get_color_for_service_init, normalization, line_styles, plot_limit, smooth, open_file, \
-    read_parameters_from_json, sort_legend, cpu_limit_max, memory_limit
+    read_parameters_from_json, sort_legend, cpu_limit_max, memory_limit, colors_table
 
 #metric_to_plot="request_aggr" #latency or request
 harmonization=False
 
 file_path_json = '../teastore.json'
 
-csv_file_path = "/home/erods-chouette/Documents/synchronizeExperimentation/Load/teastore_loads/"
+csv_file_path = "/home/erods-chouette/Documents/synchronizeExperimentation/Load/load2/"
 
-latency_path = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/injectGab/nantes/hyperthreading/128/linear/3nodes/linear/05-11-2024"
+latency_path = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/low_10/nantes/hyperthreading/128/linear/3nodes/linear/07-11-2024"
 
-services = ["teastore-auth", "teastore-image", "teastore-persistence", "teastore-registry","teastore-webui"]
+services = ["teastore-webui"]
+#services = ["teastore-auth", "teastore-image", "teastore-persistence", "teastore-recommender", "teastore-registry","teastore-webui"]
 
 def plot_json_generic(file_path, file_name, data_type='cpu'):
     is_cpu = data_type == 'cpu'
@@ -155,8 +156,7 @@ def plot_metrics(data, elt, metric_to_plot=""):
                       result['values'][:plot_limit]] + [0] * (
                              plot_limit - min(plot_limit, len(
                          result['values'])))  # Remplacer NaN par 0 et compléter avec des 0 si nécessaire
-        print("la valeur max ")
-        print(max(valuesInit))
+
         multiplier_note = ''
         if harmonization and metric_to_plot == "latency":
             if destination != 'teastore-webui' and metric_to_plot == "latency":
@@ -173,7 +173,8 @@ def plot_metrics(data, elt, metric_to_plot=""):
         if metric_to_plot == "latency":
             plt.plot(timestamps, values, color=color,
                     #label=f'{destination_txt + str(position + 1)}{multiplier_note}',
-                    label=f'{source_workload_txt + str(position + 1)}{multiplier_note}',
+                    #label=f'{source_workload_txt + str(position + 1)}{multiplier_note}',
+                    label=f'{destination_txt + str(position + 1)}{multiplier_note}',
                     linestyle=line_styles[position])
         else:
             plt.plot(timestamps, values, color=color,
@@ -205,11 +206,13 @@ def plot_metrics(data, elt, metric_to_plot=""):
     return ticks
 
 
-elts = ["si_sin_2"]
-#elts = ["rd_jump_2"]
-#elts = ["linear_50","li_stairsd_2","li_stairsu_2","rd_jump_2","rd_bell_2","rd_stairs_2","si_abscos_2","si_abssin_2","si_cos_2","si_log_2","si_sin_2"]
+elts = ["li_const_2"]
+#elts = ["li_stairsu_2","li_stairsd_2","li_stairsu_2","si_sin_2"]
+#elts = ["li_const_2","linear_10", "li_stairsd_2","li_stairsu_2","si_sin_2"]
+#elts = ["li_const_2","linear_50","li_stairsd_2","li_stairsu_2","rd_bell_2","rd_jump_2","rd_stairs_2","si_abscos_2","si_abssin_2","si_cos_2","si_log_2","si_sin_2"]
 #elts = [180, 200, 250, 300, 350]
 #x = 1
+
 
 #element="teastore-webui"
 #listElement = services
@@ -225,12 +228,12 @@ for element in services:
         fileToPlot = f"output_{x}"
         #fileToPlot = f"output-linear_{x}requests_max_per_sec.csv"
         #fileToPlot = f"output-linear_80requests_max_per_sec.csv"
-        save_path = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/injectGab/nantes/hyperthreading/128/linear/3nodes/linear/05-11-2024/{x}/"
-        #save_path = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/injectGab/nantes/hyperthreading/128/linear/3nodes/linear/mean_calculation/{x}/"
+        save_path = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/low_10/nantes/hyperthreading/128/linear/3nodes/linear/07-11-2024/{x}/"
+        #save_path = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/low_10/nantes/hyperthreading/128/linear/3nodes/linear/mean_calculation/{x}/"
         #save_path = f"../nantes/hyperthreading/16-07-2024/data/metrics/experimentation-output-linear_80requests_max_per_sec.csv/"
 
-        #save_graphics_at = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/injectGab/nantes/hyperthreading/128/linear/3nodes/linear/mean_calculation/{x}/Plots"
-        save_graphics_at = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/injectGab/nantes/hyperthreading/128/linear/3nodes/linear/05-11-2024/{x}/Plots/merge"
+        #save_graphics_at = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/low_10/nantes/hyperthreading/128/linear/3nodes/linear/mean_calculation/{x}/Plots"
+        save_graphics_at = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/low_10/nantes/hyperthreading/128/linear/3nodes/linear/07-11-2024/{x}/Plots/merge"
 
         parameters = read_parameters_from_json(file_path_json)
 
@@ -239,7 +242,7 @@ for element in services:
         plot_window = 50  # Show by interval of 5 minutes
 
         # Plot the first set of data
-        plt.subplot(4, 1, 1)
+        plt.subplot(5, 1, 1)
         all_timestamps = []
         all_values = []
 
@@ -290,7 +293,7 @@ for element in services:
         # Set ticks on the x-axis
         ticks_seconds = [((ts - start_time) // plot_window) * plot_window for ts in ticks]
 
-        plt.axhline(y=1, color='r', linestyle='--')
+        #plt.axhline(y=1, color='r', linestyle='--')
         plt.xticks(ticks, ticks_seconds)
         plt.xlabel('Time (seconds)')
         plt.ylabel('cores per second')
@@ -307,7 +310,7 @@ for element in services:
         plt.legend()
 
         # Plot the second set of data
-        plt.subplot(4, 1, 2)
+        plt.subplot(5, 1, 2)
         all_timestamps2 = []
 
         legend_objectsMemory = []
@@ -359,12 +362,12 @@ for element in services:
         plt.legend()
         lastEl = ticks_seconds2[-1]
 
-        plt.subplot(4, 1, 3)
+        plt.subplot(5, 1, 3)
 
         max_value=0
 
         json_filenames = []
-
+        plot_stats_path=""
         # retrieve the max size to pyt ylim for all plots
         for idx, svc in enumerate(services):
             json_file_path = os.path.join(latency_path,"request_aggr", svc, x)
@@ -419,15 +422,93 @@ for element in services:
                 df = pd.DataFrame()
 
 
-            plt.plot(time, values, color='green', label='Load Intensity')
+            #plt.plot(time, values, color='green', label='Load Intensity')
+            #plt.axhline(y=200, color='r', linestyle='--')
             plt.xlabel('Time (seconds)')
             plt.ylabel('rps')
             plt.title('Request volume')
-            plt.ylim(0, 500)
+            plt.ylim(0, 125)
+
+            for i in range(1,4):
+                plot_stats_path = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/low_10/nantes/hyperthreading/128/linear/3nodes/linear/07-11-2024/output/{x}_{i}_stats_history.csv"
+
+                df_stats = pd.read_csv(plot_stats_path)
+
+                requests = df_stats['Requests/s']
+                requests = requests.reindex(range(299), fill_value=0)
+                print(requests)
+
+                plt.plot(time, requests,  color=colors_table[i-1], linestyle=line_styles[i-1], label=f"locust_stats_{i}")
+
             plt.legend(loc='upper left', frameon=False)
 
+#-------------------------------------------------------------------------
+        plt.subplot(5, 1, 4)
 
-        plt.subplot(4, 1, 4)
+        max_value = 0
+
+        json_filenames = []
+
+        # retrieve the max size to pyt ylim for all plots
+        for idx, svc in enumerate(services):
+            json_file_path = os.path.join(latency_path, "request_aggr", svc, x)
+            json_filenames = sorted([os.path.join(json_file_path, file) for file in
+                                     os.listdir(json_file_path)[:3]])  # Take the first 3 elements
+
+            for json_filename in json_filenames:
+                with open(json_filename) as f:
+                    source = json.load(f)
+                data_list = source['data']['result']
+                for json_data in data_list:
+                    result = json_data
+                    # values = [float(x[1]) for x in result["values"]]
+                    values = [float(x[1]) for x in result["values"] if x[1] != "NaN"]
+                    if values:  # Check if values is not empty
+                        print(max(values))
+                        if max(values) > max_value:
+                            max_value = max(values)
+
+
+
+        time = []
+        values = []
+        try:
+            df = pd.read_csv(csv_file_path + x + ".csv", sep=",")
+            time = df.iloc[:, 0].tolist()
+            values = df.iloc[:, 1].tolist()
+        except FileNotFoundError:
+            # print(f"Le fichier {file_name} n'a pas été trouvé dans le chemin {plot_path}")
+            # Vous pouvez également faire d'autres traitements ici, comme retourner un DataFrame vide
+            df = pd.DataFrame()
+
+        plt.plot(time, values, color='green', label='Expected users')
+        plt.xlabel('Time (seconds)')
+        plt.ylabel('Number of users')
+        plt.title('Creation of users for load injection')
+        plt.ylim(0, 70)
+
+
+        df_stats = pd.read_csv(plot_stats_path)
+
+        # print(df_stats.iloc[0])
+        print("nombre de ligne " + str(len(df_stats['User Count'])))
+        # print(df_stats['Timestamp'])
+        # df_stats = pd.DataFrame()
+
+
+        for i in range(1, 4):
+            plot_stats_path = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/low_10/nantes/hyperthreading/128/linear/3nodes/linear/07-11-2024/output/{x}_{i}_stats_history.csv"
+
+            df_stats = pd.read_csv(plot_stats_path)
+
+            user_count = df_stats['User Count']
+            user_count = user_count.reindex(range(299), fill_value=0)
+
+            plt.plot(time, user_count, color=colors_table[i - 1], linestyle=line_styles[i - 1], label=f"active_users_{i}")
+        plt.legend(loc='upper left', frameon=False)
+
+#-------------------------------------------------------------------------
+        plt.subplot(5, 1, 5)
 
         max_value = 0
 
@@ -481,7 +562,7 @@ for element in services:
             plt.title('Request duration')
             plt.xlabel('Time (seconds)')
             plt.ylabel('Latency (ms)')
-            plt.yscale('log')
+            #plt.yscale('log')
             plt.ylim(0, max_value)
 
         plt.tight_layout()

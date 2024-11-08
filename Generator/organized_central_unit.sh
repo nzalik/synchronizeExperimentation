@@ -18,7 +18,8 @@ parent_dir=$(dirname $(pwd))
 
 # The date is used to version the experiemntations and to know which experimentation
 # has been done on which day
-date_str=$(date +"%d-%m-%Y")
+#date_str=$(date +"%d-%m-%Y")
+date_str="07-11-2024"
 
 # The relative path for storing experiments data
 category="128/linear/3nodes/linear"
@@ -35,7 +36,7 @@ root_prefix="/home/ykoagnenzali/"
 prefix_folder="${root_prefix}synchronizeExperimentation"
 
 # Complete relative path for data storage
-new_folder_base="$parent_dir/synchronizeExperimentation/locust/low_20/nantes/hyperthreading/$category/$date_str"
+new_folder_base="$parent_dir/synchronizeExperimentation/locust/low_10/nantes/hyperthreading/$category/$date_str"
 new_folder_path1="$new_folder_base"
 new_folder_path_backup="$new_folder_base/backup"
 
@@ -59,7 +60,7 @@ kubectl create secret docker-registry docker-registry-secret --docker-server=htt
 
   #number=$((number + 1))
   #new_folder_path="${new_folder_path1}/${number}"
-  for file_name in $prefix_folder/Load/load2/*.csv; do
+  for file_name in $prefix_folder/Load/load1/*.csv; do
     for i in {1..4}; do
       root_file_name=$(basename "$file_name" .csv)
 
@@ -68,7 +69,7 @@ kubectl create secret docker-registry docker-registry-secret --docker-server=htt
 
       # Créer le sous-répertoire "experimentation" avec le numéro
       exp_folder_path="$new_folder_path1/$root_file_name"
-      log_exp_folder_path="${new_folder_path1}/output/${root_file_name}_$i"
+      log_exp_folder_path="${new_folder_path1}/output2/${root_file_name}_$i"
 
       echo $root_file_name
 
