@@ -56,7 +56,7 @@ export KUBECONFIG="${init_root_prefix}admin_collect-data.conf"
   for element in load1 load2
     do
       # Complete relative path for data storage
-      new_folder_base="$parent_dir/synchronizeExperimentation/train/$element/nantes/hyperthreading/$category/$date_str"
+      new_folder_base="$parent_dir/synchronizeExperimentation/locust/train/$element/nantes/hyperthreading/$category/$date_str"
       new_folder_path1="$new_folder_base"
       new_folder_path_backup="$new_folder_base/backup"
 
@@ -71,11 +71,11 @@ export KUBECONFIG="${init_root_prefix}admin_collect-data.conf"
       #env INTENSITY_FILE="$prefix_folder$WARMUP_FILE" locust -f $prefix_folder/workload_generators/locust/teastore_locustfile-custom-scale.py --headless --host $host
       #env INTENSITY_FILE="$prefix_folder$WARMUP_FILE" locust -f $prefix_folder/workload_generators/locust/bi_locustfile_request.py --headless --csv $log_exp_folder_path --host $host
 
-      sleep 120
+     # sleep 120
 
       for file_name in $prefix_folder/Load/$element/*.csv;
         do
-            for i in {1 ..4};
+            for i in {1 ..5};
               do
                 root_file_name=$(basename "$file_name" .csv)
 

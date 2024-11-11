@@ -23,8 +23,10 @@ VERBOSE_LOGGING = 0  # ${LOCUST_VERBOSE_LOGGING}
 state_data = []
 GLOBAL_MIN_USERS           = 10
 GLOBAL_INTENSITY_FILE      = os.environ.get("INTENSITY_FILE")
-from constants import HOST_URL
+#from constants import HOST_URL
 #from request_type.use_cases.UserBooking import UserBooking
+
+HOST_URL = sys.argv[1]
 
 class Requests:
     host = HOST_URL
