@@ -75,7 +75,7 @@ export KUBECONFIG="${init_root_prefix}admin_load3.conf"
 
       for file_name in $prefix_folder/Load/$element/*.csv;
         do
-            for i in $(seq 1 8); do
+            for i in $(seq 1 8);
               do
                 root_file_name=$(basename "$file_name" .csv)
 
