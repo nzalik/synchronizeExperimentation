@@ -46,7 +46,7 @@ host="$WEBUI"
 
 # The kubernetes credentials to used for entering the cluster
 #export KUBECONFIG=~/admin_collect-data.conf
-export KUBECONFIG="${init_root_prefix}admin_collect-data.conf"
+export KUBECONFIG="${init_root_prefix}admin_load3.conf"
 
 # This script deployed every necessary configuration for istio mesh
 /bin/bash "$prefix_folder/mesh/istio.sh" $prefix_folder

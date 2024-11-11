@@ -19,27 +19,47 @@ colors_table = [
     "#3357FF"  # Bleu Foncé
 ]
 
+# def get_color_for_service_init(service_name):
+#     service_name = service_name.lower()
+#
+#     # Switch case avec 7 cas différents
+#     match service_name:
+#         case 'teastore-webui':
+#             return '#8ECAE6'
+#         case 'teastore-persistence':
+#             return '#eb014f'
+#         case 'teastore-db':
+#             return '#126782'
+#         case 'teastore-registry':
+#             return '#023047'
+#         case 'teastore-auth':
+#             return '#FFB703'
+#         case 'teastore-image':
+#             return '#067d4a'
+#         case 'teastore-recommender':
+#             return '#9c23c2'
+#         case _:
+#             return '#adb5bd'
+
 def get_color_for_service_init(service_name):
     service_name = service_name.lower()
 
-    # Switch case avec 7 cas différents
-    match service_name:
-        case 'teastore-webui':
-            return '#8ECAE6'
-        case 'teastore-persistence':
-            return '#eb014f'
-        case 'teastore-db':
-            return '#126782'
-        case 'teastore-registry':
-            return '#023047'
-        case 'teastore-auth':
-            return '#FFB703'
-        case 'teastore-image':
-            return '#067d4a'
-        case 'teastore-recommender':
-            return '#9c23c2'
-        case _:
-            return '#adb5bd'
+    if service_name == 'teastore-webui':
+        return '#8ECAE6'
+    elif service_name == 'teastore-persistence':
+        return '#eb014f'
+    elif service_name == 'teastore-db':
+        return '#126782'
+    elif service_name == 'teastore-registry':
+        return '#023047'
+    elif service_name == 'teastore-auth':
+        return '#FFB703'
+    elif service_name == 'teastore-image':
+        return '#067d4a'
+    elif service_name == 'teastore-recommender':
+        return '#9c23c2'
+    else:
+        return '#adb5bd'
 
 def normalization(value):
     return value / (1000 ** 3)
