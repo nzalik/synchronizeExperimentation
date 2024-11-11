@@ -20,9 +20,9 @@ harmonization=False
 
 file_path_json = '../teastore.json'
 
-csv_file_path = "/home/erods-chouette/Documents/synchronizeExperimentation/Load/load2/"
+csv_file_path = "/home/erods-chouette/Documents/synchronizeExperimentation/Load/load1/"
 
-latency_path = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/low_10/nantes/hyperthreading/128/linear/3nodes/linear/07-11-2024"
+latency_path = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/load1/nantes/hyperthreading/128/linear/3nodes/linear/08-11-2024"
 
 services = ["teastore-webui"]
 #services = ["teastore-auth", "teastore-image", "teastore-persistence", "teastore-recommender", "teastore-registry","teastore-webui"]
@@ -228,12 +228,12 @@ for element in services:
         fileToPlot = f"output_{x}"
         #fileToPlot = f"output-linear_{x}requests_max_per_sec.csv"
         #fileToPlot = f"output-linear_80requests_max_per_sec.csv"
-        save_path = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/low_10/nantes/hyperthreading/128/linear/3nodes/linear/07-11-2024/{x}/"
-        #save_path = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/low_10/nantes/hyperthreading/128/linear/3nodes/linear/mean_calculation/{x}/"
-        #save_path = f"../nantes/hyperthreading/16-07-2024/data/metrics/experimentation-output-linear_80requests_max_per_sec.csv/"
+        save_path = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/load1/nantes/hyperthreading/128/linear/3nodes/linear/08-11-2024/{x}/"
+        #save_path = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/load1/nantes/hyperthreading/128/linear/3nodes/linear/mean_calculation/{x}/"
+        #save_path = f"../nantes/hyperthreading/16-08-2024/data/metrics/experimentation-output-linear_80requests_max_per_sec.csv/"
 
-        #save_graphics_at = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/low_10/nantes/hyperthreading/128/linear/3nodes/linear/mean_calculation/{x}/Plots"
-        save_graphics_at = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/low_10/nantes/hyperthreading/128/linear/3nodes/linear/07-11-2024/{x}/Plots/merge"
+        #save_graphics_at = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/load1/nantes/hyperthreading/128/linear/3nodes/linear/mean_calculation/{x}/Plots"
+        save_graphics_at = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/load1/nantes/hyperthreading/128/linear/3nodes/linear/08-11-2024/{x}/Plots/merge"
 
         parameters = read_parameters_from_json(file_path_json)
 
@@ -430,7 +430,7 @@ for element in services:
             plt.ylim(0, 125)
 
             for i in range(1,4):
-                plot_stats_path = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/low_10/nantes/hyperthreading/128/linear/3nodes/linear/07-11-2024/output/{x}_{i}_stats_history.csv"
+                plot_stats_path = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/load1/nantes/hyperthreading/128/linear/3nodes/linear/08-11-2024/output/{x}_{i}_stats_history.csv"
 
                 df_stats = pd.read_csv(plot_stats_path)
 
@@ -497,7 +497,7 @@ for element in services:
 
 
         for i in range(1, 4):
-            plot_stats_path = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/low_10/nantes/hyperthreading/128/linear/3nodes/linear/07-11-2024/output/{x}_{i}_stats_history.csv"
+            plot_stats_path = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/load1/nantes/hyperthreading/128/linear/3nodes/linear/08-11-2024/output/{x}_{i}_stats_history.csv"
 
             df_stats = pd.read_csv(plot_stats_path)
 
@@ -572,6 +572,6 @@ for element in services:
         #my_string = f"{save_graphics_at}/output{str(data_count + 1)}-{x}.png"
         my_string = f"{save_graphics_at}/output{str(data_count + 1)}-{element}.png"
         print(my_string)
-        plt.savefig(my_string)
+        #plt.savefig(my_string)
         plt.show()
         plt.close(fig)
