@@ -63,7 +63,7 @@ kubectl create secret docker-registry docker-registry-secret --docker-server=htt
       new_folder_path_backup="$new_folder_base/backup"
 
       for file_name in $prefix_folder/Load/$element/*.csv; do
-        for i in {1 ..8}; do
+        for i in $(seq 1 8); do
           root_file_name=$(basename "$file_name" .csv)
 
           # Compter le nombre de fichiers dans le répertoire $date_str
