@@ -41,6 +41,7 @@ colors_table = [
 #         case _:
 #             return '#adb5bd'
 
+#Match case is not usable before python version 3.12
 def get_color_for_service_init(service_name):
     service_name = service_name.lower()
 

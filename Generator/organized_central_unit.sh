@@ -24,6 +24,7 @@ date_str=$(date +"%d-%m-%Y")
 # The relative path for storing experiments data
 category="128/linear/3nodes/linear"
 
+site="nantes"
 # This is to give an indication to the script from where the script is executed
 # From the home environment or from the Grid
 #root_prefix="/home/erods-chouette/Documents/"
@@ -55,15 +56,16 @@ kubectl create secret docker-registry docker-registry-secret --docker-server=htt
 
   #number=$((number + 1))
   #new_folder_path="${new_folder_path1}/${number}"
-  for element in load1 load2
+  #for element in load1 load2
+  for element in load1
     do
       # Complete relative path for data storage
-      new_folder_base="$parent_dir/synchronizeExperimentation/locust/$element/nantes/hyperthreading/$category/$date_str"
+      new_folder_base="$parent_dir/synchronizeExperimentation/locust/$site/teastore/$element/hyperthreading/$date_str"
       new_folder_path1="$new_folder_base"
       new_folder_path_backup="$new_folder_base/backup"
 
       for file_name in $prefix_folder/Load/$element/*.csv; do
-        for i in $(seq 1 8); do
+        for i in $(seq 1 3); do
           root_file_name=$(basename "$file_name" .csv)
 
           # Compter le nombre de fichiers dans le répertoire $date_str
