@@ -5,7 +5,7 @@ from datetime import datetime
 import requests
 
 
-line_styles=["solid","dotted","dashed","dashdot"]
+line_styles=["solid","dotted","dashed","dashdot","dashdotted"]
 
 plot_limit = 301
 cpu_limit_max=1.2
