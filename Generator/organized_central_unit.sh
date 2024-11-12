@@ -47,7 +47,7 @@ host="$WEBUI/tools.descartes.teastore.webui"
 
 # The kubernetes credentials to used for entering the cluster
 #export KUBECONFIG=~/admin_collect-data.conf
-export KUBECONFIG="${init_root_prefix}admin_collect-data.conf"
+export KUBECONFIG="${init_root_prefix}$CERTIFICATE"
 
 # This script deployed every necessary configuration for istio mesh
 /bin/bash "$prefix_folder/mesh/istio.sh" $prefix_folder
@@ -60,12 +60,32 @@ kubectl create secret docker-registry docker-registry-secret --docker-server=htt
   for element in load1
     do
       # Complete relative path for data storage
-      new_folder_base="$parent_dir/synchronizeExperimentation/locust/$site/teastore/$element/hyperthreading/$date_str"
+      new_folder_base="$parent_dir/synchronizeExperimentation/locust/$site/teastore/${element}$PATH_SUFFIX/hyperthreading/$date_str"
+      echo "save............................."
+      echo $new_folder_base
       new_folder_path1="$new_folder_base"
       new_folder_path_backup="$new_folder_base/backup"
 
-      for file_name in $prefix_folder/Load/$element/*.csv; do
-        for i in $(seq 1 3); do
+       for i in $(seq 1 3); do
+          # Créer le déploiement Kubernetes
+          kubectl create -f $prefix_folder/custom_deployments/$APP_MANIFEST
+
+          sleep 240 # This wait time is necessary because the application after being deployed, need some time to
+                    # be ready to process requests
+
+          echo "##################### Sleeping befor240e warmup ##################################################"
+
+         # warm=""
+
+          #for warmp in ../warmUp/*.csv; do
+          #Lancer le générateur de charge HTTP
+          #env INTENSITY_FILE=$warm locust -f ~/PycharmProjects/synchronizeExperimentation/workload_generators/locust/teastore_locustfile-custom-scale.py --headless --csv=log --csv-full-history
+          env INTENSITY_FILE="$prefix_folder$WARMUP_FILE" locust -f $prefix_folder/workload_generators/locust/teastore_locustfile-custom-scale.py --headless --host $host
+
+          sleep 120
+
+       for file_name in $prefix_folder/Load/$element/*.csv; do
+
           root_file_name=$(basename "$file_name" .csv)
 
           # Compter le nombre de fichiers dans le répertoire $date_str
@@ -84,22 +104,6 @@ kubectl create secret docker-registry docker-registry-secret --docker-server=htt
           echo "##################### Initialisation ##################################################"
           echo "$file_name"
 
-          # Créer le déploiement Kubernetes
-          kubectl create -f $prefix_folder/custom_deployments/gricard-teastore.yaml
-
-          sleep 240 # This wait time is necessary because the application after being deployed, need some time to
-                    # be ready to process requests
-
-          echo "##################### Sleeping befor240e warmup ##################################################"
-
-         # warm=""
-
-          #for warmp in ../warmUp/*.csv; do
-          #Lancer le générateur de charge HTTP
-          #env INTENSITY_FILE=$warm locust -f ~/PycharmProjects/synchronizeExperimentation/workload_generators/locust/teastore_locustfile-custom-scale.py --headless --csv=log --csv-full-history
-          env INTENSITY_FILE="$prefix_folder$WARMUP_FILE" locust -f $prefix_folder/workload_generators/locust/teastore_locustfile-custom-scale.py --headless --host $host
-
-          sleep 120
 
           echo "##################### Sleeping before load ##################################################"
 
@@ -116,9 +120,9 @@ kubectl create secret docker-registry docker-registry-secret --docker-server=htt
           python3 $prefix_folder/Fetcher/istio_metric_fetch.py "$new_folder_path1" "$time_obj" "$istio_path" "$PROMETHEUS_URL" "$DURATION" "$root_file_name"
           #python3 $prefix_folder/Fetcher/istio_metric_fetch_backup.py "$new_folder_path_backup" "$time_obj" $metric_path $istio_path $root_file_name
 
-          kubectl delete pods,deployments,services -l app=teastore
+          #kubectl delete pods,deployments,services -l app=teastore
 
-          sleep 120
+          sleep 60
 
       done
     done

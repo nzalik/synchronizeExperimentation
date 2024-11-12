@@ -23,6 +23,7 @@ python3 -m venv myenv
 
 source myenv/bin/activate
 
+ /bin/bash ./Generator/train_central_unit.sh ./conf/train.conf
 
 # DATA COLLECTION 
 
@@ -39,8 +40,8 @@ source myenv/bin/activate
             nb_f_offset=2
 
     2. Teastore
-        locust/low_10/nantes/hyperthreading/128/linear/3nodes/linear/07-11-2024/ | locust/low_20/nantes/hyperthreading/128/linear/3nodes/linear/07-11-2024 is extension of low_10
-        locust/low_20/nantes/hyperthreading/128/linear/3nodes/linear/07-11-2024
+        locust/previous_data/low_10/nantes/hyperthreading/128/linear/3nodes/linear/07-11-2024/ | locust/previous_data/load1/nantes/hyperthreading/128/linear/3nodes/linear/07-11-2024 is extension of low_10
+        locust/previous_data/low_20/nantes/hyperthreading/128/linear/3nodes/linear/07-11-2024
         Teastore 1cpu | 5gb load1 et load2
 
         
