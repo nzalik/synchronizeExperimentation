@@ -20,9 +20,9 @@ harmonization=False
 
 file_path_json = '../teastore.json'
 
-csv_file_path = "/home/erods-chouette/Documents/synchronizeExperimentation/Load/load1/"
+csv_file_path = "/home/erods-chouette/Documents/synchronizeExperimentation/Load/load2/"
 
-latency_path = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/nantes/train/load1/nantes/hyperthreading/128/linear/3nodes/linear/11-11-2024"
+latency_path = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/nantes/train/load2/nantes/hyperthreading/128/linear/3nodes/linear/11-11-2024"
 
 services = ["ts-ui-dashboard"]
 #services = ["teastore-auth", "teastore-image", "teastore-persistence", "teastore-recommender", "teastore-registry","teastore-webui"]
@@ -206,7 +206,7 @@ def plot_metrics(data, elt, metric_to_plot=""):
     return ticks
 
 
-elts = ["li_const_2"]
+elts = ["si_sin_2"]
 #elts = ["li_stairsu_2","li_stairsd_2","li_stairsu_2","si_sin_2"]
 #elts = ["li_const_2","linear_10", "li_stairsd_2","li_stairsu_2","si_sin_2"]
 #elts = ["li_const_2","linear_50","li_stairsd_2","li_stairsu_2","rd_bell_2","rd_jump_2","rd_stairs_2","si_abscos_2","si_abssin_2","si_cos_2","si_log_2","si_sin_2"]
@@ -228,12 +228,12 @@ for element in services:
         fileToPlot = f"output_{x}"
         #fileToPlot = f"output-linear_{x}requests_max_per_sec.csv"
         #fileToPlot = f"output-linear_80requests_max_per_sec.csv"
-        save_path = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/nantes/train/load1/nantes/hyperthreading/128/linear/3nodes/linear/11-11-2024/{x}/"
-        #save_path = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/load1/nantes/hyperthreading/128/linear/3nodes/linear/mean_calculation/{x}/"
+        save_path = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/nantes/train/load2/nantes/hyperthreading/128/linear/3nodes/linear/11-11-2024/{x}/"
+        #save_path = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/load2/nantes/hyperthreading/128/linear/3nodes/linear/mean_calculation/{x}/"
         #save_path = f"../nantes/hyperthreading/16-08-2024/data/metrics/experimentation-output-linear_80requests_max_per_sec.csv/"
 
-        #save_graphics_at = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/load1/nantes/hyperthreading/128/linear/3nodes/linear/mean_calculation/{x}/Plots"
-        save_graphics_at = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/nantes/train/load1/nantes/hyperthreading/128/linear/3nodes/linear/11-11-2024/{x}/Plots/merge"
+        #save_graphics_at = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/load2/nantes/hyperthreading/128/linear/3nodes/linear/mean_calculation/{x}/Plots"
+        save_graphics_at = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/nantes/train/load2/nantes/hyperthreading/128/linear/3nodes/linear/11-11-2024/{x}/Plots/merge"
 
         parameters = read_parameters_from_json(file_path_json)
 
@@ -430,7 +430,7 @@ for element in services:
             plt.ylim(0, 125)
 
             for i in range(1,4):
-                plot_stats_path = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/nantes/train/load1/nantes/hyperthreading/128/linear/3nodes/linear/11-11-2024/output/{x}_{i}_stats_history.csv"
+                plot_stats_path = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/nantes/train/load2/nantes/hyperthreading/128/linear/3nodes/linear/11-11-2024/output/{x}_{i}_stats_history.csv"
 
                 df_stats = pd.read_csv(plot_stats_path)
 
@@ -497,7 +497,7 @@ for element in services:
 
 
         for i in range(1, 4):
-            plot_stats_path = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/nantes/train/load1/nantes/hyperthreading/128/linear/3nodes/linear/11-11-2024/output/{x}_{i}_stats_history.csv"
+            plot_stats_path = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/nantes/train/load2/nantes/hyperthreading/128/linear/3nodes/linear/11-11-2024/output/{x}_{i}_stats_history.csv"
 
             df_stats = pd.read_csv(plot_stats_path)
 
