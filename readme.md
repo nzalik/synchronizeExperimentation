@@ -49,6 +49,9 @@ source myenv/bin/activate
 
         locust/nantes/teastore/load1_sequential_injection : data after only one warmup, and profile usage and data collection
         no limit on cpu and pod 
+        locust/nantes/teastore/load1_sequential_injection_cpu_limit
+        locust/nantes/teastore/load2_sequential_injection_cpu_limit for injection with cpu limit to 1 
+        
         
 
         
