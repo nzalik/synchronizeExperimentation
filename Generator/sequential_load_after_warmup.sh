@@ -65,7 +65,7 @@ kubectl create secret docker-registry docker-registry-secret --docker-server=htt
       new_folder_path_backup="$new_folder_base/backup"
 
       for file_name in $prefix_folder/Load/$element/*.csv; do
-        for i in $(seq 1 1); do
+        for i in $(seq 1 8); do
           root_file_name=$(basename "$file_name" .csv)
 
           # Compter le nombre de fichiers dans le répertoire $date_str
@@ -113,8 +113,8 @@ kubectl create secret docker-registry docker-registry-secret --docker-server=htt
 
           sleep 60
 
-          python3 $prefix_folder/Fetcher/fetch_organized_for_mean.py "$result" "$workload_dir" "$exp_folder_path" "$time_obj" "$PROMETHEUS_URL" "$DURATION" "$prefix_folder" $i
-          python3 $prefix_folder/Fetcher/istio_metric_fetch.py "$new_folder_path1" "$time_obj" "$istio_path" "$PROMETHEUS_URL" "$DURATION" "$root_file_name" $i
+          python3 $prefix_folder/Fetcher/fetch_organized_for_mean_order.py "$result" "$workload_dir" "$exp_folder_path" "$time_obj" "$PROMETHEUS_URL" "$DURATION" "$prefix_folder" "$i"
+          python3 $prefix_folder/Fetcher/istio_metric_fetch_order.py "$new_folder_path1" "$time_obj" "$istio_path" "$PROMETHEUS_URL" "$DURATION" "$root_file_name" "$i"
           #python3 $prefix_folder/Fetcher/istio_metric_fetch_backup.py "$new_folder_path_backup" "$time_obj" $metric_path $istio_path $root_file_name
 
           kubectl delete pods,deployments,services -l app=teastore
