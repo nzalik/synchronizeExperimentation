@@ -23,6 +23,7 @@ if len(sys.argv) > 1:
 prometheus_url = sys.argv[4]
 duration = sys.argv[5]
 profile = sys.argv[6]
+exp_nb = sys.argv[7]
 
 parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
 metrics_path = f"{parent_dir}/istio_metrics.json"
@@ -112,30 +113,30 @@ def query_svc_names(prometheus_url, namespace='default', start_dt='', end_dt='',
     return services
 
 
-def query_for_service(self, prometheus_url, svc, start_dt, end_dt, step, datadir, second_svc):
-    query_str = self._query_str(svc, second_svc)
-    payload = {'query': query_str, 'start': start_dt.timestamp(), 'end': end_dt.timestamp(), 'step': step + 's'}
-
-    url = prometheus_url + '/api/v1/query_range?'
-    print("Querying " + url + " with payload " + str(payload))
-    res = None
-
-    # Query Prometheus
-    try:
-        res = requests.post(url, headers={'Content-Type': 'application/x-www-form-urlencoded'}, data=payload).json()
-    except Exception as e:
-        print(e)
-        print("...Fail at Prometheus request.")
-
-    if res != None and 'error' in res:
-        print("ERROR ", res["error"])
-        res = None
-
-    elif res != None and len(res['data']['result']) > 0:
-        print("...saving data.")
-        self._save_as_json(res, datadir, second_svc)
-
-    return res
+# def query_for_service(self, prometheus_url, svc, start_dt, end_dt, step, datadir, second_svc):
+#     query_str = self._query_str(svc, second_svc)
+#     payload = {'query': query_str, 'start': start_dt.timestamp(), 'end': end_dt.timestamp(), 'step': step + 's'}
+# 
+#     url = prometheus_url + '/api/v1/query_range?'
+#     print("Querying " + url + " with payload " + str(payload))
+#     res = None
+# 
+#     # Query Prometheus
+#     try:
+#         res = requests.post(url, headers={'Content-Type': 'application/x-www-form-urlencoded'}, data=payload).json()
+#     except Exception as e:
+#         print(e)
+#         print("...Fail at Prometheus request.")
+# 
+#     if res != None and 'error' in res:
+#         print("ERROR ", res["error"])
+#         res = None
+# 
+#     elif res != None and len(res['data']['result']) > 0:
+#         print("...saving data.")
+#         self._save_as_json(res, datadir, second_svc)
+# 
+#     return res
 
 def _get_query_modifier(metric_parameter, destination_target):
 
@@ -177,12 +178,12 @@ def _save_as_json(source, destination, res, datadir):
     # Créer le chemin du fichier avec le nom du service source et destination
     filename = f"{dir_name}{datadir}_to_{destination}_{profile}.json"
     filepath = os.path.join(datadir, filename)
-    if os.path.exists(filepath):
-        base, ext = os.path.splitext(filename)
-        counter = 1
-        while os.path.exists(os.path.join(datadir, f"{base}_{counter}{ext}")):
-            counter += 1
-        filepath = os.path.join(datadir, f"{base}_{counter}{ext}")
+    # if os.path.exists(filepath):
+    #     base, ext = os.path.splitext(filename)
+    #     counter = 1
+    #     while os.path.exists(os.path.join(datadir, f"{base}_{counter}{ext}")):
+    #         counter += 1
+    #     filepath = os.path.join(datadir, f"{base}_{counter}{ext}")
     # Créer le répertoire s'il n'existe pas
     os.makedirs(datadir, exist_ok=True)
 
@@ -206,7 +207,8 @@ for destination_workload in services:
         # query_str = f"""
         # histogram_quantile(0.95, sum(rate(istio_request_duration_milliseconds_bucket{{reporter="source",destination_workload="{destination}", source_workload="{source}"}}[{interval}])) by (le, destination_workload))
         # """
-        query_str = _get_query_modifier(metric, destination)
+        #query_str = _get_query_modifier(metric, destination)
+        query_str = _get_query_modifier(metric, f"{exp_nb}_{destination}")
 
         payload = {'query': query_str, 'start': start_dt, 'end': end_dt, 'step': step + 's'}
 

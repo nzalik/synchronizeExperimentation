@@ -44,7 +44,7 @@ source myenv/bin/activate
         locust/previous_data/low_20/nantes/hyperthreading/128/linear/3nodes/linear/07-11-2024
         Teastore 1cpu | 5gb load1 et load2
 
-        locust/nantes/teastore/load1/hyperthreading/12-11-2024/ : data with a constant load of 10 req/s for min 
+        locust/nantes/teastore/load1|load2/hyperthreading/12-11-2024/ : data with a constant load of 10 req/s for min 
         followed by the collection of data for different profiles
 
         locust/nantes/teastore/load1_sequential_injection : data after only one warmup, and profile usage and data collection

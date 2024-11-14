@@ -56,17 +56,17 @@ kubectl create secret docker-registry docker-registry-secret --docker-server=htt
 
   #number=$((number + 1))
   #new_folder_path="${new_folder_path1}/${number}"
-  for element in load1 load2
+  for element in load2
   #for element in load1
     do
       # Complete relative path for data storage
-      new_folder_base="$parent_dir/synchronizeExperimentation/locust/$site/teastore/${element}$PATH_SUFFIX/hyperthreading/$date_str"
+      new_folder_base="$parent_dir/synchronizeExperimentation/locust/$site/teastore/$date_str/${element}$PATH_SUFFIX/hyperthreading"
       echo "save............................."
       echo $new_folder_base
       new_folder_path1="$new_folder_base"
       new_folder_path_backup="$new_folder_base/backup"
 
-       for i in $(seq 1 3); do
+       for i in $(seq 1 1); do
           # Créer le déploiement Kubernetes
           kubectl create -f $prefix_folder/custom_deployments/$APP_MANIFEST
 
@@ -116,8 +116,8 @@ kubectl create secret docker-registry docker-registry-secret --docker-server=htt
 
               sleep 60
 
-              python3 $prefix_folder/Fetcher/fetch_organized_for_mean.py "$result" "$workload_dir" "$exp_folder_path" "$time_obj" "$PROMETHEUS_URL" "$DURATION" "$prefix_folder"
-              python3 $prefix_folder/Fetcher/istio_metric_fetch.py "$new_folder_path1" "$time_obj" "$istio_path" "$PROMETHEUS_URL" "$DURATION" "$root_file_name"
+              python3 $prefix_folder/Fetcher/fetch_organized_for_mean.py "$result" "$workload_dir" "$exp_folder_path" "$time_obj" "$PROMETHEUS_URL" "$DURATION" "$prefix_folder" $i
+              python3 $prefix_folder/Fetcher/istio_metric_fetch.py "$new_folder_path1" "$time_obj" "$istio_path" "$PROMETHEUS_URL" "$DURATION" "$root_file_name" $i
               #python3 $prefix_folder/Fetcher/istio_metric_fetch_backup.py "$new_folder_path_backup" "$time_obj" $metric_path $istio_path $root_file_name
 
               sleep 60

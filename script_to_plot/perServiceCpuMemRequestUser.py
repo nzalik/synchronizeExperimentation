@@ -20,9 +20,9 @@ harmonization=False
 
 file_path_json = '../teastore.json'
 
-csv_file_path = "/home/erods-chouette/Documents/synchronizeExperimentation/Load/load1/"
+csv_file_path = "/home/erods-chouette/Documents/synchronizeExperimentation/Load/load2/"
 
-latency_path = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/nantes/teastore/load1_sequential_injection_cpu_limit/hyperthreading/12-11-2024"
+latency_path = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/nantes/teastore/warmp-3min-profile/load2/hyperthreading/13-11-2024"
 
 services = ["teastore-webui"]
 #services = ["teastore-auth", "teastore-image", "teastore-persistence", "teastore-recommender", "teastore-registry","teastore-webui"]
@@ -38,7 +38,7 @@ def plot_json_generic(file_path, file_name, data_type='cpu'):
     json_data_file2 = open_file(os.path.join(file_path, list_element[1]))
     #print(list_element[2])
     json_data_file3 = open_file(os.path.join(file_path, list_element[2]))
-    #json_data_file4 = open_file(os.path.join(file_path, list_element[3]))
+    json_data_file4 = open_file(os.path.join(file_path, list_element[3]))
     #json_data_file5 = open_file(os.path.join(file_path, list_element[4]))
     #
     # print(json_data_file1)
@@ -50,7 +50,7 @@ def plot_json_generic(file_path, file_name, data_type='cpu'):
         datas1 = json_data_file1['data']['result'][0]['values']
         datas2 = json_data_file2['data']['result'][0]['values']
         datas3 = json_data_file3['data']['result'][0]['values']
-       # datas4 = json_data_file4['data']['result'][0]['values']
+        datas4 = json_data_file4['data']['result'][0]['values']
         #datas5 = json_data_file5['data']['result'][0]['values']
 
         selected_values=[]
@@ -69,7 +69,7 @@ def plot_json_generic(file_path, file_name, data_type='cpu'):
         values1 = [float(value) for _, value in datas1]
         values2 = [float(value) for _, value in datas2]
         values3 = [float(value) for _, value in datas3]
-        #values4 = [float(value) for _, value in datas4]
+        values4 = [float(value) for _, value in datas4]
         #values5 = [float(value) for _, value in datas5]
 
         # print("###########les valeurs#######################")
@@ -92,7 +92,7 @@ def plot_json_generic(file_path, file_name, data_type='cpu'):
         values1 = np.array(smooth(values1))
         values2 = np.array(smooth(values2))
         values3 = np.array(smooth(values3))
-        #values4 = np.array(values4)
+        values4 = np.array(values4)
         #values5 = np.array(values5)
 
         # print(len(values1))
@@ -123,7 +123,7 @@ def plot_json_generic(file_path, file_name, data_type='cpu'):
             legend_labelsMemory.append(label)
 
         #temp_list = [values1, values2]
-        temp_list = [values1, values2, values3]
+        temp_list = [values1, values2, values4]
         for index, tab in enumerate(temp_list):
             #tab = temp_list[i-1]
             if is_cpu:
@@ -169,7 +169,8 @@ def plot_metrics(data, elt, metric_to_plot=""):
         values = smooth(valuesInit)
         heures = [datetime.fromtimestamp(ts).strftime('%M') for ts in timestamps]
 
-        color = get_color_for_service_init(source_workload)
+        #color = get_color_for_service_init(source_workload)
+        color = colors_table[position]
         if metric_to_plot == "latency":
             plt.plot(timestamps, values, color=color,
                     #label=f'{destination_txt + str(position + 1)}{multiplier_note}',
@@ -206,7 +207,7 @@ def plot_metrics(data, elt, metric_to_plot=""):
     return ticks
 
 
-elts = ["li_stairsd_2"]
+elts = ["li_const_2"]
 #elts = ["li_stairsu_2","li_stairsd_2","li_stairsu_2","si_sin_2"]
 #elts = ["li_const_2","linear_10", "li_stairsd_2","li_stairsu_2","si_sin_2"]
 #elts = ["li_const_2","linear_50","li_stairsd_2","li_stairsu_2","rd_bell_2","rd_jump_2","rd_stairs_2","si_abscos_2","si_abssin_2","si_cos_2","si_log_2","si_sin_2"]
@@ -228,12 +229,12 @@ for element in services:
         fileToPlot = f"output_{x}"
         #fileToPlot = f"output-linear_{x}requests_max_per_sec.csv"
         #fileToPlot = f"output-linear_80requests_max_per_sec.csv"
-        save_path = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/nantes/teastore/load1_sequential_injection_cpu_limit/hyperthreading/12-11-2024/{x}/"
+        save_path = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/nantes/teastore/warmp-3min-profile/load2/hyperthreading/13-11-2024/{x}/"
         #save_path = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/load1/nantes/hyperthreading/128/linear/3nodes/linear/mean_calculation/{x}/"
         #save_path = f"../nantes/hyperthreading/16-08-2024/data/metrics/experimentation-output-linear_80requests_max_per_sec.csv/"
 
         #save_graphics_at = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/load1/nantes/hyperthreading/128/linear/3nodes/linear/mean_calculation/{x}/Plots"
-        save_graphics_at = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/nantes/teastore/load1_sequential_injection_cpu_limit/hyperthreading/12-11-2024/{x}/Plots/merge"
+        save_graphics_at = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/nantes/teastore/warmp-3min-profile/load2/hyperthreading/13-11-2024/{x}/Plots/merge"
 
         parameters = read_parameters_from_json(file_path_json)
 
@@ -430,7 +431,7 @@ for element in services:
             plt.ylim(0, 125)
 
             for i in range(1,4):
-                plot_stats_path = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/nantes/teastore/load1_sequential_injection_cpu_limit/hyperthreading/12-11-2024/output/{x}_{i}_stats_history.csv"
+                plot_stats_path = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/nantes/teastore/warmp-3min-profile/load2/hyperthreading/13-11-2024/output/{x}_{i}_stats_history.csv"
 
                 df_stats = pd.read_csv(plot_stats_path)
 
@@ -497,7 +498,7 @@ for element in services:
 
 
         for i in range(1, 4):
-            plot_stats_path = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/nantes/teastore/load1_sequential_injection_cpu_limit/hyperthreading/12-11-2024/output/{x}_{i}_stats_history.csv"
+            plot_stats_path = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/nantes/teastore/warmp-3min-profile/load2/hyperthreading/13-11-2024/output/{x}_{i}_stats_history.csv"
 
             df_stats = pd.read_csv(plot_stats_path)
 
@@ -572,6 +573,6 @@ for element in services:
         #my_string = f"{save_graphics_at}/output{str(data_count + 1)}-{x}.png"
         my_string = f"{save_graphics_at}/output{str(data_count + 1)}-{element}.png"
         print(my_string)
-        plt.savefig(my_string)
+        #plt.savefig(my_string)
         plt.show()
         plt.close(fig)

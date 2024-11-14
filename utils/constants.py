@@ -16,7 +16,8 @@ pod_limit=2
 colors_table = [
     "#FF5733",  # Rouge orangé
     "#33FF57",  # Vert Lime
-    "#3357FF"  # Bleu Foncé
+    "#3357FF",  # Bleu Foncé
+    "003049"
 ]
 
 # def get_color_for_service_init(service_name):

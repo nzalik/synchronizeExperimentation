@@ -27,6 +27,7 @@ if len(sys.argv) > 1:
 
 prom_url = sys.argv[5]
 duration = sys.argv[6]
+exp_nb = sys.argv[7]
 
 today = date.today()
 date_str = today.strftime("%d-%m-%Y")
@@ -93,14 +94,14 @@ for section_name in config.sections():
             res = None
 
             filename = svc + '.json'
-            query_str_file = directory + "/" + filename
+            query_str_file = os.path.join(directory, f"{exp_nb}_{filename}")
             #query_str_file = os.path.join(directory2, filename)
-            if os.path.exists(query_str_file):
-                base, ext = os.path.splitext(filename)
-                counter = 1
-                while os.path.exists(os.path.join(directory, f"{base}_{counter}{ext}")):
-                    counter += 1
-                query_str_file = os.path.join(directory, f"{base}_{counter}{ext}")
+            # if os.path.exists(query_str_file):
+            #     base, ext = os.path.splitext(filename)
+            #     counter = 1
+            #     while os.path.exists(os.path.join(directory, f"{base}_{counter}{ext}")):
+            #         counter += 1
+            #     query_str_file = os.path.join(directory, f"{base}_{counter}{ext}")
 
             # query_str_file = "nom_du_fichier.json"
             os.makedirs(directory, exist_ok=True)
@@ -142,46 +143,49 @@ for section_name in config.sections():
 
     # The name of the current experimentation file
     profile = dir_name.split('/')[-1]
-    filename = container_name + '.json'
-    filename2 = f'aggregation_{profile}.json'
-    filename3 = f'aggregation_memory_{profile}.json'
-    filename4 = f'pod_restart_{profile}.json'
+    filename = f"{exp_nb}_{container_name}.json"
+    filename2 = f'{exp_nb}_aggregation_{profile}.json'
+    filename3 = f'{exp_nb}_aggregation_memory_{profile}.json'
+    filename4 = f'{exp_nb}_pod_restart_{profile}.json'
+    query_str_file = os.path.join(directory2, filename)
 
     query_str_file2 = os.path.join(directory3, filename2)
-
-    if os.path.exists(query_str_file2):
-        base, ext = os.path.splitext(filename2)
-        counter = 1
-        while os.path.exists(os.path.join(directory3, f"{base}_{counter}{ext}")):
-            counter += 1
-        query_str_file2 = os.path.join(directory3, f"{base}_{counter}{ext}")
-
     query_str_file3 = os.path.join(directory3, filename3)
-    if os.path.exists(query_str_file3):
-        base, ext = os.path.splitext(filename3)
-        counter = 1
-        while os.path.exists(os.path.join(directory3, f"{base}_{counter}{ext}")):
-            counter += 1
-        query_str_file3 = os.path.join(directory3, f"{base}_{counter}{ext}")
-
     query_str_file4 = os.path.join(directory3, filename4)
-    if os.path.exists(query_str_file4):
-        base, ext = os.path.splitext(filename4)
-        counter = 1
-        while os.path.exists(os.path.join(directory3, f"{base}_{counter}{ext}")):
-            counter += 1
-        query_str_file4 = os.path.join(directory3, f"{base}_{counter}{ext}")
+    
+    # if os.path.exists(query_str_file2):
+    #     base, ext = os.path.splitext(filename2)
+    #     counter = 1
+    #     while os.path.exists(os.path.join(directory3, f"{base}_{counter}{ext}")):
+    #         counter += 1
+    #     query_str_file2 = os.path.join(directory3, f"{base}_{counter}{ext}")
+    # 
+    # query_str_file3 = os.path.join(directory3, filename3)
+    # if os.path.exists(query_str_file3):
+    #     base, ext = os.path.splitext(filename3)
+    #     counter = 1
+    #     while os.path.exists(os.path.join(directory3, f"{base}_{counter}{ext}")):
+    #         counter += 1
+    #     query_str_file3 = os.path.join(directory3, f"{base}_{counter}{ext}")
+    # 
+    # query_str_file4 = os.path.join(directory3, filename4)
+    # if os.path.exists(query_str_file4):
+    #     base, ext = os.path.splitext(filename4)
+    #     counter = 1
+    #     while os.path.exists(os.path.join(directory3, f"{base}_{counter}{ext}")):
+    #         counter += 1
+    #     query_str_file4 = os.path.join(directory3, f"{base}_{counter}{ext}")
 
     # query_str_file = "nom_du_fichier.json"
 
 
-    query_str_file = os.path.join(directory2, filename)
-    if os.path.exists(query_str_file):
-        base, ext = os.path.splitext(filename)
-        counter = 1
-        while os.path.exists(os.path.join(directory2, f"{base}_{counter}{ext}")):
-            counter += 1
-        query_str_file = os.path.join(directory2, f"{base}_{counter}{ext}")
+
+    # if os.path.exists(query_str_file):
+    #     base, ext = os.path.splitext(filename)
+    #     counter = 1
+    #     while os.path.exists(os.path.join(directory2, f"{base}_{counter}{ext}")):
+    #         counter += 1
+    #     query_str_file = os.path.join(directory2, f"{base}_{counter}{ext}")
 
 
 
