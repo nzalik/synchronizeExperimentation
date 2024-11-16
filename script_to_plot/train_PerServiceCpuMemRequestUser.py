@@ -23,9 +23,9 @@ range_limit = 4
 
 file_path_json = '../teastore.json'
 
-csv_file_path = "/home/erods-chouette/Documents/synchronizeExperimentation/Load/load2/"
+csv_file_path = "/home/erods-chouette/Documents/synchronizeExperimentation/Load/train_load_50/"
 
-root_path = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/nantes/train/load2/nantes/hyperthreading/128/linear/3nodes/linear/11-11-2024"
+root_path = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/nantes/train/train_load_50_sequential_train_50/hyperthreading"
 
 latency_path = root_path
 
@@ -581,6 +581,6 @@ for element in services:
         #my_string = f"{save_graphics_at}/output{str(data_count + 1)}-{x}.png"
         my_string = f"{save_graphics_at}/output{str(data_count + 1)}-{element}.png"
         print(my_string)
-        plt.savefig(my_string)
+        #plt.savefig(my_string)
         plt.show()
         plt.close(fig)

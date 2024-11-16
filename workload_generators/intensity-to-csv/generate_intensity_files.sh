@@ -1,7 +1,7 @@
 #!/bin/bash
 
 duration=300
-max_req=100
+max_req=200
 min_req=10
 nb_files_per_func=1
 nb_f_offset=2
