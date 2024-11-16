@@ -33,12 +33,12 @@ category="128/linear/3nodes/linear"
 # This is to give an indication to the script from where the script is executed
 # From the home environment or from the Grid
 
-root_prefix="/home/erods-chouette/Documents/"
-init_root_prefix="/home/erods-chouette/"
+#root_prefix="/home/erods-chouette/Documents/"
+#init_root_prefix="/home/erods-chouette/"
 
 #Production environment
-#init_root_prefix="/home/ykoagnenzali/"
-#root_prefix="/home/ykoagnenzali/"
+init_root_prefix="/home/ykoagnenzali/"
+root_prefix="/home/ykoagnenzali/"
 
 prefix_folder="${root_prefix}synchronizeExperimentation"
 
@@ -76,7 +76,7 @@ for element in social_load
       new_folder_path1="$new_folder_base"
       new_folder_path_backup="$new_folder_base/backup"
 
-       for i in $(seq 1 1); do
+       for i in $(seq 1 8); do
           # Créer le déploiement Kubernetes
           helm install socialnetwork $prefix_folder/benchmarks/DeathStarBench/socialNetwork/helm-chart/socialnetwork/
           kubectl rollout status deployment nginx-thrift
@@ -134,6 +134,6 @@ for element in social_load
               sleep 60
 
           done
-          #helm uninstall socialnetwork
+          helm uninstall socialnetwork
     done
     done
