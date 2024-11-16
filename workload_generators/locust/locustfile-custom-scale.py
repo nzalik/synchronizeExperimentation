@@ -18,6 +18,7 @@ GLOBAL_NGINX_FRONTEND_URL  = os.environ.get("NGINX_ADDR")
 GLOBAL_MEDIA_FRONTEND_URL  = os.environ.get("MEDIA_ADDR")
 GLOBAL_INTENSITY_FILE      = os.environ.get("INTENSITY_FILE")
 COMPOSITION_OPTION         = os.environ.get("COMP_OPT")
+ROUTE_PREFIX         = os.environ.get("ROUTE_PREFIX")
 
 #GLOBAL_EXPERIMENT_DURATION = 3600    # None = Run forever, 43200 = 12 hour
 #GLOBAL_SECONDS_PER_DAY     = 3600    # 3600 = 1 hour
@@ -39,12 +40,12 @@ else:
     GLOBAL_COMPOSITIONS = [(5, 40, 55), (5, 45, 50), (5, 50, 45), (5, 55, 40), (10, 35, 55), (10, 40, 50), (10, 45, 45), (10, 50, 40), (10, 55, 35), (15, 35, 50), (15, 40, 45), (15, 45, 40), (15, 50, 35)]
 
 ####################################################################################################################################
-texts = [text.replace('@', '') for text in list(open('/home/erods-chouette/Documents/synchronizeExperimentation/workload_generators/locust/datasets/fb-posts/news.txt'))]
-media = [os.path.join('/home/erods-chouette/Documents/synchronizeExperimentation/workload_generators/locust/datasets/inria-person', fname) for fname in os.listdir('/home/erods-chouette/Documents/synchronizeExperimentation/workload_generators/locust/datasets/inria-person')]
+texts = [text.replace('@', '') for text in list(open(f'{ROUTE_PREFIX}/workload_generators/locust/datasets/fb-posts/news.txt'))]
+media = [os.path.join(f'{ROUTE_PREFIX}/workload_generators/locust/datasets/inria-person', fname) for fname in os.listdir('/home/erods-chouette/Documents/synchronizeExperimentation/workload_generators/locust/datasets/inria-person')]
 users = list(range(1, 963))
 cycle = 0
 active_users, inactive_users = [], list(range(1, 963))
-with open('/home/erods-chouette/Documents/synchronizeExperimentation/workload_generators/locust/datasets/social-graph/socfb-Reed98.mtx', 'r') as f:
+with open(f'{ROUTE_PREFIX}/workload_generators/locust/datasets/social-graph/socfb-Reed98.mtx', 'r') as f:
     friends = {}
     for edge in f.readlines():
         edge = list(map(int, edge.strip().split()))

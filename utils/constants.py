@@ -5,7 +5,7 @@ from datetime import datetime
 import requests
 
 
-line_styles=["solid","dotted","dashed","dashdot","dashdotted"]
+line_styles=["solid","dotted","dashed","dashdot"]
 
 plot_limit = 301
 cpu_limit_max=1.2
@@ -17,7 +17,13 @@ colors_table = [
     "#FF5733",  # Rouge orangé
     "#33FF57",  # Vert Lime
     "#3357FF",  # Bleu Foncé
-    "003049"
+    "#003049",  # Bleu profond
+    "#F9C74F",  # Jaune doré
+    "#8E44AD",  # Violet foncé
+    "#E74C3C",  # Rouge vif
+    "#1ABC9C",  # Turquoise
+    "#FFC300",  # Jaune vif
+    "#7D3C98"   # Violet profond
 ]
 
 # def get_color_for_service_init(service_name):

@@ -18,11 +18,16 @@ from utils.constants import get_color_for_service_init, normalization, line_styl
 #metric_to_plot="request_aggr" #latency or request
 harmonization=False
 
+request_volume_limit = 50
+range_limit = 4
+
 file_path_json = '../teastore.json'
 
 csv_file_path = "/home/erods-chouette/Documents/synchronizeExperimentation/Load/load2/"
 
-latency_path = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/nantes/train/load2/nantes/hyperthreading/128/linear/3nodes/linear/11-11-2024"
+root_path = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/nantes/train/load2/nantes/hyperthreading/128/linear/3nodes/linear/11-11-2024"
+
+latency_path = root_path
 
 services = ["ts-ui-dashboard"]
 #services = ["teastore-auth", "teastore-image", "teastore-persistence", "teastore-recommender", "teastore-registry","teastore-webui"]
@@ -228,12 +233,12 @@ for element in services:
         fileToPlot = f"output_{x}"
         #fileToPlot = f"output-linear_{x}requests_max_per_sec.csv"
         #fileToPlot = f"output-linear_80requests_max_per_sec.csv"
-        save_path = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/nantes/train/load2/nantes/hyperthreading/128/linear/3nodes/linear/11-11-2024/{x}/"
+        save_path = f"{root_path}/{x}/"
         #save_path = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/load2/nantes/hyperthreading/128/linear/3nodes/linear/mean_calculation/{x}/"
         #save_path = f"../nantes/hyperthreading/16-08-2024/data/metrics/experimentation-output-linear_80requests_max_per_sec.csv/"
 
         #save_graphics_at = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/load2/nantes/hyperthreading/128/linear/3nodes/linear/mean_calculation/{x}/Plots"
-        save_graphics_at = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/nantes/train/load2/nantes/hyperthreading/128/linear/3nodes/linear/11-11-2024/{x}/Plots/merge"
+        save_graphics_at = f"{root_path}/{x}/Plots/merge"
 
         parameters = read_parameters_from_json(file_path_json)
 
@@ -372,7 +377,7 @@ for element in services:
         for idx, svc in enumerate(services):
             json_file_path = os.path.join(latency_path,"request_aggr", svc, x)
             json_filenames = sorted([os.path.join(json_file_path, file) for file in
-                              os.listdir(json_file_path)[:4]])  # Take the first 3 elements
+                              os.listdir(json_file_path)[:range_limit]])  # Take the first 3 elements
 
             for json_filename in json_filenames:
                 with open(json_filename) as f:
@@ -393,7 +398,7 @@ for element in services:
             json_file_path = os.path.join(latency_path, "request_aggr", svc, x)
 
             json_filenames = sorted([os.path.join(json_file_path, file) for file in
-                              os.listdir(json_file_path)[:4]])
+                              os.listdir(json_file_path)[:range_limit]])
 
             max_value = math.ceil(max_value / 100) * 100
 
@@ -427,18 +432,22 @@ for element in services:
             plt.xlabel('Time (seconds)')
             plt.ylabel('rps')
             plt.title('Request volume')
-            plt.ylim(0, 125)
+            plt.ylim(0, request_volume_limit)
 
-            for i in range(1,4):
-                plot_stats_path = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/nantes/train/load2/nantes/hyperthreading/128/linear/3nodes/linear/11-11-2024/output/{x}_{i}_stats_history.csv"
+            for i in range(1,range_limit):
+                plot_stats_path = f"{root_path}/output/{x}_{i}_stats_history.csv"
+                print(plot_stats_path)
 
                 df_stats = pd.read_csv(plot_stats_path)
 
                 requests = df_stats['Requests/s']
                 requests = requests.reindex(range(299), fill_value=0)
                 print(requests)
+                print("le tem")
+                print(time)
 
                 plt.plot(time, requests,  color=colors_table[i-1], linestyle=line_styles[i-1], label=f"locust_stats_{i}")
+                #plt.plot(time, requests)
 
             plt.legend(loc='upper left', frameon=False)
 
@@ -496,8 +505,8 @@ for element in services:
         # df_stats = pd.DataFrame()
 
 
-        for i in range(1, 4):
-            plot_stats_path = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/nantes/train/load2/nantes/hyperthreading/128/linear/3nodes/linear/11-11-2024/output/{x}_{i}_stats_history.csv"
+        for i in range(1, range_limit):
+            plot_stats_path = f"{root_path}/output/{x}_{i}_stats_history.csv"
 
             df_stats = pd.read_csv(plot_stats_path)
 
@@ -518,7 +527,7 @@ for element in services:
         for idx, svc in enumerate(services):
             json_file_path = os.path.join(latency_path, "latency", svc, x)
             json_filenames = sorted([os.path.join(json_file_path, file) for file in
-                                     os.listdir(json_file_path)[:4]])  # Take the first 3 elements
+                                     os.listdir(json_file_path)[:range_limit]])  # Take the first 3 elements
 
             for json_filename in json_filenames:
                 #print(json_filename)
@@ -539,7 +548,7 @@ for element in services:
             json_file_path = os.path.join(latency_path, "latency", svc, x)
 
             json_filenames = sorted([os.path.join(json_file_path, file) for file in
-                                     os.listdir(json_file_path)[:4]])
+                                     os.listdir(json_file_path)[:range_limit]])
             max_value = math.ceil(max_value / 100) * 100
 
             for json_filename in json_filenames:
@@ -572,6 +581,6 @@ for element in services:
         #my_string = f"{save_graphics_at}/output{str(data_count + 1)}-{x}.png"
         my_string = f"{save_graphics_at}/output{str(data_count + 1)}-{element}.png"
         print(my_string)
-        #plt.savefig(my_string)
+        plt.savefig(my_string)
         plt.show()
         plt.close(fig)

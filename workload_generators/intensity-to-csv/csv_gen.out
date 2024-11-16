@@ -148,3 +148,75 @@ stairsu_2: ceil=10 | floor=1
 stairsd_2: ceil=10 | floor=1
 - Const files
 const_2: ceil=10
+- Sin files
+sin_2: ceil=39 | floor=12 | peaks=2
+- Cos files
+cos_2: ceil=13 | floor=12 | peaks=2
+- AbsSin files
+abssin_2: ceil=39 | floor=30 | peaks=2
+- AbsCos files
+abscos_2: ceil=43 | floor=21 | peaks=2
+- Log files
+log_2: ceil=46 | floor=36 | a=-2
+- Bell files
+bell_2: ceil=11 | floor=10
+- Random Stairs files
+rdstairs_2: ceil=41 | floor=10
+- Random Jump files
+rdjump_2: ceil=50 | floor=10
+- Const files
+const_2: ceil=39
+- Linear files
+linear_2: ceil=24 | floor=18 | a=3
+- Stairs Up files
+stairsu_2: ceil=30 | floor=10
+- Stairs Down files
+stairsd_2: ceil=10 | floor=10
+- Sin files
+sin_2: ceil=23 | floor=17 | peaks=3
+- Cos files
+cos_2: ceil=29 | floor=17 | peaks=3
+- AbsSin files
+abssin_2: ceil=19 | floor=14 | peaks=3
+- AbsCos files
+abscos_2: ceil=13 | floor=11 | peaks=3
+- Log files
+log_2: ceil=48 | floor=43 | a=-4
+- Bell files
+bell_2: ceil=45 | floor=34
+- Random Stairs files
+rdstairs_2: ceil=32 | floor=10
+- Random Jump files
+rdjump_2: ceil=28 | floor=10
+- Const files
+const_2: ceil=43
+- Linear files
+linear_2: ceil=38 | floor=26 | a=3
+- Stairs Up files
+stairsu_2: ceil=13 | floor=10
+- Stairs Down files
+stairsd_2: ceil=21 | floor=10
+- Sin files
+sin_2: ceil=65 | floor=45 | peaks=2
+- Cos files
+cos_2: ceil=81 | floor=61 | peaks=1
+- AbsSin files
+abssin_2: ceil=94 | floor=25 | peaks=3
+- AbsCos files
+abscos_2: ceil=91 | floor=13 | peaks=3
+- Log files
+log_2: ceil=27 | floor=25 | a=1
+- Bell files
+bell_2: ceil=14 | floor=13
+- Random Stairs files
+rdstairs_2: ceil=89 | floor=10
+- Random Jump files
+rdjump_2: ceil=55 | floor=10
+- Const files
+const_2: ceil=54
+- Linear files
+linear_2: ceil=72 | floor=25 | a=2
+- Stairs Up files
+stairsu_2: ceil=16 | floor=10
+- Stairs Down files
+stairsd_2: ceil=58 | floor=10

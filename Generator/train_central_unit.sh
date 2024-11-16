@@ -53,10 +53,11 @@ export KUBECONFIG="${init_root_prefix}admin_load3.conf"
 
   #number=$((number + 1))
   #new_folder_path="${new_folder_path1}/${number}"
-  for element in load1 load2
+  for element in train_load_50
     do
       # Complete relative path for data storage
-      new_folder_base="$parent_dir/synchronizeExperimentation/locust/train/$element/nantes/hyperthreading/$category/$date_str"
+      new_folder_base="$parent_dir/synchronizeExperimentation/locust/$site/train/$date_str/${element}$PATH_SUFFIX/hyperthreading"
+      #new_folder_base="$parent_dir/synchronizeExperimentation/locust/train/$element/nantes/hyperthreading/$category/$date_str"
       new_folder_path1="$new_folder_base"
       new_folder_path_backup="$new_folder_base/backup"
 
