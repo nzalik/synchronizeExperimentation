@@ -211,7 +211,7 @@ def plot_metrics(data, elt, metric_to_plot=""):
     return ticks
 
 
-elts = ["si_sin_2"]
+elts = ["li_stairsd_2"]
 #elts = ["li_stairsu_2","li_stairsd_2","li_stairsu_2","si_sin_2"]
 #elts = ["li_const_2","linear_10", "li_stairsd_2","li_stairsu_2","si_sin_2"]
 #elts = ["li_const_2","linear_50","li_stairsd_2","li_stairsu_2","rd_bell_2","rd_jump_2","rd_stairs_2","si_abscos_2","si_abssin_2","si_cos_2","si_log_2","si_sin_2"]
