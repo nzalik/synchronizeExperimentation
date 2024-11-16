@@ -57,7 +57,7 @@ kubectl create secret docker-registry docker-registry-secret --docker-server=htt
   #number=$((number + 1))
   #new_folder_path="${new_folder_path1}/${number}"
   #for element in load1 load2
-  for element in load2
+  for element in train_load_50
     do
       # Complete relative path for data storage
       new_folder_base="$parent_dir/synchronizeExperimentation/locust/$site/teastore/${element}$PATH_SUFFIX/hyperthreading/$date_str"
