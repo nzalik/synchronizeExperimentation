@@ -23,13 +23,13 @@ range_limit = 4
 
 file_path_json = '../teastore.json'
 
-csv_file_path = "/home/erods-chouette/Documents/synchronizeExperimentation/Load/train_load_50/"
+csv_file_path = "/home/erods-chouette/Documents/synchronizeExperimentation/Load/social_load/"
 
 root_path = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/nantes/train/train_load_50_sequential_train_50/hyperthreading"
 
 latency_path = root_path
 
-services = ["ts-ui-dashboard"]
+services = ["nginx-thrift"]
 #services = ["teastore-auth", "teastore-image", "teastore-persistence", "teastore-recommender", "teastore-registry","teastore-webui"]
 
 def plot_json_generic(file_path, file_name, data_type='cpu'):
@@ -211,7 +211,7 @@ def plot_metrics(data, elt, metric_to_plot=""):
     return ticks
 
 
-elts = ["li_stairsd_2"]
+elts = ["li_linear_2"]
 #elts = ["li_stairsu_2","li_stairsd_2","li_stairsu_2","si_sin_2"]
 #elts = ["li_const_2","linear_10", "li_stairsd_2","li_stairsu_2","si_sin_2"]
 #elts = ["li_const_2","linear_50","li_stairsd_2","li_stairsu_2","rd_bell_2","rd_jump_2","rd_stairs_2","si_abscos_2","si_abssin_2","si_cos_2","si_log_2","si_sin_2"]

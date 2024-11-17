@@ -22,7 +22,7 @@ def generate_linear_profile(duration, step_size, start_value, end_values):
         os.makedirs(dir_name, exist_ok=True)
 
     for end_value in end_values:
-        file_name = f"linear_{end_value}requests_max_per_sec.csv"
+        file_name = f"li_linear_{end_value}.csv"
         file_path = os.path.join(dir_name, file_name)
 
         with open(file_path, 'w', newline='') as csv_file:
@@ -45,6 +45,6 @@ def generate_linear_profile(duration, step_size, start_value, end_values):
 DURATION = 299.5  # Durée totale du profil de charge (en secondes)
 STEP_SIZE = 1.0
 START_VALUE = 0.5  # Valeur de départ modifiée à 1.0
-END_VALUE = [300]  # Valeur finale
+END_VALUE = [600, 900]  # Valeur finale
 
 generate_linear_profile(DURATION, STEP_SIZE, START_VALUE, END_VALUE)

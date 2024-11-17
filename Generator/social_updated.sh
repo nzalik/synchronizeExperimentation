@@ -61,12 +61,12 @@ host="$WEBUI"
 export KUBECONFIG="${init_root_prefix}$CERTIFICATE"
 
 # This script deployed every necessary configuration for istio mesh
-/bin/bash "$prefix_folder/mesh/istio.sh" $prefix_folder
+#/bin/bash "$prefix_folder/mesh/istio.sh" $prefix_folder
 
-kubectl create secret docker-registry docker-registry-secret --docker-server=https://gricad-registry.univ-grenoble-alpes.fr --docker-username=chouette --docker-password=esVsrrxsLA9sJ_nzPurJ
+#kubectl create secret docker-registry docker-registry-secret --docker-server=https://gricad-registry.univ-grenoble-alpes.fr --docker-username=chouette --docker-password=esVsrrxsLA9sJ_nzPurJ
 
 
-for element in social_load
+for element in train_load_100 train_load_200 train_load_300 social_load_600 social_load_900
   #for element in load1
     do
       # Complete relative path for data storage
@@ -76,7 +76,7 @@ for element in social_load
       new_folder_path1="$new_folder_base"
       new_folder_path_backup="$new_folder_base/backup"
 
-       for i in $(seq 1 8); do
+       for i in $(seq 1 1); do
           # Créer le déploiement Kubernetes
           helm install socialnetwork $prefix_folder/benchmarks/DeathStarBench/socialNetwork/helm-chart/socialnetwork/
           kubectl rollout status deployment nginx-thrift
