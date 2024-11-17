@@ -46,14 +46,14 @@ host="$WEBUI"
 
 # The kubernetes credentials to used for entering the cluster
 #export KUBECONFIG=~/admin_collect-data.conf
-export KUBECONFIG="${init_root_prefix}admin_kube5k.conf"
+export KUBECONFIG="${init_root_prefix}admin_collect-data.conf"
 
 # This script deployed every necessary configuration for istio mesh
 /bin/bash "$prefix_folder/mesh/istio.sh" $prefix_folder
 
   #number=$((number + 1))
   #new_folder_path="${new_folder_path1}/${number}"
-  for element in train_load_100
+  for element in train_load_100 train_load_200 train_load_300
     do
       # Complete relative path for data storage
       new_folder_base="$parent_dir/synchronizeExperimentation/locust/$site/train/$date_str/${element}$PATH_SUFFIX/hyperthreading"
