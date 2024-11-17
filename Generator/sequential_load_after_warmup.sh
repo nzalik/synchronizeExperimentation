@@ -56,7 +56,7 @@ kubectl create secret docker-registry docker-registry-secret --docker-server=htt
 
   #number=$((number + 1))
   #new_folder_path="${new_folder_path1}/${number}"
-  for element in train_load_100 train_load_200
+  for element in train_load_200 train_load_100
   #for element in load1
     do
       # Complete relative path for data storage
