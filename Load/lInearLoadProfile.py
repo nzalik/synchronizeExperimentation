@@ -27,7 +27,7 @@ def generate_linear_profile(duration, step_size, start_value, end_values):
 
         with open(file_path, 'w', newline='') as csv_file:
             writer = csv.writer(csv_file)
-            writer.writerow(['timestamp', 'requests'])
+            #writer.writerow(['timestamp', 'requests'])
 
             for t in range(0, int(duration + step_size), int(step_size)):
                 if t < (duration - (2 * step_size)):
@@ -44,7 +44,7 @@ def generate_linear_profile(duration, step_size, start_value, end_values):
 # Paramètres de configuration
 DURATION = 299.5  # Durée totale du profil de charge (en secondes)
 STEP_SIZE = 1.0
-START_VALUE = 1.5  # Valeur de départ modifiée à 1.0
-END_VALUE = [100]  # Valeur finale
+START_VALUE = 0.5  # Valeur de départ modifiée à 1.0
+END_VALUE = [300]  # Valeur finale
 
 generate_linear_profile(DURATION, STEP_SIZE, START_VALUE, END_VALUE)

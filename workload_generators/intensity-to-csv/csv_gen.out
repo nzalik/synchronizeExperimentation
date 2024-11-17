@@ -244,3 +244,27 @@ linear_2: ceil=168 | floor=100 | a=2
 stairsu_2: ceil=155 | floor=10
 - Stairs Down files
 stairsd_2: ceil=119 | floor=10
+- Sin files
+sin_2: ceil=95 | floor=75 | peaks=3
+- Cos files
+cos_2: ceil=143 | floor=138 | peaks=2
+- AbsSin files
+abssin_2: ceil=107 | floor=29 | peaks=3
+- AbsCos files
+abscos_2: ceil=132 | floor=77 | peaks=3
+- Log files
+log_2: ceil=224 | floor=86 | a=-4
+- Bell files
+bell_2: ceil=273 | floor=25
+- Random Stairs files
+rdstairs_2: ceil=109 | floor=10
+- Random Jump files
+rdjump_2: ceil=233 | floor=10
+- Const files
+const_2: ceil=66
+- Linear files
+linear_2: ceil=294 | floor=217 | a=2
+- Stairs Up files
+stairsu_2: ceil=87 | floor=10
+- Stairs Down files
+stairsd_2: ceil=241 | floor=10
