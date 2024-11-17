@@ -78,20 +78,20 @@ for element in train_load_100 train_load_200 train_load_300 social_load_600 soci
 
        for i in $(seq 1 1); do
           # Créer le déploiement Kubernetes
-          helm install socialnetwork $prefix_folder/benchmarks/DeathStarBench/socialNetwork/helm-chart/socialnetwork/
-          kubectl rollout status deployment nginx-thrift
-          kubectl apply -f $prefix_folder/socialNetwork/nginx-thrift-nodeport.yaml
-          kubectl apply -f $prefix_folder/socialNetwork/media-frontend-nodeport.yaml
+          #helm install socialnetwork $prefix_folder/benchmarks/DeathStarBench/socialNetwork/helm-chart/socialnetwork/
+          #kubectl rollout status deployment nginx-thrift
+          #kubectl apply -f $prefix_folder/socialNetwork/nginx-thrift-nodeport.yaml
+          #kubectl apply -f $prefix_folder/socialNetwork/media-frontend-nodeport.yaml
 
 
-          sleep 180 # This wait time is necessary because the application after being deployed, need some time to
+          #sleep 180 # This wait time is necessary because the application after being deployed, need some time to
                     # be ready to process requests
 
           echo "##################### Sleeping befor240e warmup ##################################################"
 
-         python3 $prefix_folder/workload_generators/locust/warmup.py --graph $prefix_folder/workload_generators/locust/datasets/social-graph/socfb-Reed98.mtx --addr $WEBUI_ADDR
+         #python3 $prefix_folder/workload_generators/locust/warmup.py --graph $prefix_folder/workload_generators/locust/datasets/social-graph/socfb-Reed98.mtx --addr $WEBUI_ADDR
 
-          sleep 120
+          #sleep 120
 
            for file_name in $prefix_folder/Load/$element/*.csv; do
 
@@ -125,10 +125,10 @@ for element in train_load_100 train_load_200 train_load_300 social_load_600 soci
 
               env ROUTE_PREFIX=$prefix_folder NGINX_ADDR=$WEBUI_ADDR MEDIA_ADDR=$MEDIA_ADDR INTENSITY_FILE=$file_name COMP_OPT=$REQUEST locust -f $prefix_folder/workload_generators/locust/locustfile-custom-scale.py --headless --csv $log_exp_folder_path
 
-              sleep 60
+              #sleep 60
 
-              python3 $prefix_folder/Fetcher/fetch_organized_for_mean_order.py "$result" "$workload_dir" "$exp_folder_path" "$time_obj" "$PROMETHEUS_URL" "$DURATION" "$prefix_folder" "$i"
-              python3 $prefix_folder/Fetcher/istio_metric_fetch_order.py "$new_folder_path1" "$time_obj" "$istio_path" "$PROMETHEUS_URL" "$DURATION" "$root_file_name" "$i"
+              #python3 $prefix_folder/Fetcher/fetch_organized_for_mean_order.py "$result" "$workload_dir" "$exp_folder_path" "$time_obj" "$PROMETHEUS_URL" "$DURATION" "$prefix_folder" "$i"
+              #python3 $prefix_folder/Fetcher/istio_metric_fetch_order.py "$new_folder_path1" "$time_obj" "$istio_path" "$PROMETHEUS_URL" "$DURATION" "$root_file_name" "$i"
               #python3 $prefix_folder/Fetcher/istio_metric_fetch_backup.py "$new_folder_path_backup" "$time_obj" $metric_path $istio_path $root_file_name
 
               sleep 60

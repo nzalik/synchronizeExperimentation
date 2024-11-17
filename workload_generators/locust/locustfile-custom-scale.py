@@ -41,7 +41,7 @@ else:
 
 ####################################################################################################################################
 texts = [text.replace('@', '') for text in list(open(f'{ROUTE_PREFIX}/workload_generators/locust/datasets/fb-posts/news.txt'))]
-media = [os.path.join(f'{ROUTE_PREFIX}/workload_generators/locust/datasets/inria-person', fname) for fname in os.listdir('/home/erods-chouette/Documents/synchronizeExperimentation/workload_generators/locust/datasets/inria-person')]
+media = [os.path.join(f'{ROUTE_PREFIX}/workload_generators/locust/datasets/inria-person', fname) for fname in os.listdir(f'{ROUTE_PREFIX}/workload_generators/locust/datasets/inria-person')]
 users = list(range(1, 963))
 cycle = 0
 active_users, inactive_users = [], list(range(1, 963))
