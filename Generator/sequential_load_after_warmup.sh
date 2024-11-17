@@ -37,11 +37,11 @@ root_prefix="/home/ykoagnenzali/"
 prefix_folder="${root_prefix}synchronizeExperimentation"
 
 #Those paths are given to a indicate to the script that fecth data, where the metrics for istio are
-# created and also the
+# created and also the 
 istio_path="../istio_metrics.json"
 metric_path="../teastore_grenoble.json"
 
-# This is the adress of the server where your applciation is deployed plus the
+# This is the adress of the server where your applciation is deployed plus the 
 # frontend page you want to access
 host="$WEBUI/tools.descartes.teastore.webui"
 
@@ -56,37 +56,19 @@ kubectl create secret docker-registry docker-registry-secret --docker-server=htt
 
   #number=$((number + 1))
   #new_folder_path="${new_folder_path1}/${number}"
-  #for element in load1 load2
-  for element in train_load_50
+  for element in train_load_100 train_load_200
+  #for element in load1
     do
       # Complete relative path for data storage
-      new_folder_base="$parent_dir/synchronizeExperimentation/locust/$site/teastore/${element}$PATH_SUFFIX/hyperthreading/$date_str"
+      new_folder_base="$parent_dir/synchronizeExperimentation/locust/$site/teastore/$date_str/${element}$PATH_SUFFIX/hyperthreading"
+      echo "save............................."
+      echo $new_folder_base
       new_folder_path1="$new_folder_base"
       new_folder_path_backup="$new_folder_base/backup"
 
-      for file_name in $prefix_folder/Load/$element/*.csv; do
-        for i in $(seq 1 8); do
-          root_file_name=$(basename "$file_name" .csv)
-
-          # Compter le nombre de fichiers dans le répertoire $date_str
-          file_count=$(ls -1 "$new_folder_path1" | wc -l)
-
-          # Créer le sous-répertoire "experimentation" avec le numéro
-          exp_folder_path="$new_folder_path1/$root_file_name"
-          log_exp_folder_path="${new_folder_path1}/output/${root_file_name}_$i"
-
-          echo $root_file_name
-
-          input_string=$file_name
-          output_part=$(basename "$input_string" .csv)
-          output_part="${output_part#profiles_}"
-
-          echo "##################### Initialisation ##################################################"
-          echo "$file_name"
-
+       for i in $(seq 1 1); do
           # Créer le déploiement Kubernetes
           kubectl create -f $prefix_folder/custom_deployments/$APP_MANIFEST
-          #gricard-teastore.yaml
 
           sleep 240 # This wait time is necessary because the application after being deployed, need some time to
                     # be ready to process requests
@@ -102,25 +84,45 @@ kubectl create secret docker-registry docker-registry-secret --docker-server=htt
 
           sleep 120
 
-          echo "##################### Sleeping before load ##################################################"
+           for file_name in $prefix_folder/Load/$element/*.csv; do
 
-          result="$output_part.csv"
+              root_file_name=$(basename "$file_name" .csv)
 
-          time_obj=$(date +"%H:%M:%S")
-          echo $time_obj
+              # Compter le nombre de fichiers dans le répertoire $date_str
+              file_count=$(ls -1 "$new_folder_path1" | wc -l)
 
-          env INTENSITY_FILE="$file_name" locust -f $prefix_folder/workload_generators/locust/teastore_locustfile-custom-scale.py --headless --csv $log_exp_folder_path --host $host
+              # Créer le sous-répertoire "experimentation" avec le numéro
+              exp_folder_path="$new_folder_path1/$root_file_name"
+              log_exp_folder_path="${new_folder_path1}/output/${root_file_name}_$i"
 
-          sleep 60
+              echo $root_file_name
 
-          python3 $prefix_folder/Fetcher/fetch_organized_for_mean_order.py "$result" "$workload_dir" "$exp_folder_path" "$time_obj" "$PROMETHEUS_URL" "$DURATION" "$prefix_folder" "$i"
-          python3 $prefix_folder/Fetcher/istio_metric_fetch_order.py "$new_folder_path1" "$time_obj" "$istio_path" "$PROMETHEUS_URL" "$DURATION" "$root_file_name" "$i"
-          #python3 $prefix_folder/Fetcher/istio_metric_fetch_backup.py "$new_folder_path_backup" "$time_obj" $metric_path $istio_path $root_file_name
+              input_string=$file_name
+              output_part=$(basename "$input_string" .csv)
+              output_part="${output_part#profiles_}"
 
+              echo "##################### Initialisation ##################################################"
+              echo "$file_name"
+
+
+              echo "##################### Sleeping before load ##################################################"
+
+              result="$output_part.csv"
+
+              time_obj=$(date +"%H:%M:%S")
+              echo $time_obj
+
+              env INTENSITY_FILE="$file_name" locust -f $prefix_folder/workload_generators/locust/teastore_locustfile-custom-scale.py --headless --csv $log_exp_folder_path --host $host
+
+              sleep 60
+
+              python3 $prefix_folder/Fetcher/fetch_organized_for_mean.py "$result" "$workload_dir" "$exp_folder_path" "$time_obj" "$PROMETHEUS_URL" "$DURATION" "$prefix_folder" $i
+              python3 $prefix_folder/Fetcher/istio_metric_fetch.py "$new_folder_path1" "$time_obj" "$istio_path" "$PROMETHEUS_URL" "$DURATION" "$root_file_name" $i
+              #python3 $prefix_folder/Fetcher/istio_metric_fetch_backup.py "$new_folder_path_backup" "$time_obj" $metric_path $istio_path $root_file_name
+
+              sleep 60
+
+          done
           kubectl delete pods,deployments,services -l app=teastore
-
-          sleep 120
-
-      done
     done
     done
