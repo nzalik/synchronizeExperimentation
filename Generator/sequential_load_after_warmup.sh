@@ -66,7 +66,7 @@ kubectl create secret docker-registry docker-registry-secret --docker-server=htt
       new_folder_path1="$new_folder_base"
       new_folder_path_backup="$new_folder_base/backup"
 
-       for i in $(seq 1 1); do
+       for i in $(seq 1 8); do
           # Créer le déploiement Kubernetes
           kubectl create -f $prefix_folder/custom_deployments/$APP_MANIFEST
 
