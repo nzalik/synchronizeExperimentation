@@ -3,8 +3,8 @@ import json
 import os
 from datetime import datetime
 import requests
-
-
+import numpy as np
+import matplotlib.pyplot as plt
 line_styles=["solid","dotted","dashed","dashdot"]
 
 plot_limit = 301
@@ -12,6 +12,9 @@ cpu_limit_max=1.2
 load_max=475
 memory_limit=5
 pod_limit=2
+
+range_limit=5
+harmonization=False
 
 colors_table = [
     "#FF5733",  # Rouge orangé
@@ -147,66 +150,6 @@ def sort_legend(legend_objects, legend_labels):
 
     return legend_objects_sorted, legend_labels_sorted
 
-# def plot_metrics(data, ax):
-#     global timestamps
-#     results = data['data']['result']
-#
-#     for result in results:
-#         metric = result['metric']
-#         source_workload = metric.get('source_workload', 'unknown')
-#         destination = metric.get('destination_workload', elt)
-#
-#         source_workload_txt = source_workload.split('-')[1] if '-' in source_workload else source_workload
-#         destination_txt = destination.split('-')[1]
-#
-#         timestamps = np.arange(0, plot_limit)
-#         valuesInit = [0 if point[1] == "NaN" else float(point[1]) for point in
-#                       result['values'][:plot_limit]] + [0] * (
-#                              plot_limit - min(plot_limit, len(
-#                          result['values'])))  # Remplacer NaN par 0 et compléter avec des 0 si nécessaire
-#
-#         multiplier_note = ''
-#         if harmonization and metric_to_plot == "latency":
-#             if destination != 'teastore-webui' and metric_to_plot == "latency":
-#                 valuesInit = [x * 5 for x in valuesInit]  # Multiply values by a factor for non-webui destinations
-#                 multiplier_note = ' (x5)'
-#             else:
-#                 multiplier_note = ''
-#
-#
-#         values = smooth(valuesInit)
-#         heures = [datetime.fromtimestamp(ts).strftime('%M') for ts in timestamps]
-#
-#         color = get_color_for_serviceInit(source_workload)
-#         ax.plot(timestamps, values, color=color,
-#                 label=f'{source_workload_txt + str(position + 1)} → {destination_txt + str(position + 1)}{multiplier_note}',
-#                 linestyle=line_styles[position])
-#
-#     start_time = min(timestamps)
-#     end_time = max(timestamps)
-#
-#     ticks = np.arange(start_time, end_time + 1, plot_window)
-#     ticks_seconds = [((ts - start_time) // plot_window) * plot_window for ts in ticks]
-#     ax.set_xticks(ticks)
-#     ax.set_xticklabels(ticks_seconds)
-#
-#     ax.set_xlabel('Time (seconds)')
-#     ax.set_ylabel('rps (requests per second)')
-#     ax.set_title(f'Request volume')
-#     #ax.set_title(f'Requests volume send to {elt}')
-#     if metric_to_plot=="latency":
-#         ax.set_ylabel('Latency (ms)')
-#         ax.set_title(f'Request duration')
-#         #ax.set_title(f'Request duration to {elt}')
-#
-#     ax.set_ylim(0, max_value)
-#     ax.legend(loc='upper left', frameon=False)
-#     return ticks
-
-
-###################################################Fetcher#############################
-
-
 cpu_step = "2m"
 step = "1s"
 
@@ -311,3 +254,201 @@ def init_metric_metadata(metric, pod_name, prom_url):
             return f"irate({metric}{{namespace=\"default\",pod=\"{pod_name}\", container=\"{root_container_name}\"}}[{cpu_step}])"
         else:
             return f"{metric}{{namespace=\"default\"}}"
+
+
+def plot_json_generic(file_path, file_name, data_type='cpu'):
+    is_cpu = data_type == 'cpu'
+    label = file_name
+    print(data_type)
+    list_element = sorted(os.listdir(file_path))
+    print(list_element)
+
+    #print(list_element[0])
+    json_data_file1 = open_file(os.path.join(file_path, list_element[0]))
+    #print(list_element[1])
+    json_data_file2 = open_file(os.path.join(file_path, list_element[1]))
+    #print(list_element[2])
+    json_data_file3 = open_file(os.path.join(file_path, list_element[2]))
+    json_data_file4 = open_file(os.path.join(file_path, list_element[3]))
+    json_data_file5 = open_file(os.path.join(file_path, list_element[4]))
+    json_data_file6 = open_file(os.path.join(file_path, list_element[5]))
+    json_data_file7 = open_file(os.path.join(file_path, list_element[6]))
+    #json_data_file8 = open_file(os.path.join(file_path, list_element[7]))
+    #
+    # print(json_data_file1)
+    # print(json_data_file2)
+    # print(json_data_file3)
+    #print(json_data_file4)
+
+    if len(json_data_file1['data']['result']) > 0 :
+        datas1 = json_data_file1['data']['result'][0]['values']
+        datas2 = json_data_file2['data']['result'][0]['values']
+        datas3 = json_data_file3['data']['result'][0]['values']
+        datas4 = json_data_file4['data']['result'][0]['values']
+        datas5 = json_data_file5['data']['result'][0]['values']
+        datas6 = json_data_file6['data']['result'][0]['values']
+        datas7 = json_data_file7['data']['result'][0]['values']
+        #datas8 = json_data_file8['data']['result'][0]['values']
+
+
+        selected_values=[]
+
+        valid_values_list = [datas1, datas2]
+        for values in valid_values_list:
+            if len(values) > plot_limit:
+                selected_values = values
+                break
+        #timestamps = np.array([int(ts) for ts, _ in datas1])
+        timestamps = np.array([int(ts) for ts, _ in selected_values])
+        given_value = 0.0
+
+        greater_than_value = timestamps[timestamps > given_value]
+
+        values1 = [float(value) for _, value in datas1]
+        values2 = [float(value) for _, value in datas2]
+        values3 = [float(value) for _, value in datas3]
+        values4 = [float(value) for _, value in datas4]
+        values5 = [float(value) for _, value in datas5]
+        values6 = [float(value) for _, value in datas6]
+        values7 = [float(value) for _, value in datas7]
+#        values8 = [float(value) for _, value in datas8]
+
+        # print("###########les valeurs#######################")
+        # print(values1)
+        # print(values2)
+        # print(values3)
+        #print(values4)
+
+        longueur_max = plot_limit
+        # longueur_max = max(len(liste) for liste in [values1, values2, values3])
+        for liste in [values1, values2]:
+            if len(liste) > longueur_max:
+                # Couper pour garder les longueur_max derniers éléments
+                del liste[:-longueur_max]
+            else:
+                while len(liste) < longueur_max:
+                 liste.append(0)
+
+
+        values1 = np.array(smooth(values1))
+        values2 = np.array(smooth(values2))
+        values3 = np.array(smooth(values3))
+        values4 = np.array(smooth(values4))
+        values5 = np.array(smooth(values5))
+        values6 = np.array(smooth(values6))
+        values7 = np.array(smooth(values7))
+        #values8 = np.array(smooth(values8))
+
+        # print(len(values1))
+        # print(len(values2))
+        # print(len(values3))
+        #print(len(values4))
+        #print(len(values5))
+
+        meanValues = np.mean([values1, values2], axis=0)
+
+        if not is_cpu:
+            normalized_values = [value / (1000 ** 3) for value in meanValues]
+            last_ten_values = normalized_values[-(len(greater_than_value)):]
+        else:
+            last_ten_values = meanValues[-(len(greater_than_value)):]
+
+        new_timestamps = np.arange(0, plot_limit)
+        lissageValues = last_ten_values
+
+        #color = get_color_for_service_init(label)
+
+
+        current_line = plt.plot([], [], label="")[0]
+
+        # if is_cpu:
+        #     legend_objectsCpu.append(current_line)
+        #     legend_labelsCpu.append(label)
+        # else:
+        #     legend_objectsMemory.append(current_line)
+        #     legend_labelsMemory.append(label)
+
+        #temp_list = [values1, values2]
+        temp_list = [values1, values2,  values4, values5, values6, values7][:range_limit]
+        for index, tab in enumerate(temp_list):
+            print(index)
+            #tab = temp_list[i-1]
+            if is_cpu:
+                plt.plot(new_timestamps, tab, color = colors_table[index], label=label+str(index+1), linestyle=line_styles[index % len(line_styles)])
+            else:
+                plt.plot(new_timestamps, normalization(tab), color = colors_table[index], label=label+str(index+1), linestyle=line_styles[index % len(line_styles)])
+
+        #plt.plot(new_timestamps, lissageValues, color=color, label=label)
+        return new_timestamps, current_line, label
+        #return new_timestamps, lissageValues if is_cpu else new_timestamps
+    return []
+
+def plot_metrics(data, elt, position, metric_to_plot=""):
+    global timestamps
+    results = data['data']['result']
+
+    for result in results:
+        metric = result['metric']
+        source_workload = metric.get('source_workload', 'unknown')
+        destination = metric.get('destination_workload', elt)
+
+        source_workload_txt = source_workload
+        #source_workload_txt = source_workload.split('-')[1] if '-' in source_workload else source_workload
+        destination_txt = destination
+        #destination_txt = destination.split('-')[1]
+
+        timestamps = np.arange(0, plot_limit)  # Adjust the step value as needed for your specific interval
+
+        valuesInit = [0 if point[1] == "NaN" else float(point[1]) for point in
+                      result['values'][:plot_limit]] + [0] * (
+                             plot_limit - min(plot_limit, len(
+                         result['values'])))  # Remplacer NaN par 0 et compléter avec des 0 si nécessaire
+
+        multiplier_note = ''
+        if harmonization and metric_to_plot == "latency":
+            if destination != 'teastore-webui' and metric_to_plot == "latency":
+                valuesInit = [x * 5 for x in valuesInit]  # Multiply values by a factor for non-webui destinations
+                multiplier_note = ' (x5)'
+            else:
+                multiplier_note = ''
+
+
+        values = smooth(valuesInit)
+        heures = [datetime.fromtimestamp(ts).strftime('%M') for ts in timestamps]
+
+        #color = get_color_for_service_init(source_workload)
+        color = colors_table[position]
+        if metric_to_plot == "latency":
+            plt.plot(timestamps, values, color=color,
+                    #label=f'{destination_txt + str(position + 1)}{multiplier_note}',
+                    #label=f'{source_workload_txt + str(position + 1)}{multiplier_note}',
+                    label=f'{destination_txt + str(position + 1)}{multiplier_note}',
+                     linestyle=line_styles[position % len(line_styles)])
+        else:
+            plt.plot(timestamps, values, color=color,
+                     label=f'{destination_txt + str(position + 1)}{multiplier_note}',
+                     # label=f'{source_workload_txt + str(position + 1)} → {destination_txt + str(position + 1)}{multiplier_note}',
+                     linestyle=line_styles[position % len(line_styles)])
+
+
+    # start_time = min(timestamps)
+    # end_time = max(timestamps)
+    #
+    # ticks = np.arange(start_time, end_time + 1, plot_window)
+    # ticks_seconds = [((ts - start_time) // plot_window) * plot_window for ts in ticks]
+    # plt.set_xticks(ticks)
+    # plt.set_xticklabels(ticks_seconds)
+    #
+    # plt.set_xlabel('Time (seconds)')
+    # plt.set_ylabel('rps (requests per second)')
+    # plt.set_title(f'Request volume')
+    # #plt.set_title(f'Requests volume send to {elt}')
+    # if metric_to_plot=="latency":
+    #     plt.set_ylabel('Latency (ms)')
+    #     plt.set_title(f'Request duration')
+    #     #plt.set_title(f'Request duration to {elt}')
+    #
+    # plt.set_ylim(0, max_value)
+
+
+    return []

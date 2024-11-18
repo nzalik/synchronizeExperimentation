@@ -13,11 +13,11 @@ import numpy as np
 import pandas as pd
 
 from utils.constants import get_color_for_service_init, normalization, line_styles, plot_limit, smooth, open_file, \
-    read_parameters_from_json, sort_legend, cpu_limit_max, memory_limit, colors_table
+    read_parameters_from_json, sort_legend, cpu_limit_max, memory_limit, colors_table, plot_json_generic, range_limit, \
+    plot_metrics
 
 #metric_to_plot="request_aggr" #latency or request
 harmonization=False
-range_limit = 6
 
 file_path_json = '../teastore.json'
 
@@ -29,202 +29,6 @@ latency_path = f"{root_path}"
 
 services = ["teastore-webui"]
 #services = ["teastore-auth", "teastore-image", "teastore-persistence", "teastore-recommender", "teastore-registry","teastore-webui"]
-
-def plot_json_generic(file_path, file_name, data_type='cpu'):
-    is_cpu = data_type == 'cpu'
-    label = file_name
-    print(data_type)
-    list_element = sorted(os.listdir(file_path))
-    print(list_element)
-
-    #print(list_element[0])
-    json_data_file1 = open_file(os.path.join(file_path, list_element[0]))
-    #print(list_element[1])
-    json_data_file2 = open_file(os.path.join(file_path, list_element[1]))
-    #print(list_element[2])
-    json_data_file3 = open_file(os.path.join(file_path, list_element[2]))
-    json_data_file4 = open_file(os.path.join(file_path, list_element[3]))
-    json_data_file5 = open_file(os.path.join(file_path, list_element[4]))
-    json_data_file6 = open_file(os.path.join(file_path, list_element[5]))
-    json_data_file7 = open_file(os.path.join(file_path, list_element[6]))
-    #json_data_file8 = open_file(os.path.join(file_path, list_element[7]))
-    #
-    # print(json_data_file1)
-    # print(json_data_file2)
-    # print(json_data_file3)
-    #print(json_data_file4)
-
-    if len(json_data_file1['data']['result']) > 0 :
-        datas1 = json_data_file1['data']['result'][0]['values']
-        datas2 = json_data_file2['data']['result'][0]['values']
-        datas3 = json_data_file3['data']['result'][0]['values']
-        datas4 = json_data_file4['data']['result'][0]['values']
-        datas5 = json_data_file5['data']['result'][0]['values']
-        datas6 = json_data_file6['data']['result'][0]['values']
-        datas7 = json_data_file7['data']['result'][0]['values']
-        #datas8 = json_data_file8['data']['result'][0]['values']
-
-
-        selected_values=[]
-
-        valid_values_list = [datas1, datas2]
-        for values in valid_values_list:
-            if len(values) > plot_limit:
-                selected_values = values
-                break
-        #timestamps = np.array([int(ts) for ts, _ in datas1])
-        timestamps = np.array([int(ts) for ts, _ in selected_values])
-        given_value = 0.0
-
-        greater_than_value = timestamps[timestamps > given_value]
-
-        values1 = [float(value) for _, value in datas1]
-        values2 = [float(value) for _, value in datas2]
-        values3 = [float(value) for _, value in datas3]
-        values4 = [float(value) for _, value in datas4]
-        values5 = [float(value) for _, value in datas5]
-        values6 = [float(value) for _, value in datas6]
-        values7 = [float(value) for _, value in datas7]
-#        values8 = [float(value) for _, value in datas8]
-
-        # print("###########les valeurs#######################")
-        # print(values1)
-        # print(values2)
-        # print(values3)
-        #print(values4)
-
-        longueur_max = plot_limit
-        # longueur_max = max(len(liste) for liste in [values1, values2, values3])
-        for liste in [values1, values2]:
-            if len(liste) > longueur_max:
-                # Couper pour garder les longueur_max derniers éléments
-                del liste[:-longueur_max]
-            else:
-                while len(liste) < longueur_max:
-                 liste.append(0)
-
-
-        values1 = np.array(smooth(values1))
-        values2 = np.array(smooth(values2))
-        values3 = np.array(smooth(values3))
-        values4 = np.array(smooth(values4))
-        values5 = np.array(smooth(values5))
-        values6 = np.array(smooth(values6))
-        values7 = np.array(smooth(values7))
-        #values8 = np.array(smooth(values8))
-
-        # print(len(values1))
-        # print(len(values2))
-        # print(len(values3))
-        #print(len(values4))
-        #print(len(values5))
-
-        meanValues = np.mean([values1, values2], axis=0)
-
-        if not is_cpu:
-            normalized_values = [value / (1000 ** 3) for value in meanValues]
-            last_ten_values = normalized_values[-(len(greater_than_value)):]
-        else:
-            last_ten_values = meanValues[-(len(greater_than_value)):]
-
-        new_timestamps = np.arange(0, plot_limit)
-        lissageValues = last_ten_values
-
-        #color = get_color_for_service_init(label)
-
-
-        current_line = plt.plot([], [], label="")[0]
-        if is_cpu:
-            legend_objectsCpu.append(current_line)
-            legend_labelsCpu.append(label)
-        else:
-            legend_objectsMemory.append(current_line)
-            legend_labelsMemory.append(label)
-
-        #temp_list = [values1, values2]
-        temp_list = [values1, values2,  values4, values5, values6, values7][:range_limit]
-        for index, tab in enumerate(temp_list):
-            print(index)
-            #tab = temp_list[i-1]
-            if is_cpu:
-                plt.plot(new_timestamps, tab, color = colors_table[index], label=label+str(index+1), linestyle=line_styles[index % len(line_styles)])
-            else:
-                plt.plot(new_timestamps, normalization(tab), color = colors_table[index], label=label+str(index+1), linestyle=line_styles[index % len(line_styles)])
-
-        #plt.plot(new_timestamps, lissageValues, color=color, label=label)
-        return new_timestamps
-        #return new_timestamps, lissageValues if is_cpu else new_timestamps
-    return []
-
-def plot_metrics(data, elt, metric_to_plot=""):
-    global timestamps
-    results = data['data']['result']
-
-    for result in results:
-        metric = result['metric']
-        source_workload = metric.get('source_workload', 'unknown')
-        destination = metric.get('destination_workload', elt)
-
-        source_workload_txt = source_workload
-        #source_workload_txt = source_workload.split('-')[1] if '-' in source_workload else source_workload
-        destination_txt = destination
-        #destination_txt = destination.split('-')[1]
-
-        timestamps = np.arange(0, plot_limit)  # Adjust the step value as needed for your specific interval
-
-        valuesInit = [0 if point[1] == "NaN" else float(point[1]) for point in
-                      result['values'][:plot_limit]] + [0] * (
-                             plot_limit - min(plot_limit, len(
-                         result['values'])))  # Remplacer NaN par 0 et compléter avec des 0 si nécessaire
-
-        multiplier_note = ''
-        if harmonization and metric_to_plot == "latency":
-            if destination != 'teastore-webui' and metric_to_plot == "latency":
-                valuesInit = [x * 5 for x in valuesInit]  # Multiply values by a factor for non-webui destinations
-                multiplier_note = ' (x5)'
-            else:
-                multiplier_note = ''
-
-
-        values = smooth(valuesInit)
-        heures = [datetime.fromtimestamp(ts).strftime('%M') for ts in timestamps]
-
-        #color = get_color_for_service_init(source_workload)
-        color = colors_table[position]
-        if metric_to_plot == "latency":
-            plt.plot(timestamps, values, color=color,
-                    #label=f'{destination_txt + str(position + 1)}{multiplier_note}',
-                    #label=f'{source_workload_txt + str(position + 1)}{multiplier_note}',
-                    label=f'{destination_txt + str(position + 1)}{multiplier_note}',
-                     linestyle=line_styles[position % len(line_styles)])
-        else:
-            plt.plot(timestamps, values, color=color,
-                     label=f'{destination_txt + str(position + 1)}{multiplier_note}',
-                     # label=f'{source_workload_txt + str(position + 1)} → {destination_txt + str(position + 1)}{multiplier_note}',
-                     linestyle=line_styles[position % len(line_styles)])
-
-
-    # start_time = min(timestamps)
-    # end_time = max(timestamps)
-    #
-    # ticks = np.arange(start_time, end_time + 1, plot_window)
-    # ticks_seconds = [((ts - start_time) // plot_window) * plot_window for ts in ticks]
-    # plt.set_xticks(ticks)
-    # plt.set_xticklabels(ticks_seconds)
-    #
-    # plt.set_xlabel('Time (seconds)')
-    # plt.set_ylabel('rps (requests per second)')
-    # plt.set_title(f'Request volume')
-    # #plt.set_title(f'Requests volume send to {elt}')
-    # if metric_to_plot=="latency":
-    #     plt.set_ylabel('Latency (ms)')
-    #     plt.set_title(f'Request duration')
-    #     #plt.set_title(f'Request duration to {elt}')
-    #
-    # plt.set_ylim(0, max_value)
-
-
-    return ticks
 
 
 elts = ["li_stairsu_2"]
@@ -244,8 +48,6 @@ for element in services:
     #element = "teastore-webui"
     listElement = [element]
     for x in elts:
-
-        print(x)
         fileToPlot = f"output_{x}"
         #fileToPlot = f"output-linear_{x}requests_max_per_sec.csv"
         #fileToPlot = f"output-linear_80requests_max_per_sec.csv"
@@ -281,11 +83,6 @@ for element in services:
 
         directoryS = save_path + 'cpu/'
 
-
-        #listElement = os.listdir(directoryS)
-       # print("all les elements")
-        #print(listElement)
-
         for element in listElement:
             directory = save_path + f"cpu/{element}/"
             #for file_name in os.listdir(directory):
@@ -294,12 +91,14 @@ for element in services:
             file_parts = file_path.split("/")
             last_part = (file_parts[-1]).split(".")[0]
             result = re.split(r'-\d+', last_part)[0]
-            timestamps = plot_json_generic(directory, element, data_type='cpu')
+            timestamps, current_line, label = plot_json_generic(directory, element, data_type='cpu')
 
 
             if len(timestamps) > 0:
                 all_timestamps.append(timestamps)
                 #all_values.append(values)
+            legend_objectsCpu.append(current_line)
+            legend_labelsCpu.append(label)
 
         # Concatenate all timestamps
         all_timestamps = np.concatenate(all_timestamps)
@@ -347,11 +146,13 @@ for element in services:
             file_parts = file_path.split("/")
             last_part = (file_parts[-1]).split(".")[0]
             result = re.split(r'-\d+', last_part)[0]
-            timestamps2 = plot_json_generic(directory2, last_part, data_type='memory')
+            timestamps2, current_line, label = plot_json_generic(directory2, last_part, data_type='memory')
 
             if len(timestamps2) > 0:
                 all_timestamps2.append(timestamps2)
 
+            legend_objectsMemory.append(current_line)
+            legend_labelsMemory.append(label)
 
         # Concatenate all timestamps
         all_timestamps2 = np.concatenate(all_timestamps2)
@@ -404,7 +205,6 @@ for element in services:
                     # values = [float(x[1]) for x in result["values"]]
                     values = [float(x[1]) for x in result["values"] if x[1] != "NaN"]
                     if values:  # Check if values is not empty
-                        print(max(values))
                         if max(values) > max_value:
                             max_value = max(values)
 
@@ -429,7 +229,7 @@ for element in services:
 
                 timestamps = []
 
-                plot_metrics(data, svc, "request_aggr")
+                plot_metrics(data, svc, int(position), "request_aggr")
 
             time = []
             values = []
@@ -438,11 +238,7 @@ for element in services:
                 time = df.iloc[:, 0].tolist()
                 values = df.iloc[:, 1].tolist()
             except FileNotFoundError:
-                # print(f"Le fichier {file_name} n'a pas été trouvé dans le chemin {plot_path}")
-                # Vous pouvez également faire d'autres traitements ici, comme retourner un DataFrame vide
-                df = pd.DataFrame()
-
-
+              df = pd.DataFrame()
             #plt.plot(time, values, color='green', label='Load Intensity')
             #plt.axhline(y=200, color='r', linestyle='--')
             plt.xlabel('Time (seconds)')
@@ -452,13 +248,11 @@ for element in services:
 
             for i in range(1,range_limit+1):
                 plot_stats_path = f"{root_path}/output/{x}_{i}_stats_history.csv"
-                print(plot_stats_path)
 
                 df_stats = pd.read_csv(plot_stats_path)
 
                 requests = df_stats['Requests/s']
                 requests = requests.reindex(range(299), fill_value=0)
-                print(requests)
 
                 plt.plot(time, requests,  color=colors_table[i-1], linestyle=line_styles[(i-1) % len(line_styles)], label=f"locust_stats_{i}", marker='^', ms=2)
 
@@ -486,7 +280,6 @@ for element in services:
                     # values = [float(x[1]) for x in result["values"]]
                     values = [float(x[1]) for x in result["values"] if x[1] != "NaN"]
                     if values:  # Check if values is not empty
-                        print(max(values))
                         if max(values) > max_value:
                             max_value = max(values)
 
@@ -499,8 +292,6 @@ for element in services:
             time = df.iloc[:, 0].tolist()
             values = df.iloc[:, 1].tolist()
         except FileNotFoundError:
-            # print(f"Le fichier {file_name} n'a pas été trouvé dans le chemin {plot_path}")
-            # Vous pouvez également faire d'autres traitements ici, comme retourner un DataFrame vide
             df = pd.DataFrame()
 
         plt.plot(time, values, color='green', label='Expected users')
@@ -512,16 +303,8 @@ for element in services:
 
         df_stats = pd.read_csv(plot_stats_path)
 
-        # print(df_stats.iloc[0])
-        print("nombre de ligne " + str(len(df_stats['User Count'])))
-        # print(df_stats['Timestamp'])
-        # df_stats = pd.DataFrame()
-
-
         for i in range(1, range_limit+1):
             plot_stats_path = f"{root_path}/output/{x}_{i}_stats_history.csv"
-            print("acrive users")
-            print(plot_stats_path)
 
             df_stats = pd.read_csv(plot_stats_path)
 
@@ -546,7 +329,6 @@ for element in services:
 
 
             for json_filename in json_filenames:
-                #print(json_filename)
                 with open(json_filename) as f:
                     source = json.load(f)
                 data_list = source['data']['result']
@@ -555,27 +337,19 @@ for element in services:
                     # values = [float(x[1]) for x in result["values"]]
                     values = [float(x[1]) for x in result["values"] if x[1] != "NaN"]
                     if values:  # Check if values is not empty
-                        #print(max(values))
                         if max(values) > max_value:
                             max_value = max(values)
 
 
         for idx, svc in enumerate(listElement):
             json_file_path = os.path.join(latency_path, "latency", svc, x)
-            print("concat")
-            print(json_file_path)
 
             json_filenames = sorted(
                 [os.path.join(json_file_path, file) for file in os.listdir(json_file_path)]
             )[:range_limit]
             max_value = math.ceil(max_value / 100) * 100
 
-            print("latency")
-            print(json_filenames)
             for json_filename in json_filenames:
-               # print("***************************************************")
-                #print(json_filenames)
-                #print(len(json_filename))
                 position = json_filenames.index(json_filename)
                 file_name_with_extension = os.path.basename(json_filename)
                 file_name, _ = os.path.splitext(file_name_with_extension)
@@ -587,7 +361,7 @@ for element in services:
 
                 timestamps = []
 
-                plot_metrics(data, svc, "latency")
+                plot_metrics(data, svc, int(position),"latency")
             plt.legend(ncol=2)
             plt.title('Request duration')
             plt.xlabel('Time (seconds)')
@@ -602,6 +376,6 @@ for element in services:
         #my_string = f"{save_graphics_at}/output{str(data_count + 1)}-{x}.png"
         my_string = f"{save_graphics_at}/output{str(data_count + 1)}-{element}.png"
         print(my_string)
-        plt.savefig(my_string)
+        #plt.savefig(my_string)
         plt.show()
         plt.close(fig)
