@@ -76,7 +76,7 @@ for element in train_load_100 train_load_200 train_load_300 social_load_600 soci
       new_folder_path1="$new_folder_base"
       new_folder_path_backup="$new_folder_base/backup"
 
-       for i in $(seq 1 1); do
+       for i in $(seq 1 8); do
           # Créer le déploiement Kubernetes
           helm install socialnetwork $prefix_folder/benchmarks/DeathStarBench/socialNetwork/helm-chart/socialnetwork/
           kubectl rollout status deployment nginx-thrift
