@@ -73,11 +73,11 @@ export KUBECONFIG="${init_root_prefix}admin_collect-data.conf"
       #env INTENSITY_FILE="$prefix_folder$WARMUP_FILE" locust -f $prefix_folder/workload_generators/locust/teastore_locustfile-custom-scale.py --headless --host $host
       #env INTENSITY_FILE="$prefix_folder$WARMUP_FILE" locust -f $prefix_folder/workload_generators/locust/bi_locustfile_request.py --headless --csv $log_exp_folder_path --host $host
 
-     # sleep 120
+      sleep 120
 
       for file_name in $prefix_folder/Load/$element/*.csv;
         do
-            for i in $(seq 1 1);
+            for i in $(seq 1 3);
               do
                 root_file_name=$(basename "$file_name" .csv)
 
@@ -107,8 +107,8 @@ export KUBECONFIG="${init_root_prefix}admin_collect-data.conf"
 
                 sleep 60
 
-                #python3 $prefix_folder/Fetcher/fetch_organized_for_mean_order.py "$result" "$workload_dir" "$exp_folder_path" "$time_obj" "$PROMETHEUS_URL" "$DURATION" "$prefix_folder" "$i"
-                #python3 $prefix_folder/Fetcher/istio_metric_fetch_order.py "$new_folder_path1" "$time_obj" "$istio_path" "$PROMETHEUS_URL" "$DURATION" "$root_file_name" "$i"
+                python3 $prefix_folder/Fetcher/fetch_organized_for_mean_order.py "$result" "$workload_dir" "$exp_folder_path" "$time_obj" "$PROMETHEUS_URL" "$DURATION" "$prefix_folder" "$i"
+                python3 $prefix_folder/Fetcher/istio_metric_fetch_order.py "$new_folder_path1" "$time_obj" "$istio_path" "$PROMETHEUS_URL" "$DURATION" "$root_file_name" "$i"
                 #python3 $prefix_folder/Fetcher/istio_metric_fetch_backup.py "$new_folder_path_backup" "$time_obj" $metric_path $istio_path $root_file_name
 
           done
