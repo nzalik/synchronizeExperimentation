@@ -49,7 +49,7 @@ host="$WEBUI"
 export KUBECONFIG="${init_root_prefix}admin_collect-data.conf"
 
 # This script deployed every necessary configuration for istio mesh
-/bin/bash "$prefix_folder/mesh/istio.sh" $prefix_folder
+#/bin/bash "$prefix_folder/mesh/istio.sh" $prefix_folder
 
   #number=$((number + 1))
   #new_folder_path="${new_folder_path1}/${number}"

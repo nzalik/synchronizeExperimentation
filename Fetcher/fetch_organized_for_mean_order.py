@@ -128,8 +128,7 @@ for section_name in config.sections():
     query_str2 = f"sum(irate(container_cpu_usage_seconds_total{{namespace=\"default\", container!=\"\"}}[{cpu_step}])) by (container)"
     query_str3 = "sum(container_memory_usage_bytes{namespace=\"default\", container!=\"\"}) by (container)"
     query_str4 = "kube_pod_container_status_restarts_total{namespace=\"default\", container!=\"\"}"
-    query_str5 = """topk(10, rate(container_cpu_usage_seconds_total{container!="POD"}[2m])) by (pod)
-"""
+    query_str5 = """sort_desc(sum(rate(container_cpu_usage_seconds_total{namespace="default", container!="", container!~"^istio.*"}[5m]))  by (container))"""
 
     url = prom_url + '/api/v1/query_range?'
 
