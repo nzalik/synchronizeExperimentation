@@ -26,7 +26,7 @@ parent_dir=$(dirname $(pwd))
 # has been done on which day
 date_str=$(date +"%d-%m-%Y")
 
-site="nantes"
+site="nantes/ecotype"
 # The relative path for storing experiments data
 category="128/linear/3nodes/linear"
 
@@ -66,7 +66,8 @@ export KUBECONFIG="${init_root_prefix}$CERTIFICATE"
 #kubectl create secret docker-registry docker-registry-secret --docker-server=https://gricad-registry.univ-grenoble-alpes.fr --docker-username=chouette --docker-password=esVsrrxsLA9sJ_nzPurJ
 
 
-for element in train_load_100 train_load_200 train_load_300 social_load_600 social_load_900
+for element in train_load_300 social_load_600
+#for element in train_load_100 train_load_200 train_load_300 social_load_600 social_load_900
   #for element in load1
     do
       # Complete relative path for data storage
