@@ -128,7 +128,8 @@ for section_name in config.sections():
     query_str2 = f"sum(irate(container_cpu_usage_seconds_total{{namespace=\"default\", container!=\"\"}}[{cpu_step}])) by (container)"
     query_str3 = "sum(container_memory_usage_bytes{namespace=\"default\", container!=\"\"}) by (container)"
     query_str4 = "kube_pod_container_status_restarts_total{namespace=\"default\", container!=\"\"}"
-    query_str5 = """sort_desc(sum(rate(container_cpu_usage_seconds_total{namespace="default", container!="", container!~"^istio.*"}[5m]))  by (container))"""
+    query_str5 = """topk(64, sum(rate(container_cpu_usage_seconds_total{namespace="default"}[5m])) by (pod))
+"""
 
     url = prom_url + '/api/v1/query_range?'
 
@@ -232,7 +233,7 @@ for section_name in config.sections():
 
         if res5 != None and len(res['data']['result']) > 0:
             with open(query_str_file5, 'a') as f:
-                json.dump(res4, f, ensure_ascii=False)
+                json.dump(res5, f, ensure_ascii=False)
     except Exception as e:
         print(e)
         print("...Fail at Prometheus request.")
