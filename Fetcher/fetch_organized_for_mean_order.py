@@ -128,6 +128,7 @@ for section_name in config.sections():
     query_str2 = f"sum(irate(container_cpu_usage_seconds_total{{namespace=\"default\", container!=\"\"}}[{cpu_step}])) by (container)"
     query_str3 = "sum(container_memory_usage_bytes{namespace=\"default\", container!=\"\"}) by (container)"
     query_str4 = "kube_pod_container_status_restarts_total{namespace=\"default\", container!=\"\"}"
+    query_str5 = """sum(rate(container_cpu_usage_seconds_total{namespace="your-namespace"}[5m])) by (pod)"""
 
     url = prom_url + '/api/v1/query_range?'
 
@@ -135,6 +136,7 @@ for section_name in config.sections():
     payload2 = {'query': query_str2, 'start': new_timestampManual, 'end': target_timeManual, 'step': step}
     payload3 = {'query': query_str3, 'start': new_timestampManual, 'end': target_timeManual, 'step': step}
     payload4 = {'query': query_str4, 'start': new_timestampManual, 'end': target_timeManual, 'step': step}
+    payload5 = {'query': query_str5, 'start': new_timestampManual, 'end': target_timeManual, 'step': step}
 
     res = None
 
@@ -150,12 +152,15 @@ for section_name in config.sections():
     filename2 = f'{exp_nb}_aggregation_{profile}.json'
     filename3 = f'{exp_nb}_aggregation_memory_{profile}.json'
     filename4 = f'{exp_nb}_pod_restart_{profile}.json'
+    filename5 = f'{exp_nb}_top_{profile}.json'
+
     query_str_file = os.path.join(directory2, filename)
 
     query_str_file2 = os.path.join(directory3, filename2)
     query_str_file3 = os.path.join(directory3, filename3)
     query_str_file4 = os.path.join(directory3, filename4)
-    
+    query_str_file5 = os.path.join(directory3, filename5)
+
     # if os.path.exists(query_str_file2):
     #     base, ext = os.path.splitext(filename2)
     #     counter = 1
@@ -204,6 +209,9 @@ for section_name in config.sections():
 
         res4 = requests.post(url, headers={'Content-Type': 'application/x-www-form-urlencoded'},
                              data=payload4).json()
+
+        res5 = requests.post(url, headers={'Content-Type': 'application/x-www-form-urlencoded'},
+                             data=payload5).json()
         # print("la reponse pour les pods")
         # print(res)
         if res != None and len(res['data']['result']) > 0:
@@ -222,6 +230,9 @@ for section_name in config.sections():
             with open(query_str_file4, 'a') as f:
                 json.dump(res4, f, ensure_ascii=False)
 
+        if res5 != None and len(res['data']['result']) > 0:
+            with open(query_str_file5, 'a') as f:
+                json.dump(res4, f, ensure_ascii=False)
     except Exception as e:
         print(e)
         print("...Fail at Prometheus request.")

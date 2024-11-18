@@ -53,7 +53,8 @@ export KUBECONFIG="${init_root_prefix}admin_collect-data.conf"
 
   #number=$((number + 1))
   #new_folder_path="${new_folder_path1}/${number}"
-  for element in train_load_100 train_load_200 train_load_300
+  for element in load3
+  #for element in train_load_100 train_load_200 train_load_300
     do
       # Complete relative path for data storage
       new_folder_base="$parent_dir/synchronizeExperimentation/locust/$site/train/$date_str/${element}$PATH_SUFFIX/hyperthreading"
@@ -76,7 +77,7 @@ export KUBECONFIG="${init_root_prefix}admin_collect-data.conf"
 
       for file_name in $prefix_folder/Load/$element/*.csv;
         do
-            for i in $(seq 1 8);
+            for i in $(seq 1 2);
               do
                 root_file_name=$(basename "$file_name" .csv)
 
@@ -102,7 +103,7 @@ export KUBECONFIG="${init_root_prefix}admin_collect-data.conf"
 
 
                 #env INTENSITY_FILE=$file_name locust -f ./request_type/bi_locustfile_request.py --headless --csv=log --csv-full-history
-                env INTENSITY_FILE="$file_name" locust -f $prefix_folder/workload_generators/locust/bi_locustfile_request.py --headless --csv $log_exp_folder_path --host $host
+                env INTENSITY_FILE="$file_name" locust -f $prefix_folder/workload_generators/locust/deep_load_generator_train.py --headless --csv $log_exp_folder_path --host $host
 
                 sleep 60
 
@@ -112,7 +113,7 @@ export KUBECONFIG="${init_root_prefix}admin_collect-data.conf"
 
           done
       done
-        kubectl delete -f $prefix_folder/benchmarks/train-ticket/ts-deployment-part1.yml
-        kubectl delete -f $prefix_folder/benchmarks/train-ticket/ts-deployment-part2.yml
-        kubectl delete -f $prefix_folder/benchmarks/train-ticket/ts-deployment-part3.yml
+        #kubectl delete -f $prefix_folder/benchmarks/train-ticket/ts-deployment-part1.yml
+        #kubectl delete -f $prefix_folder/benchmarks/train-ticket/ts-deployment-part2.yml
+        #kubectl delete -f $prefix_folder/benchmarks/train-ticket/ts-deployment-part3.yml
     done
