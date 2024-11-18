@@ -53,7 +53,7 @@ export KUBECONFIG="${init_root_prefix}admin_collect-data.conf"
 
   #number=$((number + 1))
   #new_folder_path="${new_folder_path1}/${number}"
-  for element in load3
+  for element in load1 load2
   #for element in train_load_100 train_load_200 train_load_300
     do
       # Complete relative path for data storage
@@ -62,22 +62,22 @@ export KUBECONFIG="${init_root_prefix}admin_collect-data.conf"
       new_folder_path1="$new_folder_base"
       new_folder_path_backup="$new_folder_base/backup"
 
-      # kubectl create -f $prefix_folder/benchmarks/train-ticket/ts-deployment-part1.yml
-      # sleep 120
-     #  kubectl create -f $prefix_folder/benchmarks/train-ticket/ts-deployment-part2.yml
-      # kubectl create -f $prefix_folder/benchmarks/train-ticket/ts-deployment-part3.yml
+      kubectl create -f $prefix_folder/benchmarks/train-ticket/ts-deployment-part1.yml
+      sleep 120
+      kubectl create -f $prefix_folder/benchmarks/train-ticket/ts-deployment-part2.yml
+      kubectl create -f $prefix_folder/benchmarks/train-ticket/ts-deployment-part3.yml
       # kubectl apply  -f trainticket-gateway.yaml
-      #sleep 480
-      #python3 $prefix_folder/workload_generators/locust/ts_api_invoke_test.py $host
+      sleep 480
+      python3 $prefix_folder/workload_generators/locust/ts_api_invoke_test.py $host
 
       #env INTENSITY_FILE="$prefix_folder$WARMUP_FILE" locust -f $prefix_folder/workload_generators/locust/teastore_locustfile-custom-scale.py --headless --host $host
       #env INTENSITY_FILE="$prefix_folder$WARMUP_FILE" locust -f $prefix_folder/workload_generators/locust/bi_locustfile_request.py --headless --csv $log_exp_folder_path --host $host
 
-      #sleep 120
+      sleep 120
 
       for file_name in $prefix_folder/Load/$element/*.csv;
         do
-            for i in $(seq 1 1);
+            for i in $(seq 1 4);
               do
                 root_file_name=$(basename "$file_name" .csv)
 
@@ -105,7 +105,7 @@ export KUBECONFIG="${init_root_prefix}admin_collect-data.conf"
                 #env INTENSITY_FILE=$file_name locust -f ./request_type/bi_locustfile_request.py --headless --csv=log --csv-full-history
                 env INTENSITY_FILE="$file_name" locust -f $prefix_folder/workload_generators/locust/deep_load_generator_train.py --headless --csv $log_exp_folder_path --host $host
 
-                sleep 60
+                sleep 80
 
                 python3 $prefix_folder/Fetcher/fetch_organized_for_mean_order.py "$result" "$workload_dir" "$exp_folder_path" "$time_obj" "$PROMETHEUS_URL" "$DURATION" "$prefix_folder" "$i"
                 python3 $prefix_folder/Fetcher/istio_metric_fetch_order.py "$new_folder_path1" "$time_obj" "$istio_path" "$PROMETHEUS_URL" "$DURATION" "$root_file_name" "$i"
@@ -113,7 +113,7 @@ export KUBECONFIG="${init_root_prefix}admin_collect-data.conf"
 
           done
       done
-        #kubectl delete -f $prefix_folder/benchmarks/train-ticket/ts-deployment-part1.yml
-        #kubectl delete -f $prefix_folder/benchmarks/train-ticket/ts-deployment-part2.yml
-        #kubectl delete -f $prefix_folder/benchmarks/train-ticket/ts-deployment-part3.yml
+        kubectl delete -f $prefix_folder/benchmarks/train-ticket/ts-deployment-part1.yml
+        kubectl delete -f $prefix_folder/benchmarks/train-ticket/ts-deployment-part2.yml
+        kubectl delete -f $prefix_folder/benchmarks/train-ticket/ts-deployment-part3.yml
     done
