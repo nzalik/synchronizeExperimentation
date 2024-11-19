@@ -61,9 +61,9 @@ host="$WEBUI"
 export KUBECONFIG="${init_root_prefix}$CERTIFICATE"
 
 # This script deployed every necessary configuration for istio mesh
-/bin/bash "$prefix_folder/mesh/istio.sh" $prefix_folder
+#/bin/bash "$prefix_folder/mesh/istio.sh" $prefix_folder
 
-kubectl create secret docker-registry docker-registry-secret --docker-server=https://gricad-registry.univ-grenoble-alpes.fr --docker-username=chouette --docker-password=esVsrrxsLA9sJ_nzPurJ
+#kubectl create secret docker-registry docker-registry-secret --docker-server=https://gricad-registry.univ-grenoble-alpes.fr --docker-username=chouette --docker-password=esVsrrxsLA9sJ_nzPurJ
 
 
 for element in train_load_300 social_load_600 social_load_900
