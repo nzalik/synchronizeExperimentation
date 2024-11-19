@@ -21,17 +21,17 @@ harmonization=False
 
 file_path_json = '../teastore.json'
 
-csv_file_path = "/home/erods-chouette/Documents/synchronizeExperimentation/Load/load1/"
+csv_file_path = "/home/erods-chouette/Documents/synchronizeExperimentation/Load/train_load_200/"
 
 
-root_path = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/nantes/train/19-11-2024/load1profile_with_deep_locustfile/hyperthreading"
+root_path = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/nantes/socialNetwork/socialNetwork/18-11-2024/train_load_200_sequential_restart/hyperthreading"
 latency_path = f"{root_path}"
-#services = ["ts-food-service"]
-services = ["ts-order-other-service", "ts-auth-service", "ts-order-other-service", "ts-station-service", "ts-train-service", "ts-food-service", "ts-ticketinfo-service", "ts-basic-service", "ts-route-service"]
+services = ["compose-post-service"]
+#services = ["ts-order-other-service", "ts-auth-service", "ts-order-other-service", "ts-station-service", "ts-train-service", "ts-food-service", "ts-ticketinfo-service", "ts-basic-service", "ts-route-service"]
 #services = ["teastore-auth", "teastore-image", "teastore-persistence", "teastore-recommender", "teastore-registry","teastore-webui"]
 
 
-elts = ["si_sin_2"]
+elts = ["li_linear_200"]
 #elts = ["li_const_2","linear_10","li_stairsd_2","li_stairsu_2","si_sin_2"]
 #elts = ["li_stairsu_2","li_stairsd_2","li_stairsu_2","si_sin_2"]
 #elts = ["li_const_2","linear_10", "li_stairsd_2","li_stairsu_2","si_sin_2"]
@@ -191,46 +191,29 @@ for element in services:
 
         json_filenames = []
         plot_stats_path=""
-        # retrieve the max size to pyt ylim for all plots
-        for idx, svc in enumerate(services):
-            json_file_path = os.path.join(latency_path,"request_aggr", svc, x)
-            json_filenames = sorted([os.path.join(json_file_path, file) for file in
-                              os.listdir(json_file_path)[:range_limit]])  # Take the first 3 elements
-
-            for json_filename in json_filenames:
-                with open(json_filename) as f:
-                    source = json.load(f)
-                data_list = source['data']['result']
-                for json_data in data_list:
-                    result = json_data
-                    # values = [float(x[1]) for x in result["values"]]
-                    values = [float(x[1]) for x in result["values"] if x[1] != "NaN"]
-                    if values:  # Check if values is not empty
-                        if max(values) > max_value:
-                            max_value = max(values)
 
         for idx, svc in enumerate(listElement):
 
 
-            json_file_path = os.path.join(latency_path, "request_aggr", svc, x)
-
-            json_filenames = sorted([os.path.join(json_file_path, file) for file in
-                              os.listdir(json_file_path)[:range_limit]])
-
-            max_value = math.ceil(max_value / 100) * 100
-
-            for json_filename in json_filenames:
-                position = json_filenames.index(json_filename)
-                file_name_with_extension = os.path.basename(json_filename)
-                file_name, _ = os.path.splitext(file_name_with_extension)
-
-                # Charger le JSON depuis un fichier
-                with open(json_filename) as f:
-                    data = json.load(f)
-
-                timestamps = []
-
-                plot_metrics(data, svc, int(position), "request_aggr")
+            # json_file_path = os.path.join(latency_path, "request_aggr", svc, x)
+            #
+            # json_filenames = sorted([os.path.join(json_file_path, file) for file in
+            #                   os.listdir(json_file_path)[:range_limit]])
+            #
+            # max_value = math.ceil(max_value / 100) * 100
+            #
+            # for json_filename in json_filenames:
+            #     position = json_filenames.index(json_filename)
+            #     file_name_with_extension = os.path.basename(json_filename)
+            #     file_name, _ = os.path.splitext(file_name_with_extension)
+            #
+            #     # Charger le JSON depuis un fichier
+            #     with open(json_filename) as f:
+            #         data = json.load(f)
+            #
+            #     timestamps = []
+            #
+            #     plot_metrics(data, svc, int(position), "request_aggr")
 
             time = []
             values = []
@@ -262,27 +245,27 @@ for element in services:
 #-------------------------------------------------------------------------
         plt.subplot(5, 1, 4)
 
-        max_value = 0
-
-        json_filenames = []
-
-        # retrieve the max size to pyt ylim for all plots
-        for idx, svc in enumerate(services):
-            json_file_path = os.path.join(latency_path, "request_aggr", svc, x)
-            json_filenames = sorted([os.path.join(json_file_path, file) for file in
-                                     os.listdir(json_file_path)[:3]])  # Take the first 3 elements
-
-            for json_filename in json_filenames:
-                with open(json_filename) as f:
-                    source = json.load(f)
-                data_list = source['data']['result']
-                for json_data in data_list:
-                    result = json_data
-                    # values = [float(x[1]) for x in result["values"]]
-                    values = [float(x[1]) for x in result["values"] if x[1] != "NaN"]
-                    if values:  # Check if values is not empty
-                        if max(values) > max_value:
-                            max_value = max(values)
+        # max_value = 0
+        #
+        # json_filenames = []
+        #
+        # # retrieve the max size to pyt ylim for all plots
+        # for idx, svc in enumerate(services):
+        #     json_file_path = os.path.join(latency_path, "request_aggr", svc, x)
+        #     json_filenames = sorted([os.path.join(json_file_path, file) for file in
+        #                              os.listdir(json_file_path)[:3]])  # Take the first 3 elements
+        #
+        #     for json_filename in json_filenames:
+        #         with open(json_filename) as f:
+        #             source = json.load(f)
+        #         data_list = source['data']['result']
+        #         for json_data in data_list:
+        #             result = json_data
+        #             # values = [float(x[1]) for x in result["values"]]
+        #             values = [float(x[1]) for x in result["values"] if x[1] != "NaN"]
+        #             if values:  # Check if values is not empty
+        #                 if max(values) > max_value:
+        #                     max_value = max(values)
 
 
 
@@ -315,60 +298,6 @@ for element in services:
             plt.plot(time, user_count, color=colors_table[i-1], linestyle=line_styles[(i-1) % len(line_styles)], label=f"active_users_{i}")
         plt.legend(loc='upper left', frameon=False, ncol=2)
 
-#-------------------------------------------------------------------------
-        plt.subplot(5, 1, 5)
-
-        max_value = 0
-
-        json_filenames = []
-
-        # retrieve the max size to pyt ylim for all plots
-        for idx, svc in enumerate(services):
-            json_file_path = os.path.join(latency_path, "latency", svc, x)
-            json_filenames = sorted([os.path.join(json_file_path, file) for file in
-                                     os.listdir(json_file_path)[:range_limit]])  # Take the first 3 elements
-
-
-            for json_filename in json_filenames:
-                with open(json_filename) as f:
-                    source = json.load(f)
-                data_list = source['data']['result']
-                for json_data in data_list:
-                    result = json_data
-                    # values = [float(x[1]) for x in result["values"]]
-                    values = [float(x[1]) for x in result["values"] if x[1] != "NaN"]
-                    if values:  # Check if values is not empty
-                        if max(values) > max_value:
-                            max_value = max(values)
-
-
-        for idx, svc in enumerate(listElement):
-            json_file_path = os.path.join(latency_path, "latency", svc, x)
-
-            json_filenames = sorted(
-                [os.path.join(json_file_path, file) for file in os.listdir(json_file_path)]
-            )[:range_limit]
-            max_value = math.ceil(max_value / 100) * 100
-
-            for json_filename in json_filenames:
-                position = json_filenames.index(json_filename)
-                file_name_with_extension = os.path.basename(json_filename)
-                file_name, _ = os.path.splitext(file_name_with_extension)
-
-
-                # Charger le JSON depuis un fichier
-                with open(json_filename) as f:
-                    data = json.load(f)
-
-                timestamps = []
-
-                plot_metrics(data, svc, int(position),"latency")
-            plt.legend(ncol=2)
-            plt.title('Request duration')
-            plt.xlabel('Time (seconds)')
-            plt.ylabel('Latency (ms)')
-            #plt.yscale('log')
-            plt.ylim(0, max_value)
 
         plt.tight_layout()
 
@@ -377,6 +306,6 @@ for element in services:
         #my_string = f"{save_graphics_at}/output{str(data_count + 1)}-{x}.png"
         my_string = f"{save_graphics_at}/output{str(data_count + 1)}-{element}-{x}.png"
         print(my_string)
-        plt.savefig(my_string)
+        #plt.savefig(my_string)
         plt.show()
         plt.close(fig)
