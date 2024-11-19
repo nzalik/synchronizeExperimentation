@@ -26,7 +26,7 @@ parent_dir=$(dirname $(pwd))
 # has been done on which day
 date_str=$(date +"%d-%m-%Y")
 
-site="nantes/ecotype"
+site="nantes"
 # The relative path for storing experiments data
 category="128/linear/3nodes/linear"
 
