@@ -49,7 +49,7 @@ host="$WEBUI"
 export KUBECONFIG="${init_root_prefix}admin_collect-data.conf"
 
 # This script deployed every necessary configuration for istio mesh
-#/bin/bash "$prefix_folder/mesh/istio.sh" $prefix_folder
+/bin/bash "$prefix_folder/mesh/istio.sh" $prefix_folder
 
   #number=$((number + 1))
   #new_folder_path="${new_folder_path1}/${number}"
@@ -77,7 +77,7 @@ export KUBECONFIG="${init_root_prefix}admin_collect-data.conf"
 
       for file_name in $prefix_folder/Load/$element/*.csv;
         do
-            for i in $(seq 1 4);
+            for i in $(seq 1 8);
               do
                 root_file_name=$(basename "$file_name" .csv)
 
