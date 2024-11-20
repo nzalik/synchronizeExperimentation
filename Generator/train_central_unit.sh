@@ -53,7 +53,7 @@ export KUBECONFIG="${init_root_prefix}admin_collect-data.conf"
 
   #number=$((number + 1))
   #new_folder_path="${new_folder_path1}/${number}"
-  for element in load1 load2
+  for element in load1
   #for element in train_load_100 train_load_200 train_load_300
     do
       # Complete relative path for data storage
@@ -77,7 +77,7 @@ export KUBECONFIG="${init_root_prefix}admin_collect-data.conf"
 
       for file_name in $prefix_folder/Load/$element/*.csv;
         do
-            for i in $(seq 1 8);
+            for i in $(seq 1 1);
               do
                 root_file_name=$(basename "$file_name" .csv)
 
