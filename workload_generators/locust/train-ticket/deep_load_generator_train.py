@@ -458,10 +458,6 @@ class TrainTicketUserTasks(TaskSet):
 
         print(f"start:{start_time} end:{end_time}")
 
-
-
-
-                       
     def query_high_speed_ticket(self,place_pair: tuple = ("Shang Hai", "Su Zhou"), headers: dict = {},
                                 time: str = "2021-07-15") -> List[str]:
         """

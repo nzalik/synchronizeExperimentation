@@ -46,7 +46,7 @@ host="$WEBUI"
 
 # The kubernetes credentials to used for entering the cluster
 #export KUBECONFIG=~/admin_collect-data.conf
-export KUBECONFIG="${init_root_prefix}admin_collect-data.conf"
+export KUBECONFIG="${init_root_prefix}$CERTIFICATE"
 
 # This script deployed every necessary configuration for istio mesh
 /bin/bash "$prefix_folder/mesh/istio.sh" $prefix_folder
@@ -62,22 +62,21 @@ export KUBECONFIG="${init_root_prefix}admin_collect-data.conf"
       new_folder_path1="$new_folder_base"
       new_folder_path_backup="$new_folder_base/backup"
 
-      kubectl create -f $prefix_folder/benchmarks/train-ticket/ts-deployment-part1.yml
-      sleep 120
-      kubectl create -f $prefix_folder/benchmarks/train-ticket/ts-deployment-part2.yml
-      kubectl create -f $prefix_folder/benchmarks/train-ticket/ts-deployment-part3.yml
-      # kubectl apply  -f trainticket-gateway.yaml
-      sleep 480
-      python3 $prefix_folder/workload_generators/locust/ts_api_invoke_test.py $host
-
-      #env INTENSITY_FILE="$prefix_folder$WARMUP_FILE" locust -f $prefix_folder/workload_generators/locust/teastore_locustfile-custom-scale.py --headless --host $host
-      #env INTENSITY_FILE="$prefix_folder$WARMUP_FILE" locust -f $prefix_folder/workload_generators/locust/bi_locustfile_request.py --headless --csv $log_exp_folder_path --host $host
-
-      sleep 120
-
       for file_name in $prefix_folder/Load/$element/*.csv;
+        kubectl create -f $prefix_folder/benchmarks/train-ticket/ts-deployment-part1.yml
+        sleep 120
+        kubectl create -f $prefix_folder/benchmarks/train-ticket/ts-deployment-part2.yml
+        kubectl create -f $prefix_folder/benchmarks/train-ticket/ts-deployment-part3.yml
+        # kubectl apply  -f trainticket-gateway.yaml
+        sleep 480
+        #python3 $prefix_folder/workload_generators/locust/train-ticket/ts_api_invoke_test.py $host
+
+        #env INTENSITY_FILE="$prefix_folder$WARMUP_FILE" locust -f $prefix_folder/workload_generators/locust/teastore_locustfile-custom-scale.py --headless --host $host
+        #env INTENSITY_FILE="$prefix_folder$WARMUP_FILE" locust -f $prefix_folder/workload_generators/locust/bi_locustfile_request.py --headless --csv $log_exp_folder_path --host $host
+
+        #sleep 120
         do
-            for i in $(seq 1 1);
+            for i in $(seq 1 6);
               do
                 root_file_name=$(basename "$file_name" .csv)
 
@@ -103,7 +102,7 @@ export KUBECONFIG="${init_root_prefix}admin_collect-data.conf"
 
 
                 #env INTENSITY_FILE=$file_name locust -f ./request_type/bi_locustfile_request.py --headless --csv=log --csv-full-history
-                env INTENSITY_FILE="$file_name" locust -f $prefix_folder/workload_generators/locust/deep_load_generator_train.py --headless --csv $log_exp_folder_path --host $host
+                env INTENSITY_FILE="$file_name" locust -f $prefix_folder/workload_generators/locust/train-ticket/locust_home.py --headless --csv $log_exp_folder_path --host $host
 
                 sleep 80
 
@@ -112,8 +111,8 @@ export KUBECONFIG="${init_root_prefix}admin_collect-data.conf"
                 #python3 $prefix_folder/Fetcher/istio_metric_fetch_backup.py "$new_folder_path_backup" "$time_obj" $metric_path $istio_path $root_file_name
 
           done
-      done
         kubectl delete -f $prefix_folder/benchmarks/train-ticket/ts-deployment-part1.yml
         kubectl delete -f $prefix_folder/benchmarks/train-ticket/ts-deployment-part2.yml
         kubectl delete -f $prefix_folder/benchmarks/train-ticket/ts-deployment-part3.yml
+      done
     done

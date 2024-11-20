@@ -128,8 +128,9 @@ for section_name in config.sections():
     query_str2 = f"sum(irate(container_cpu_usage_seconds_total{{namespace=\"default\", container!=\"\"}}[{cpu_step}])) by (container)"
     query_str3 = "sum(container_memory_usage_bytes{namespace=\"default\", container!=\"\"}) by (container)"
     query_str4 = "kube_pod_container_status_restarts_total{namespace=\"default\", container!=\"\"}"
-    query_str5 = """topk(64, sum(rate(container_cpu_usage_seconds_total{namespace="default"}[5m])) by (pod))
-"""
+    query_str5 = f"""topk(64, sum(rate(container_cpu_usage_seconds_total{{namespace="default"}}[{cpu_step}])) by (pod))"""
+    query_str6 = f"""topk(64, histogram_quantile(0.95, sum(rate(istio_request_duration_milliseconds_bucket{{namespace="default"}}[{interval}])) by (le, destination_workload)))"""
+
 
     url = prom_url + '/api/v1/query_range?'
 
@@ -138,6 +139,7 @@ for section_name in config.sections():
     payload3 = {'query': query_str3, 'start': new_timestampManual, 'end': target_timeManual, 'step': step}
     payload4 = {'query': query_str4, 'start': new_timestampManual, 'end': target_timeManual, 'step': step}
     payload5 = {'query': query_str5, 'start': new_timestampManual, 'end': target_timeManual, 'step': step}
+    payload6 = {'query': query_str6, 'start': new_timestampManual, 'end': target_timeManual, 'step': step}
 
     res = None
 
@@ -154,6 +156,7 @@ for section_name in config.sections():
     filename3 = f'{exp_nb}_aggregation_memory_{profile}.json'
     filename4 = f'{exp_nb}_pod_restart_{profile}.json'
     filename5 = f'{exp_nb}_top_{profile}.json'
+    filename6 = f'{exp_nb}_latency_top_{profile}.json'
 
     query_str_file = os.path.join(directory2, filename)
 
@@ -161,6 +164,7 @@ for section_name in config.sections():
     query_str_file3 = os.path.join(directory3, filename3)
     query_str_file4 = os.path.join(directory3, filename4)
     query_str_file5 = os.path.join(directory3, filename5)
+    query_str_file6 = os.path.join(directory3, filename6)
 
     # if os.path.exists(query_str_file2):
     #     base, ext = os.path.splitext(filename2)
@@ -213,6 +217,9 @@ for section_name in config.sections():
 
         res5 = requests.post(url, headers={'Content-Type': 'application/x-www-form-urlencoded'},
                              data=payload5).json()
+
+        res6 = requests.post(url, headers={'Content-Type': 'application/x-www-form-urlencoded'},
+                             data=payload6).json()
         # print("la reponse pour les pods")
         # print(res)
         if res != None and len(res['data']['result']) > 0:
@@ -234,6 +241,10 @@ for section_name in config.sections():
         if res5 != None and len(res['data']['result']) > 0:
             with open(query_str_file5, 'a') as f:
                 json.dump(res5, f, ensure_ascii=False)
+
+        if res6 != None and len(res['data']['result']) > 0:
+            with open(query_str_file6, 'a') as f:
+                json.dump(res6, f, ensure_ascii=False)
     except Exception as e:
         print(e)
         print("...Fail at Prometheus request.")

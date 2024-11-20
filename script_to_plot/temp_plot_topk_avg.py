@@ -6,7 +6,7 @@ import numpy as np
 
 from utils.constants import plot_limit
 
-file_path="/home/erods-chouette/Documents/synchronizeExperimentation/locust/nantes/train/19-11-2024/load2profile_with_deep_locustfile/hyperthreading/li_const_2/aggregation/1_top_li_const_2.json"
+file_path="/home/erods-chouette/Documents/synchronizeExperimentation/locust/nantes/train/19-11-2024/load1profile_with_deep_locustfile_extended/hyperthreading/li_stairsu_2/aggregation/2_top_li_stairsu_2.json"
 
 # Lire les données depuis un fichier JSON
 with open(file_path, 'r') as file:
@@ -51,7 +51,7 @@ for pod_name, metrics in top_pods:
 # Configurer le graphique
 plt.title(f'Top {top_n} Pod Consumers Over Time')
 plt.xlabel('Timestamp')
-plt.ylabel('Metric Value')
+plt.ylabel('CPU')
 plt.xticks(rotation=45, ha='right')
 plt.legend(title="Pods")
 #plt.grid(True, linestyle='--', alpha=0.6)

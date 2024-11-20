@@ -14,25 +14,27 @@ import pandas as pd
 
 from utils.constants import get_color_for_service_init, normalization, line_styles, plot_limit, smooth, open_file, \
     read_parameters_from_json, sort_legend, cpu_limit_max, memory_limit, colors_table, range_limit, plot_json_generic, \
-    harmonization, plot_metrics
+    harmonization, plot_metrics, request_volume_limit, load_max
 
 #metric_to_plot="request_aggr" #latency or request
 
-request_volume_limit = 50
+
 #range_limit = 7
 
 file_path_json = '../teastore.json'
 
-csv_file_path = "/home/erods-chouette/Documents/synchronizeExperimentation/Load/train_load_100/"
+csv_file_path = "/home/erods-chouette/Documents/synchronizeExperimentation/Load/load1/"
 
-root_path = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/nantes/train/train_load_100profile_called_sequentially/hyperthreading"
+root_path = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/nantes/train/19-11-2024/load1profile_with_deep_locustfile_extended/hyperthreading"
 
 latency_path = root_path
 
-services = ["ts-ui-dashboard"]
+#services = ["ts-ui-dashboard"]
+services = ["ts-inside-payment-service","ts-order-other-service","ts-auth-service","ts-ui-dashboard", "ts-order-other-service", "ts-station-service", "ts-travel-service", "ts-food-service", "ts-ticketinfo-service","ts-basic-service"]
+
 #services = ["teastore-auth", "teastore-image", "teastore-persistence", "teastore-recommender", "teastore-registry","teastore-webui"]
 
-elts = ["li_linear_100"]
+elts = ["li_const_2"]
 #elts = ["li_stairsu_2","li_stairsd_2","li_stairsu_2","si_sin_2"]
 #elts = ["li_const_2","linear_10", "li_stairsd_2","li_stairsu_2","si_sin_2"]
 #elts = ["li_const_2","linear_50","li_stairsd_2","li_stairsu_2","rd_bell_2","rd_jump_2","rd_stairs_2","si_abscos_2","si_abssin_2","si_cos_2","si_log_2","si_sin_2"]
@@ -60,6 +62,7 @@ for element in services:
 
         #save_graphics_at = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/load2/nantes/hyperthreading/128/linear/3nodes/linear/mean_calculation/{x}/Plots"
         save_graphics_at = f"{root_path}/{x}/Plots/merge"
+        full_path = os.path.join(save_graphics_at, x)
 
         parameters = read_parameters_from_json(file_path_json)
 
@@ -78,8 +81,8 @@ for element in services:
         #save_graphics_at = f"../Plots/{dir_name}"  #TFB8500
         #save_graphics_at = f"../Plots"  #TFB8500
         # he directory where you want things to be saved
-        if not os.path.exists(save_graphics_at):
-            os.makedirs(save_graphics_at)
+        if not os.path.exists(full_path):
+            os.makedirs(full_path)
 
         legend_objectsCpu = []
         legend_labelsCpu = []
@@ -271,10 +274,10 @@ for element in services:
                 print("le tem")
                 print(time)
 
-                plt.plot(time, requests,  color=colors_table[i-1], linestyle=line_styles[i-1], label=f"locust_stats_{i}")
+                plt.plot(time, requests,  color=colors_table[i-1], linestyle=line_styles[(i-1) % len(line_styles)], label=f"locust_stats_{i}")
                 #plt.plot(time, requests)
 
-            plt.legend(loc='upper left', frameon=False)
+            plt.legend(loc='upper left', ncol=4, frameon=False)
 
 #-------------------------------------------------------------------------
         plt.subplot(5, 1, 4)
@@ -319,7 +322,7 @@ for element in services:
         plt.xlabel('Time (seconds)')
         plt.ylabel('Number of users')
         plt.title('Creation of users for load injection')
-        plt.ylim(0, 70)
+        plt.ylim(0, load_max)
 
 
         df_stats = pd.read_csv(plot_stats_path)
@@ -338,7 +341,7 @@ for element in services:
             user_count = df_stats['User Count']
             user_count = user_count.reindex(range(299), fill_value=0)
 
-            plt.plot(time, user_count, color=colors_table[i - 1], linestyle=line_styles[i - 1], label=f"active_users_{i}")
+            plt.plot(time, user_count, color=colors_table[i - 1], linestyle=line_styles[(i-1) % len(line_styles)],  label=f"active_users_{i}")
         plt.legend(loc='upper left', frameon=False)
 
 #-------------------------------------------------------------------------
@@ -402,10 +405,11 @@ for element in services:
         plt.tight_layout()
 
         files = os.listdir(save_graphics_at)
+
         data_count = sum(1 for f in files if f.startswith("output") and f.endswith(".png"))
         #my_string = f"{save_graphics_at}/output{str(data_count + 1)}-{x}.png"
-        my_string = f"{save_graphics_at}/output{str(data_count + 1)}-{element}.png"
+        my_string = f"{save_graphics_at}/{x}/output{str(data_count + 1)}-{element}.png"
         print(my_string)
-        #plt.savefig(my_string)
+        plt.savefig(my_string)
         plt.show()
         plt.close(fig)

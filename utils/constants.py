@@ -9,11 +9,12 @@ line_styles=["solid","dotted","dashed","dashdot"]
 
 plot_limit = 301
 cpu_limit_max=0.3
-load_max=150
-memory_limit=0.03
+load_max=11
+memory_limit=0.2
 pod_limit=2
+request_volume_limit = 120
 
-range_limit=3
+range_limit=4
 harmonization=False
 
 colors_table = [
@@ -270,8 +271,8 @@ def plot_json_generic(file_path, file_name, data_type='cpu'):
     #print(list_element[2])
     json_data_file3 = open_file(os.path.join(file_path, list_element[2]))
     json_data_file4 = open_file(os.path.join(file_path, list_element[3]))
-    # json_data_file5 = open_file(os.path.join(file_path, list_element[4]))
-    # json_data_file6 = open_file(os.path.join(file_path, list_element[5]))
+    json_data_file5 = open_file(os.path.join(file_path, list_element[4]))
+    json_data_file6 = open_file(os.path.join(file_path, list_element[5]))
     # json_data_file7 = open_file(os.path.join(file_path, list_element[6]))
     #json_data_file8 = open_file(os.path.join(file_path, list_element[7]))
     #
@@ -285,8 +286,8 @@ def plot_json_generic(file_path, file_name, data_type='cpu'):
         datas2 = json_data_file2['data']['result'][0]['values']
         datas3 = json_data_file3['data']['result'][0]['values']
         datas4 = json_data_file4['data']['result'][0]['values']
-        # datas5 = json_data_file5['data']['result'][0]['values']
-        # datas6 = json_data_file6['data']['result'][0]['values']
+        datas5 = json_data_file5['data']['result'][0]['values']
+        datas6 = json_data_file6['data']['result'][0]['values']
         # datas7 = json_data_file7['data']['result'][0]['values']
         #datas8 = json_data_file8['data']['result'][0]['values']
 
@@ -308,8 +309,8 @@ def plot_json_generic(file_path, file_name, data_type='cpu'):
         values2 = [float(value) for _, value in datas2]
         values3 = [float(value) for _, value in datas3]
         values4 = [float(value) for _, value in datas4]
-        # values5 = [float(value) for _, value in datas5]
-        # values6 = [float(value) for _, value in datas6]
+        values5 = [float(value) for _, value in datas5]
+        values6 = [float(value) for _, value in datas6]
         # values7 = [float(value) for _, value in datas7]
 #        values8 = [float(value) for _, value in datas8]
 
@@ -334,8 +335,8 @@ def plot_json_generic(file_path, file_name, data_type='cpu'):
         values2 = np.array(smooth(values2))
         values3 = np.array(smooth(values3))
         values4 = np.array(smooth(values4))
-        # values5 = np.array(smooth(values5))
-        # values6 = np.array(smooth(values6))
+        values5 = np.array(smooth(values5))
+        values6 = np.array(smooth(values6))
         # values7 = np.array(smooth(values7))
         #values8 = np.array(smooth(values8))
 
@@ -369,7 +370,7 @@ def plot_json_generic(file_path, file_name, data_type='cpu'):
         #     legend_labelsMemory.append(label)
 
         #temp_list = [values1, values2]
-        temp_list = [values1, values2, values3, values4][:range_limit]
+        temp_list = [values1, values2, values3, values4, values5, values6][:range_limit]
         for index, tab in enumerate(temp_list):
             print(index)
             #tab = temp_list[i-1]
@@ -428,7 +429,7 @@ def plot_metrics(data, elt, position, metric_to_plot=""):
             plt.plot(timestamps, values, color=color,
                      label=f'{destination_txt + str(position + 1)}{multiplier_note}',
                      # label=f'{source_workload_txt + str(position + 1)} → {destination_txt + str(position + 1)}{multiplier_note}',
-                     linestyle=line_styles[position % len(line_styles)])
+                     linestyle=line_styles[position % len(line_styles)], marker='o', ms=4)
 
 
     # start_time = min(timestamps)

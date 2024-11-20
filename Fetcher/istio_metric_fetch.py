@@ -47,7 +47,7 @@ end_dt = end_datetime.timestamp()
 namespace="default"
 time_step="1"
 step="1"
-interval = "120s"
+interval = "30s"
 
 def query_prometheus(prometheus_url, query, start_dt, end_dt, step):
     payload = {'query': query, 'start': start_dt, 'end': end_dt, 'step': step + 's'}

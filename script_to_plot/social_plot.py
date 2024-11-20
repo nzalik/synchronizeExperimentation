@@ -238,7 +238,7 @@ for element in services:
                 requests = df_stats['Requests/s']
                 requests = requests.reindex(range(299), fill_value=0)
 
-                plt.plot(time, requests,  color=colors_table[i-1], linestyle=line_styles[(i-1) % len(line_styles)], label=f"locust_stats_{i}", marker='o', ms=4)
+                plt.plot(time, requests,  color=colors_table[i-1], linestyle=line_styles[(i-1) % len(line_styles)], label=f"locust_stats_{i}")
 
             plt.legend(loc='upper left', frameon=False, ncol=2)
 

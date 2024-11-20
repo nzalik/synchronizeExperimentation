@@ -38,8 +38,15 @@ source myenv/bin/activate
             min_req=10 | 20
             nb_files_per_func=1
             nb_f_offset=2
+    cpu_step 120s
+        locust/nantes/train/16-11-2024/train_load_100profile_called_sequentially injection en utilisant les profils dont la limitation est à 100, etc
+
+        locust/nantes/train/19-11-2024/load1profile_with_deep_locustfile_extended lancer avec deep_load_generator_train.py comme scenarios de test
+        locust/nantes/train/19-11-2024/load2profile_with_deep_locustfile_extended 
+
 
     2. Teastore
+cpu_step 120
         locust/previous_data/low_10/nantes/hyperthreading/128/linear/3nodes/linear/07-11-2024/ | locust/previous_data/load1/nantes/hyperthreading/128/linear/3nodes/linear/07-11-2024 is extension of low_10
         locust/previous_data/low_20/nantes/hyperthreading/128/linear/3nodes/linear/07-11-2024
         Teastore 1cpu | 5gb load1 et load2
