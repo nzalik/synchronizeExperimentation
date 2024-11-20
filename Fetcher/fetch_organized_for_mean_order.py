@@ -129,7 +129,7 @@ for section_name in config.sections():
     query_str3 = "sum(container_memory_usage_bytes{namespace=\"default\", container!=\"\"}) by (container)"
     query_str4 = "kube_pod_container_status_restarts_total{namespace=\"default\", container!=\"\"}"
     query_str5 = f"""topk(64, sum(rate(container_cpu_usage_seconds_total{{namespace="default"}}[{cpu_step}])) by (pod))"""
-    query_str6 = f"""topk(64, histogram_quantile(0.95, sum(rate(istio_request_duration_milliseconds_bucket{{namespace="default"}}[{interval}])) by (le, destination_workload)))"""
+    query_str6 = f"""topk(64, histogram_quantile(0.95, sum(rate(istio_request_duration_milliseconds_bucket{{namespace="default"}}[{cpu_step}])) by (le, destination_workload)))"""
 
 
     url = prom_url + '/api/v1/query_range?'

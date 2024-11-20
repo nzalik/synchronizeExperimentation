@@ -151,7 +151,7 @@ def sort_legend(legend_objects, legend_labels):
 
     return legend_objects_sorted, legend_labels_sorted
 
-cpu_step = "2m"
+cpu_step = "30s"
 step = "1s"
 
 def read_ini_file(file_path):

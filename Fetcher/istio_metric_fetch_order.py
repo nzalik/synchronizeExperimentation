@@ -4,6 +4,9 @@ from datetime import datetime, timedelta
 import json
 import sys
 
+from utils.constants import cpu_step
+
+
 def read_parameters_from_json(file_path):
     with open(file_path, 'r') as file:
         parameters = json.load(file)
@@ -47,7 +50,7 @@ end_dt = end_datetime.timestamp()
 namespace="default"
 time_step="1"
 step="1"
-interval = "120s"
+interval = cpu_step
 
 def query_prometheus(prometheus_url, query, start_dt, end_dt, step):
     payload = {'query': query, 'start': start_dt, 'end': end_dt, 'step': step + 's'}
