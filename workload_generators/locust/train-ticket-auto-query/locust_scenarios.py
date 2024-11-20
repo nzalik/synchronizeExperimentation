@@ -92,9 +92,26 @@ class TrainTicketUserTasks(TaskSet):
             'response_time': response_time
         })
 
-
 class UserBooking(HttpUser):
-    tasks = [GLOBAL_TASK]
     host = HOST_URL
     wait_time = constant(1)
+
+    # Tâches dynamiques basées sur l'environnement
+    tasks = []
     highspeed_weights = {True: 60, False: 40}
+
+    def on_start(self):
+        # Associer la tâche définie par GLOBAL_TASK
+        task_mapping = {
+            "TrainTicketUserTasks": TrainTicketUserTasks,
+            "QueryCollect": QueryCollect,
+            "UserBehavior": UserBehavior,
+        }
+        self.tasks = [task_mapping.get(GLOBAL_TASK, TrainTicketUserTasks)]
+
+
+# class UserBooking(HttpUser):
+#     tasks = [GLOBAL_TASK]
+#     host = HOST_URL
+#     wait_time = constant(1)
+#     highspeed_weights = {True: 60, False: 40}
