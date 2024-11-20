@@ -155,11 +155,11 @@ def _get_query_modifier(metric_parameter, destination_target):
     elif metric_parameter['aggregator'] == "redirection":
         return f""" round(sum(irate(istio_requests_total{{destination_workload="{destination_target}",reporter=~"destination", response_code=~"3.."}}[{interval}])) by (destination_workload), 0.001)"""
     elif metric_parameter['aggregator'] == "bytes":
-        return f"""histogram_quantile(0.95, sum(irate(istio_request_bytes_bucket{{reporter=~"destination", destination_workload=~"{destination_target}"}}[{interval}])) by (le, source_workload, destination_workload))
-"""
+        return f"""histogram_quantile(0.95, sum(irate(istio_request_bytes_bucket{{reporter=~"destination", destination_workload=~"{destination_target}"}}[{interval}])) by (le, source_workload, destination_workload))"""
     elif metric_parameter['aggregator'] == "tcp":
-        return f"""round(sum(irate(istio_tcp_sent_bytes_total{{reporter=~"destination", destination_workload=~"{destination_target}"}}[{interval}])) by (destination_workload), 0.001)
-"""
+        return f"""round(sum(irate(istio_tcp_sent_bytes_total{{reporter=~"destination", destination_workload=~"{destination_target}"}}[{interval}])) by (destination_workload), 0.001)"""
+    elif metric_parameter['aggregator'] == "latency_order":
+        return f"""topk(64, histogram_quantile(0.95, sum(rate(istio_request_duration_milliseconds_bucket{{namespace="default"}}[{interval}])) by (le, destination_workload)))"""
     else:
         return f""" round(sum(irate(istio_requests_total{{reporter=~"destination", destination_workload="{destination_target}", response_code="400"}}[{interval}])) by (destination_workload), 0.001)"""
 
