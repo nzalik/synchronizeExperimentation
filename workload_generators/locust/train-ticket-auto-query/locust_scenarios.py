@@ -13,6 +13,10 @@ import time
 state_data = []
 GLOBAL_MIN_USERS = 10
 GLOBAL_INTENSITY_FILE = os.environ.get("INTENSITY_FILE")
+GLOBAL_TASK = os.environ.get("TASK")
+
+print("la tache courante")
+print(GLOBAL_TASK)
 
 HOST_URL = sys.argv[1]
 
@@ -44,6 +48,7 @@ class CustomLoadShape(LoadTestShape):
 class UserBehavior(TaskSet):
     @task
     def query_and_cancel(self):
+        print("################home########################")
         q = Query()
         if random_from_weighted(self.user.highspeed_weights):
             pairs = q.query_orders(types=tuple([0, 1]))
@@ -56,8 +61,11 @@ class UserBehavior(TaskSet):
         pair = random_from_list(pairs)
         q.cancel_order(order_id=pair[0])
 
+
+class QueryCollect(TaskSet):
     @task
     def query_and_collect(self):
+        print("***************collect***************")
         q = Query()
         if random_from_weighted(self.user.highspeed_weights):
             pairs = q.query_orders(types=tuple([1]))
@@ -70,84 +78,23 @@ class UserBehavior(TaskSet):
         pair = random_from_list(pairs)
         q.collect_order(order_id=pair[0])
 
+
+class TrainTicketUserTasks(TaskSet):
     @task
-    def query_and_execute(self):
-        q = Query()
-        if random_from_weighted(self.user.highspeed_weights):
-            pairs = q.query_orders(types=tuple([1]))
-        else:
-            pairs = q.query_orders(types=tuple([1]), query_other=True)
-
-        if not pairs:
-            return
-
-        pair = random_from_list(pairs)
-        q.enter_station(order_id=pair[0])
-
-    @task
-    def query_and_preserve(self):
-        q = Query()
-        high_speed = random_from_weighted(self.user.highspeed_weights)
-        if high_speed:
-            start = "Shang Hai"
-            end = "Su Zhou"
-            high_speed_place_pair = (start, end)
-            trip_ids = q.query_high_speed_ticket(place_pair=high_speed_place_pair)
-        else:
-            start = "Shang Hai"
-            end = "Nan Jing"
-            other_place_pair = (start, end)
-            trip_ids = q.query_normal_ticket(place_pair=other_place_pair)
-
-        q.query_assurances()
-        q.preserve(start, end, trip_ids, high_speed)
-
-    @task
-    def query_and_consign(self):
-        q = Query()
-        if random_from_weighted(self.user.highspeed_weights):
-            orders_info = q.query_orders_all_info()
-        else:
-            orders_info = q.query_orders_all_info(query_other=True)
-
-        if not orders_info:
-            return
-
-        res = random_from_list(orders_info)
-        q.put_consign(res)
-
-    @task
-    def query_and_pay(self):
-        q = Query()
-        if random_from_weighted(self.user.highspeed_weights):
-            pairs = q.query_orders(types=tuple([0, 1]))
-        else:
-            pairs = q.query_orders(types=tuple([0, 1]), query_other=True)
-
-        if not pairs:
-            return
-
-        pair = random_from_list(pairs)
-        q.pay_order(pair[0], pair[1])
-
-    @task
-    def query_and_rebook(self):
-        q = Query()
-        if random_from_weighted(self.user.highspeed_weights):
-            pairs = q.query_orders(types=tuple([0, 1]))
-        else:
-            pairs = q.query_orders(types=tuple([0, 1]), query_other=True)
-
-        if not pairs:
-            return
-
-        pair = random_from_list(pairs)
-        q.cancel_order(order_id=pair[0])
-        q.rebook_ticket(pair[0], pair[1], pair[1])
+    def home(self):
+        print("--------------index------------")
+        start_time = time.time()
+        response = self.client.get('/index.html')
+        response_time = time.time() - start_time
+        print({
+            'url': '/index.html',
+            'status_code': response.status_code,
+            'response_time': response_time
+        })
 
 
 class UserBooking(HttpUser):
-    tasks = [UserBehavior]
+    tasks = [GLOBAL_TASK]
     host = HOST_URL
     wait_time = constant(1)
     highspeed_weights = {True: 60, False: 40}

@@ -53,11 +53,13 @@ export KUBECONFIG="${init_root_prefix}$CERTIFICATE"
 
   #number=$((number + 1))
   #new_folder_path="${new_folder_path1}/${number}"
-  for element in load1
-  #for element in train_load_100 train_load_200 train_load_300
+  for task in "${TASK[@]}"; do
+    echo "Traitement de la tâche : $task"
+    for element in load1
+    #for element in train_load_100 train_load_200 train_load_300
     do
       # Complete relative path for data storage
-      new_folder_base="$parent_dir/synchronizeExperimentation/locust/$site/train/$date_str/${element}$PATH_SUFFIX/hyperthreading"
+      new_folder_base="$parent_dir/synchronizeExperimentation/locust/$site/train/$date_str/${element}$PATH_SUFFIX/hyperthreading/$task"
       #new_folder_base="$parent_dir/synchronizeExperimentation/locust/train/$element/nantes/hyperthreading/$category/$date_str"
       new_folder_path1="$new_folder_base"
       new_folder_path_backup="$new_folder_base/backup"
@@ -102,7 +104,7 @@ export KUBECONFIG="${init_root_prefix}$CERTIFICATE"
 
 
                 #env INTENSITY_FILE=$file_name locust -f ./request_type/bi_locustfile_request.py --headless --csv=log --csv-full-history
-                env INTENSITY_FILE="$file_name" locust -f $prefix_folder/workload_generators/locust/train-ticket/locust_home.py --headless --csv $log_exp_folder_path --host $host
+                env INTENSITY_FILE="$file_name" TASK=$task locust -f $prefix_folder/workload_generators/locust/train-ticket-auto-query/locust_scenarios.py --headless --csv $log_exp_folder_path --host $host
 
                 sleep 80
 
@@ -116,3 +118,4 @@ export KUBECONFIG="${init_root_prefix}$CERTIFICATE"
         kubectl delete -f $prefix_folder/benchmarks/train-ticket/ts-deployment-part3.yml
       done
     done
+  done

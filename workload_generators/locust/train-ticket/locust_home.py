@@ -68,6 +68,7 @@ class TrainTicketUserTasks(TaskSet):
         })
 
 
+
 class WebsiteUser(HttpUser):
     host = HOST_URL
     wait_time = constant(1)  # Temps d'attente entre les tâches
