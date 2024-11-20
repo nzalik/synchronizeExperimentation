@@ -76,7 +76,7 @@ export KUBECONFIG="${init_root_prefix}$CERTIFICATE"
         #env INTENSITY_FILE="$prefix_folder$WARMUP_FILE" locust -f $prefix_folder/workload_generators/locust/bi_locustfile_request.py --headless --csv $log_exp_folder_path --host $host
 
         #sleep 120
-            for i in $(seq 1 6);
+            for i in $(seq 1 3);
               do
                 root_file_name=$(basename "$file_name" .csv)
 
