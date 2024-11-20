@@ -64,12 +64,12 @@ export KUBECONFIG="${init_root_prefix}$CERTIFICATE"
 
       for file_name in $prefix_folder/Load/$element/*.csv;
         do
-        kubectl create -f $prefix_folder/benchmarks/train-ticket/ts-deployment-part1.yml
-        sleep 120
-        kubectl create -f $prefix_folder/benchmarks/train-ticket/ts-deployment-part2.yml
-        kubectl create -f $prefix_folder/benchmarks/train-ticket/ts-deployment-part3.yml
-        # kubectl apply  -f trainticket-gateway.yaml
-        sleep 480
+#        kubectl create -f $prefix_folder/benchmarks/train-ticket/ts-deployment-part1.yml
+#        sleep 120
+#        kubectl create -f $prefix_folder/benchmarks/train-ticket/ts-deployment-part2.yml
+#        kubectl create -f $prefix_folder/benchmarks/train-ticket/ts-deployment-part3.yml
+#        # kubectl apply  -f trainticket-gateway.yaml
+#        sleep 480
         #python3 $prefix_folder/workload_generators/locust/train-ticket/ts_api_invoke_test.py $host
 
         #env INTENSITY_FILE="$prefix_folder$WARMUP_FILE" locust -f $prefix_folder/workload_generators/locust/teastore_locustfile-custom-scale.py --headless --host $host
