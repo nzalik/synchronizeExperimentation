@@ -49,7 +49,7 @@ host="$WEBUI"
 export KUBECONFIG="${init_root_prefix}$CERTIFICATE"
 
 # This script deployed every necessary configuration for istio mesh
-/bin/bash "$prefix_folder/mesh/istio.sh" $prefix_folder
+#/bin/bash "$prefix_folder/mesh/istio.sh" $prefix_folder
 
   #number=$((number + 1))
   #new_folder_path="${new_folder_path1}/${number}"
@@ -63,6 +63,7 @@ export KUBECONFIG="${init_root_prefix}$CERTIFICATE"
       new_folder_path_backup="$new_folder_base/backup"
 
       for file_name in $prefix_folder/Load/$element/*.csv;
+        do
         kubectl create -f $prefix_folder/benchmarks/train-ticket/ts-deployment-part1.yml
         sleep 120
         kubectl create -f $prefix_folder/benchmarks/train-ticket/ts-deployment-part2.yml
@@ -75,7 +76,6 @@ export KUBECONFIG="${init_root_prefix}$CERTIFICATE"
         #env INTENSITY_FILE="$prefix_folder$WARMUP_FILE" locust -f $prefix_folder/workload_generators/locust/bi_locustfile_request.py --headless --csv $log_exp_folder_path --host $host
 
         #sleep 120
-        do
             for i in $(seq 1 6);
               do
                 root_file_name=$(basename "$file_name" .csv)
