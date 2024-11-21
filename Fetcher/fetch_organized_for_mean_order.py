@@ -125,7 +125,7 @@ for section_name in config.sections():
     container_name = "pod_info"
 
     query_str = "kube_deployment_status_replicas_ready{namespace=\"default\"}"
-    query_str2 = f"sum(irate(container_cpu_usage_seconds_total{{namespace=\"default\", container!=\"\"}}[{cpu_step}])) by (container)"
+    query_str2 = f"sum(rate(container_cpu_usage_seconds_total{{namespace=\"default\", container!=\"\"}}[{cpu_step}])) by (container)"
     query_str3 = "sum(container_memory_usage_bytes{namespace=\"default\", container!=\"\"}) by (container)"
     query_str4 = "kube_pod_container_status_restarts_total{namespace=\"default\", container!=\"\"}"
     query_str5 = f"""topk(64, sum(rate(container_cpu_usage_seconds_total{{namespace="default"}}[{cpu_step}])) by (pod))"""

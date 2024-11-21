@@ -29,8 +29,8 @@ root_path = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/n
 
 latency_path = root_path
 
-#services = ["ts-ui-dashboard"]
-services = ["ts-inside-payment-service","ts-order-other-service","ts-auth-service","ts-ui-dashboard", "ts-order-other-service", "ts-station-service", "ts-travel-service", "ts-food-service", "ts-ticketinfo-service","ts-basic-service"]
+services = ["ts-ui-dashboard"]
+#services = ["ts-inside-payment-service","ts-order-other-service","ts-auth-service","ts-ui-dashboard", "ts-order-other-service", "ts-station-service", "ts-travel-service", "ts-food-service", "ts-ticketinfo-service","ts-basic-service"]
 
 #services = ["teastore-auth", "teastore-image", "teastore-persistence", "teastore-recommender", "teastore-registry","teastore-webui"]
 
@@ -410,6 +410,6 @@ for element in services:
         #my_string = f"{save_graphics_at}/output{str(data_count + 1)}-{x}.png"
         my_string = f"{save_graphics_at}/{x}/output{str(data_count + 1)}-{element}.png"
         print(my_string)
-        plt.savefig(my_string)
+        #plt.savefig(my_string)
         plt.show()
         plt.close(fig)

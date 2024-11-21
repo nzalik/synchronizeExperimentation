@@ -14,24 +14,24 @@ import pandas as pd
 
 from utils.constants import get_color_for_service_init, normalization, line_styles, plot_limit, smooth, open_file, \
     read_parameters_from_json, sort_legend, cpu_limit_max, memory_limit, colors_table, plot_json_generic, range_limit, \
-    plot_metrics, load_max
+    plot_metrics, load_max, request_volume_limit
 
 #metric_to_plot="request_aggr" #latency or request
 harmonization=False
 
 file_path_json = '../teastore.json'
 
-csv_file_path = "/home/erods-chouette/Documents/synchronizeExperimentation/Load/train_load_200/"
+csv_file_path = "/home/erods-chouette/Documents/synchronizeExperimentation/Load/load1/"
 
 
-root_path = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/nantes/socialNetwork/socialNetwork/18-11-2024/train_load_200_sequential_restart/hyperthreading"
+root_path = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/nantes/train/21-11-2024/load1profile_login_workload/hyperthreading/TrainTicketUserTasks"
 latency_path = f"{root_path}"
-services = ["compose-post-service"]
+services = ["ts-ui-dashboard"]
 #services = ["ts-order-other-service", "ts-auth-service", "ts-order-other-service", "ts-station-service", "ts-train-service", "ts-food-service", "ts-ticketinfo-service", "ts-basic-service", "ts-route-service"]
 #services = ["teastore-auth", "teastore-image", "teastore-persistence", "teastore-recommender", "teastore-registry","teastore-webui"]
 
 
-elts = ["li_linear_200"]
+elts = ["linear_10"]
 #elts = ["li_const_2","linear_10","li_stairsd_2","li_stairsu_2","si_sin_2"]
 #elts = ["li_stairsu_2","li_stairsd_2","li_stairsu_2","si_sin_2"]
 #elts = ["li_const_2","linear_10", "li_stairsd_2","li_stairsu_2","si_sin_2"]
@@ -228,7 +228,7 @@ for element in services:
             plt.xlabel('Time (seconds)')
             plt.ylabel('rps')
             plt.title('Request volume')
-            plt.ylim(0, 125)
+            plt.ylim(0, request_volume_limit)
 
             for i in range(1,range_limit+1):
                 plot_stats_path = f"{root_path}/output/{x}_{i}_stats_history.csv"

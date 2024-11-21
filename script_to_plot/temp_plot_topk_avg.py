@@ -6,7 +6,7 @@ import numpy as np
 
 from utils.constants import plot_limit
 
-file_path="/home/erods-chouette/Documents/synchronizeExperimentation/locust/nantes/train/19-11-2024/load1profile_with_deep_locustfile_extended/hyperthreading/li_stairsu_2/aggregation/2_top_li_stairsu_2.json"
+file_path="/home/erods-chouette/Documents/synchronizeExperimentation/locust/nantes/train/21-11-2024/load1profile_login_workload/hyperthreading/TrainTicketUserTasks/linear_10/aggregation/1_top_linear_10.json"
 
 # Lire les données depuis un fichier JSON
 with open(file_path, 'r') as file:
@@ -14,6 +14,7 @@ with open(file_path, 'r') as file:
 
 # Accéder à la liste des résultats
 results = data["data"]["result"]
+print(len(results))
 
 # Calculer la consommation moyenne pour chaque pod
 pod_metrics = {}
@@ -32,7 +33,7 @@ for result in results:
 sorted_pods = sorted(pod_metrics.items(), key=lambda x: x[1]["avg"], reverse=True)
 
 # Filtrer les top N pods (par exemple, les 3 premiers)
-top_n = 10
+top_n = 6
 top_pods = sorted_pods[:top_n]
 
 # Tracer les courbes des top N pods
@@ -44,9 +45,9 @@ for pod_name, metrics in top_pods:
     #     for ts in metrics["timestamps"]
     # ]
     readable_timestamps = np.arange(0, plot_limit)
-
+    values = metrics["values"][:plot_limit]
     # Tracer les données
-    plt.plot(readable_timestamps, metrics["values"], marker='o', label=f"{pod_name} (Avg: {metrics['avg']:.5f})")
+    plt.plot(readable_timestamps, values, marker='o', label=f"{pod_name} (Avg: {metrics['avg']:.5f})")
 
 # Configurer le graphique
 plt.title(f'Top {top_n} Pod Consumers Over Time')
