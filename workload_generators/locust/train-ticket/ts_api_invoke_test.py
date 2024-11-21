@@ -10,7 +10,7 @@ import requests
 from numpy.random import randint
 
 #from constants import HOST_URL
-from test_data import USER_CREDETIALS
+from test_data_light import USER_CREDETIALS
 
 USER_CREDENTIALS = ["abcd", "efgh", "ijkl"]
 
