@@ -20,6 +20,9 @@ istioctl install -f samples/bookinfo/demo-profile-no-gateways.yaml -y
 
 # Activer l'injection automatique d'Istio sur le namespace par défaut
 kubectl label namespace default istio-injection=enabled
+kubectl create namespace istio-system
+
+kubectl create -f samples/addons/prometheus.yaml
 
 # Attendre que tous les déploiements dans le namespace monitoring soient en cours d'exécution
 for deployment in $(kubectl get deployments -n monitoring -o jsonpath='{.items[*].metadata.name}'); do
