@@ -14,6 +14,9 @@ memory_limit=0.01
 pod_limit=2
 request_volume_limit = 11
 
+cpu_step = "5m"
+step = "1s"
+
 range_limit=2
 harmonization=False
 
@@ -151,8 +154,7 @@ def sort_legend(legend_objects, legend_labels):
 
     return legend_objects_sorted, legend_labels_sorted
 
-cpu_step = "30s"
-step = "1s"
+
 
 def read_ini_file(file_path):
     config = configparser.ConfigParser()
