@@ -83,6 +83,7 @@ for section_name in config.sections():
         for svc in pod_names:
 
             root_container_name = '-'.join(svc.split('-')[:-2])
+
             directory = path_to_save(dir_name) + "/" + key + "/" + root_container_name
 
             container_name = svc
@@ -98,15 +99,7 @@ for section_name in config.sections():
 
             filename = svc + '.json'
             query_str_file = os.path.join(directory, f"{exp_nb}_{filename}")
-            #query_str_file = os.path.join(directory2, filename)
-            # if os.path.exists(query_str_file):
-            #     base, ext = os.path.splitext(filename)
-            #     counter = 1
-            #     while os.path.exists(os.path.join(directory, f"{base}_{counter}{ext}")):
-            #         counter += 1
-            #     query_str_file = os.path.join(directory, f"{base}_{counter}{ext}")
 
-            # query_str_file = "nom_du_fichier.json"
             os.makedirs(directory, exist_ok=True)
 
             try:
@@ -121,131 +114,59 @@ for section_name in config.sections():
                 print(e)
                 print("...Fail at Prometheus request.")
 
+# Informations générales
+container_name = "pod_info"
+url = prom_url + '/api/v1/query_range?'
 
-    container_name = "pod_info"
+queries = [
+    ("kube_deployment_status_replicas_ready{namespace=\"default\"}", "pod_info"),
+    (
+    f"sum(rate(container_cpu_usage_seconds_total{{namespace=\"default\", container!=\"\"}}[{cpu_step}])) by (container)",
+    "aggregation_cpu"),
+    ("sum(container_memory_usage_bytes{namespace=\"default\", container!=\"\"}) by (container)",
+     "aggregation_memory"),
+    ("kube_pod_container_status_restarts_total{namespace=\"default\", container!=\"\"}", "pod_restart"),
+    (f"topk(64, sum(rate(container_cpu_usage_seconds_total{{namespace=\"default\"}}[{cpu_step}])) by (pod))",
+     "top_pods"),
+    (
+    f"topk(64, histogram_quantile(0.95, sum(rate(istio_request_duration_milliseconds_bucket{{namespace=\"default\"}}[{cpu_step}])) by (le, destination_workload)))",
+    "latency_top")
+]
 
-    query_str = "kube_deployment_status_replicas_ready{namespace=\"default\"}"
-    query_str2 = f"sum(rate(container_cpu_usage_seconds_total{{namespace=\"default\", container!=\"\"}}[{cpu_step}])) by (container)"
-    query_str3 = "sum(container_memory_usage_bytes{namespace=\"default\", container!=\"\"}) by (container)"
-    query_str4 = "kube_pod_container_status_restarts_total{namespace=\"default\", container!=\"\"}"
-    query_str5 = f"""topk(64, sum(rate(container_cpu_usage_seconds_total{{namespace="default"}}[{cpu_step}])) by (pod))"""
-    query_str6 = f"""topk(64, histogram_quantile(0.95, sum(rate(istio_request_duration_milliseconds_bucket{{namespace="default"}}[{cpu_step}])) by (le, destination_workload)))"""
+payload_common = {
+    'start': new_timestampManual,
+    'end': target_timeManual,
+    'step': step
+}
 
+# Création des dossiers
+directory2 = path_to_save(dir_name) + "/pod_info"
+directory3 = path_to_save(dir_name) + "/aggregation"
 
-    url = prom_url + '/api/v1/query_range?'
+os.makedirs(directory2, exist_ok=True)
+os.makedirs(directory3, exist_ok=True)
 
-    payload = {'query': query_str, 'start': new_timestampManual, 'end': target_timeManual, 'step': step}
-    payload2 = {'query': query_str2, 'start': new_timestampManual, 'end': target_timeManual, 'step': step}
-    payload3 = {'query': query_str3, 'start': new_timestampManual, 'end': target_timeManual, 'step': step}
-    payload4 = {'query': query_str4, 'start': new_timestampManual, 'end': target_timeManual, 'step': step}
-    payload5 = {'query': query_str5, 'start': new_timestampManual, 'end': target_timeManual, 'step': step}
-    payload6 = {'query': query_str6, 'start': new_timestampManual, 'end': target_timeManual, 'step': step}
+# Fichiers à générer
+profile = dir_name.split('/')[-1]
 
-    res = None
+try:
+    for idx, (query_str, file_suffix) in enumerate(queries):
+        payload = {'query': query_str, **payload_common}
+        response = requests.post(
+            url,
+            headers={'Content-Type': 'application/x-www-form-urlencoded'},
+            data=payload
+        ).json()
 
-    directory2 = path_to_save(dir_name) + "/pod_info"
-    directory3 = path_to_save(dir_name) + "/aggregation"
+        # Vérifier et enregistrer les résultats
+        if response and 'data' in response and response['data']['result']:
+            filename = f"{exp_nb}_{file_suffix}_{profile}.json"
+            directory = directory2 if file_suffix == "pod_info" else directory3
+            filepath = os.path.join(directory, filename)
 
-    os.makedirs(directory2, exist_ok=True)
-    os.makedirs(directory3, exist_ok=True)
+            with open(filepath, 'a') as f:
+                json.dump(response, f, ensure_ascii=False)
 
-    # The name of the current experimentation file
-    profile = dir_name.split('/')[-1]
-    filename = f"{exp_nb}_{container_name}.json"
-    filename2 = f'{exp_nb}_aggregation_{profile}.json'
-    filename3 = f'{exp_nb}_aggregation_memory_{profile}.json'
-    filename4 = f'{exp_nb}_pod_restart_{profile}.json'
-    filename5 = f'{exp_nb}_top_{profile}.json'
-    filename6 = f'{exp_nb}_latency_top_{profile}.json'
-
-    query_str_file = os.path.join(directory2, filename)
-
-    query_str_file2 = os.path.join(directory3, filename2)
-    query_str_file3 = os.path.join(directory3, filename3)
-    query_str_file4 = os.path.join(directory3, filename4)
-    query_str_file5 = os.path.join(directory3, filename5)
-    query_str_file6 = os.path.join(directory3, filename6)
-
-    # if os.path.exists(query_str_file2):
-    #     base, ext = os.path.splitext(filename2)
-    #     counter = 1
-    #     while os.path.exists(os.path.join(directory3, f"{base}_{counter}{ext}")):
-    #         counter += 1
-    #     query_str_file2 = os.path.join(directory3, f"{base}_{counter}{ext}")
-    # 
-    # query_str_file3 = os.path.join(directory3, filename3)
-    # if os.path.exists(query_str_file3):
-    #     base, ext = os.path.splitext(filename3)
-    #     counter = 1
-    #     while os.path.exists(os.path.join(directory3, f"{base}_{counter}{ext}")):
-    #         counter += 1
-    #     query_str_file3 = os.path.join(directory3, f"{base}_{counter}{ext}")
-    # 
-    # query_str_file4 = os.path.join(directory3, filename4)
-    # if os.path.exists(query_str_file4):
-    #     base, ext = os.path.splitext(filename4)
-    #     counter = 1
-    #     while os.path.exists(os.path.join(directory3, f"{base}_{counter}{ext}")):
-    #         counter += 1
-    #     query_str_file4 = os.path.join(directory3, f"{base}_{counter}{ext}")
-
-    # query_str_file = "nom_du_fichier.json"
-
-
-
-    # if os.path.exists(query_str_file):
-    #     base, ext = os.path.splitext(filename)
-    #     counter = 1
-    #     while os.path.exists(os.path.join(directory2, f"{base}_{counter}{ext}")):
-    #         counter += 1
-    #     query_str_file = os.path.join(directory2, f"{base}_{counter}{ext}")
-
-
-
-    # Query Prometheus
-    try:
-        # res = requests.get(url, headers={'Content-Type': 'application/x-www-form-urlencoded'}).json()
-        res = requests.post(url, headers={'Content-Type': 'application/x-www-form-urlencoded'},
-                            data=payload).json()
-        res2 = requests.post(url, headers={'Content-Type': 'application/x-www-form-urlencoded'},
-                            data=payload2).json()
-        res3 = requests.post(url, headers={'Content-Type': 'application/x-www-form-urlencoded'},
-                            data=payload3).json()
-
-        res4 = requests.post(url, headers={'Content-Type': 'application/x-www-form-urlencoded'},
-                             data=payload4).json()
-
-        res5 = requests.post(url, headers={'Content-Type': 'application/x-www-form-urlencoded'},
-                             data=payload5).json()
-
-        res6 = requests.post(url, headers={'Content-Type': 'application/x-www-form-urlencoded'},
-                             data=payload6).json()
-        # print("la reponse pour les pods")
-        # print(res)
-        if res != None and len(res['data']['result']) > 0:
-            with open(query_str_file, 'a') as f:
-                json.dump(res, f, ensure_ascii=False)
-
-        if res2 != None and len(res['data']['result']) > 0:
-            with open(query_str_file2, 'a') as f:
-                json.dump(res2, f, ensure_ascii=False)
-
-        if res3 != None and len(res['data']['result']) > 0:
-            with open(query_str_file3, 'a') as f:
-                json.dump(res3, f, ensure_ascii=False)
-
-        if res4 != None and len(res['data']['result']) > 0:
-            with open(query_str_file4, 'a') as f:
-                json.dump(res4, f, ensure_ascii=False)
-
-        if res5 != None and len(res['data']['result']) > 0:
-            with open(query_str_file5, 'a') as f:
-                json.dump(res5, f, ensure_ascii=False)
-
-        if res6 != None and len(res['data']['result']) > 0:
-            with open(query_str_file6, 'a') as f:
-                json.dump(res6, f, ensure_ascii=False)
-    except Exception as e:
-        print(e)
-        print("...Fail at Prometheus request.")
-
+except Exception as e:
+    print(e)
+    print("...Fail at Prometheus request.")

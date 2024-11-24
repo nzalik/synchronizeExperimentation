@@ -6,6 +6,8 @@ parent_dir=$1
 #export KUBECONFIG=/home/erods-chouette/socialNetwork/admin_k8s_soc.conf
 
 #Install serviceMonitor to script data to kube-prometheus-stack
+kubectl create namespace istio-system
+
 kubectl create -f "$parent_dir/mesh/istio"
 kubectl create -f $parent_dir/custom_deployments/istio-prometheus-nodeport.yaml
 # Télécharger et extraire Istio
@@ -14,6 +16,8 @@ cd "$parent_dir/mesh/istio-1.23.3"
 
 # Ajouter Istio au PATH
 export PATH=$PWD/bin:$PATH
+
+
 
 # Installer Istio
 istioctl install -f samples/bookinfo/demo-profile-no-gateways.yaml -y

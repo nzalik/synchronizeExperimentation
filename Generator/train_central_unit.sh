@@ -21,7 +21,7 @@ parent_dir=$(dirname $(pwd))
 date_str=$(date +"%d-%m-%Y")
 #date_str="07-11-2024"
 
-site="grenoble"
+site="nantes"
 
 # The relative path for storing experiments data
 category="128/linear/3nodes/linear"
@@ -51,19 +51,21 @@ host="$WEBUI"
 export KUBECONFIG="${init_root_prefix}$CERTIFICATE"
 
 # This script deployed every necessary configuration for istio mesh
-#/bin/bash "$prefix_folder/mesh/istio.sh" $prefix_folder
+/bin/bash "$prefix_folder/mesh/istio.sh" $prefix_folder
 
   #number=$((number + 1))
   #new_folder_path="${new_folder_path1}/${number}"
-  for task in "${TASK[@]}"; do
+  #for task in "${TASK[@]}"; do
     echo "Traitement de la tâche : $task"
     for element in load1
     #for element in train_load_100 train_load_200 train_load_300
     do
       # Complete relative path for data storage
+      #new_folder_base="$parent_dir/synchronizeExperimentation/locust/$site/train/$date_str/${element}$PATH_SUFFIX/hyperthreading"
       new_folder_base="$parent_dir/synchronizeExperimentation/locust/$site/train/$date_str/${element}$PATH_SUFFIX/hyperthreading/$task"
       #new_folder_base="$parent_dir/synchronizeExperimentation/locust/train/$element/nantes/hyperthreading/$category/$date_str"
       new_folder_path1="$new_folder_base"
+      new_folder_path2="$new_folder_base/source"
       new_folder_path_backup="$new_folder_base/backup"
 
       for file_name in $prefix_folder/Load/$element/*.csv;
@@ -74,18 +76,24 @@ export KUBECONFIG="${init_root_prefix}$CERTIFICATE"
         kubectl create -f $prefix_folder/benchmarks/train-ticket/ts-deployment-part3.yml
         # kubectl apply  -f trainticket-gateway.yaml
         sleep 480
-        #python3 $prefix_folder/workload_generators/locust/train-ticket/ts_api_invoke_test.py $host
+        python3 $prefix_folder/workload_generators/locust/train-ticket/ts_api_invoke_test.py $host
 
         #env INTENSITY_FILE="$prefix_folder$WARMUP_FILE" locust -f $prefix_folder/workload_generators/locust/teastore_locustfile-custom-scale.py --headless --host $host
         #env INTENSITY_FILE="$prefix_folder$WARMUP_FILE" locust -f $prefix_folder/workload_generators/locust/bi_locustfile_request.py --headless --csv $log_exp_folder_path --host $host
 
-        #sleep 120
-            for i in $(seq 1 4);
+        sleep 240
+        i=0
+            for i in $(seq 1 8);
               do
                 root_file_name=$(basename "$file_name" .csv)
 
                 # Compter le nombre de fichiers dans le répertoire $date_str
                 file_count=$(ls -1 "$new_folder_path1" | wc -l)
+
+                echo "Le nombre de fichiers est : $file_count"
+
+                # Pour ajouter file_count à i, utilisez l'évaluation arithmétique
+               # i=$((i + file_count))
 
                 # Créer le sous-répertoire "experimentation" avec le numéro
                 exp_folder_path="$new_folder_path1/$root_file_name"
@@ -106,18 +114,20 @@ export KUBECONFIG="${init_root_prefix}$CERTIFICATE"
 
 
                 #env INTENSITY_FILE=$file_name locust -f ./request_type/bi_locustfile_request.py --headless --csv=log --csv-full-history
-                env INTENSITY_FILE="$file_name" TASK=$task locust -f $prefix_folder/workload_generators/locust/train-ticket-auto-query/locust_scenarios.py --headless --csv $log_exp_folder_path --host $host
+                env INTENSITY_FILE="$file_name" TASK=$task locust -f $prefix_folder/workload_generators/locust/train-ticket/locust_sequential_tasks.py --headless --csv $log_exp_folder_path --host $host
 
                 sleep 80
 
                 python3 $prefix_folder/Fetcher/fetch_organized_for_mean_order.py "$result" "$workload_dir" "$exp_folder_path" "$time_obj" "$PROMETHEUS_URL" "$DURATION" "$prefix_folder" "$i"
                 python3 $prefix_folder/Fetcher/istio_metric_fetch_order.py "$new_folder_path1" "$time_obj" "$istio_path" "$PROMETHEUS_URL" "$DURATION" "$root_file_name" "$i"
-                #python3 $prefix_folder/Fetcher/istio_metric_fetch_backup.py "$new_folder_path_backup" "$time_obj" $metric_path $istio_path $root_file_name
+                python3 $prefix_folder/Fetcher/double_istio_metric_fetch_order.py "$new_folder_path2" "$time_obj" "$istio_path" "$PROMETHEUS_URL" "$DURATION" "$root_file_name" "$i"
+
 
           done
         kubectl delete -f $prefix_folder/benchmarks/train-ticket/ts-deployment-part1.yml
         kubectl delete -f $prefix_folder/benchmarks/train-ticket/ts-deployment-part2.yml
         kubectl delete -f $prefix_folder/benchmarks/train-ticket/ts-deployment-part3.yml
       done
+      break
     done
-  done
+  #done

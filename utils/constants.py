@@ -7,7 +7,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 line_styles=["solid","dotted","dashed","dashdot"]
 
-plot_limit = 298
+plot_limit = 301
 cpu_limit_max=0.002
 load_max=11
 memory_limit=0.01
@@ -151,7 +151,7 @@ def sort_legend(legend_objects, legend_labels):
 
     return legend_objects_sorted, legend_labels_sorted
 
-cpu_step = "120s"
+cpu_step = "5m"
 step = "1s"
 
 def read_ini_file(file_path):
@@ -270,7 +270,7 @@ def plot_json_generic(file_path, file_name, data_type='cpu'):
     json_data_file2 = open_file(os.path.join(file_path, list_element[1]))
     #print(list_element[2])
     json_data_file3 = open_file(os.path.join(file_path, list_element[2]))
-    # json_data_file4 = open_file(os.path.join(file_path, list_element[3]))
+    #json_data_file4 = open_file(os.path.join(file_path, list_element[3]))
     # json_data_file5 = open_file(os.path.join(file_path, list_element[4]))
     # json_data_file6 = open_file(os.path.join(file_path, list_element[5]))
     # json_data_file7 = open_file(os.path.join(file_path, list_element[6]))
@@ -285,7 +285,7 @@ def plot_json_generic(file_path, file_name, data_type='cpu'):
         datas1 = json_data_file1['data']['result'][0]['values']
         datas2 = json_data_file2['data']['result'][0]['values']
         datas3 = json_data_file3['data']['result'][0]['values']
-        # datas4 = json_data_file4['data']['result'][0]['values']
+        #datas4 = json_data_file4['data']['result'][0]['values']
         # datas5 = json_data_file5['data']['result'][0]['values']
         # datas6 = json_data_file6['data']['result'][0]['values']
         # datas7 = json_data_file7['data']['result'][0]['values']
@@ -308,7 +308,7 @@ def plot_json_generic(file_path, file_name, data_type='cpu'):
         values1 = [float(value) for _, value in datas1]
         values2 = [float(value) for _, value in datas2]
         values3 = [float(value) for _, value in datas3]
-        # values4 = [float(value) for _, value in datas4]
+       # values4 = [float(value) for _, value in datas4]
         # values5 = [float(value) for _, value in datas5]
         # values6 = [float(value) for _, value in datas6]
         # values7 = [float(value) for _, value in datas7]
@@ -331,10 +331,10 @@ def plot_json_generic(file_path, file_name, data_type='cpu'):
                  liste.append(0)
 
 
-        values1 = np.array(smooth(values1))
-        values2 = np.array(smooth(values2))
-        values3 = np.array(smooth(values3))
-        # values4 = np.array(smooth(values4))
+        values1 = np.array((values1))
+        values2 = np.array((values2))
+        values3 = np.array((values3))
+        #values4 = np.array(smooth(values4))
         # values5 = np.array(smooth(values5))
         # values6 = np.array(smooth(values6))
         # values7 = np.array(smooth(values7))

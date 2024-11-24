@@ -6,7 +6,7 @@ import numpy as np
 
 from utils.constants import plot_limit
 
-file_path="/home/erods-chouette/Documents/synchronizeExperimentation/locust/nantes/train/21-11-2024/load1profile_login_workload/hyperthreading/TrainTicketUserTasks/linear_10/aggregation/1_top_linear_10.json"
+file_path="/home/erods-chouette/Documents/synchronizeExperimentation/locust/grenoble/train/24-11-2024/temp_1temp_profile_login_no_user_creation_at_beginning1/hyperthreading/linear_10/aggregation/1_top_pods_linear_10.json"
 
 # Lire les données depuis un fichier JSON
 with open(file_path, 'r') as file:
@@ -33,7 +33,7 @@ for result in results:
 sorted_pods = sorted(pod_metrics.items(), key=lambda x: x[1]["avg"], reverse=True)
 
 # Filtrer les top N pods (par exemple, les 3 premiers)
-top_n = 6
+top_n = 10
 top_pods = sorted_pods[:top_n]
 
 # Tracer les courbes des top N pods

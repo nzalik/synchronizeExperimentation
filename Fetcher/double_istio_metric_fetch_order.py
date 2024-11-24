@@ -147,27 +147,27 @@ def query_svc_names(prometheus_url, namespace='default', start_dt='', end_dt='',
 def _get_query_modifier(metric_parameter, destination_target):
 
     if metric_parameter['aggregator'] == "histogram_quantile":
-        return f""" histogram_quantile(0.95, sum(rate(istio_request_duration_milliseconds_bucket{{reporter=~"destination", destination_workload="{destination_target}"}}[{interval}])) by (le, destination_workload))"""
+        return f""" histogram_quantile(0.95, sum(rate(istio_request_duration_milliseconds_bucket{{reporter=~"source",source_workload=~"(teastore-webui|teastore-recommender|teastore-persistence|teastore-image|teastore-auth), destination_workload="{destination_target}"}}[{interval}])) by (le, source_workload))"""
     elif metric_parameter['aggregator'] == "round_aggr":
-        return f""" round(sum(rate(istio_requests_total{{destination_workload="{destination_target}",reporter=~"destination"}}[{interval}])) by (destination_workload), 0.001)"""
+        return f""" round(sum(rate(istio_requests_total{{destination_workload="{destination_target}",source_workload=~"(teastore-webui|teastore-recommender|teastore-persistence|teastore-image|teastore-auth),reporter=~"source"}}[{interval}])) by (source_workload), 0.001)"""
     elif metric_parameter['aggregator'] == "round":
-        return f""" round(sum(rate(istio_requests_total{{destination_workload="{destination_target}",reporter=~"destination"}}[{interval}])) by (destination_workload), 0.001)"""
+        return f""" round(sum(rate(istio_requests_total{{destination_workload="{destination_target}",source_workload=~"(teastore-webui|teastore-recommender|teastore-persistence|teastore-image|teastore-auth),reporter=~"source"}}[{interval}])) by (source_workload), 0.001)"""
     elif metric_parameter['aggregator'] == "request_success":
-        return f""" round(sum(rate(istio_requests_total{{destination_workload="{destination_target}",reporter=~"destination", response_code=~"2.."}}[{interval}])) by (destination_workload), 0.001)"""
+        return f""" round(sum(rate(istio_requests_total{{destination_workload="{destination_target}",source_workload=~"(teastore-webui|teastore-recommender|teastore-persistence|teastore-image|teastore-auth),reporter=~"source", response_code=~"2.."}}[{interval}])) by (source_workload), 0.001)"""
     elif metric_parameter['aggregator'] == "client_error":
-        return f""" round(sum(rate(istio_requests_total{{destination_workload="{destination_target}",reporter=~"destination", response_code=~"4.."}}[{interval}])) by (destination_workload), 0.001)"""
+        return f""" round(sum(rate(istio_requests_total{{destination_workload="{destination_target}",source_workload=~"(teastore-webui|teastore-recommender|teastore-persistence|teastore-image|teastore-auth),reporter=~"source", response_code=~"4.."}}[{interval}])) by (source_workload), 0.001)"""
     elif metric_parameter['aggregator'] == "server_error":
-        return f""" round(sum(rate(istio_requests_total{{destination_workload="{destination_target}",reporter=~"destination", response_code=~"5.."}}[{interval}])) by (destination_workload), 0.001)"""
+        return f""" round(sum(rate(istio_requests_total{{destination_workload="{destination_target}",source_workload=~"(teastore-webui|teastore-recommender|teastore-persistence|teastore-image|teastore-auth),reporter=~"source", response_code=~"5.."}}[{interval}])) by (source_workload), 0.001)"""
     elif metric_parameter['aggregator'] == "redirection":
-        return f""" round(sum(rate(istio_requests_total{{destination_workload="{destination_target}",reporter=~"destination", response_code=~"3.."}}[{interval}])) by (destination_workload), 0.001)"""
+        return f""" round(sum(rate(istio_requests_total{{destination_workload="{destination_target}",source_workload=~"(teastore-webui|teastore-recommender|teastore-persistence|teastore-image|teastore-auth),reporter=~"source", response_code=~"3.."}}[{interval}])) by (source_workload), 0.001)"""
     elif metric_parameter['aggregator'] == "bytes":
-        return f"""histogram_quantile(0.95, sum(rate(istio_request_bytes_bucket{{reporter=~"destination", destination_workload=~"{destination_target}"}}[{interval}])) by (le, source_workload, destination_workload))"""
+        return f"""histogram_quantile(0.95, sum(rate(istio_request_bytes_bucket{{reporter=~"source", source_workload=~"(teastore-webui|teastore-recommender|teastore-persistence|teastore-image|teastore-auth),destination_workload=~"{destination_target}"}}[{interval}])) by (le, source_workload, destination_workload))"""
     elif metric_parameter['aggregator'] == "tcp":
-        return f"""round(sum(rate(istio_tcp_sent_bytes_total{{reporter=~"destination", destination_workload=~"{destination_target}"}}[{interval}])) by (destination_workload), 0.001)"""
+        return f"""round(sum(rate(istio_tcp_sent_bytes_total{{reporter=~"source", source_workload=~"(teastore-webui|teastore-recommender|teastore-persistence|teastore-image|teastore-auth),destination_workload=~"{destination_target}"}}[{interval}])) by (source_workload), 0.001)"""
     elif metric_parameter['aggregator'] == "latency_order":
         return f"""topk(64, histogram_quantile(0.95, sum(rate(istio_request_duration_milliseconds_bucket{{namespace="default"}}[{interval}])) by (le, destination_workload)))"""
     else:
-        return f""" round(sum(rate(istio_requests_total{{reporter=~"destination", destination_workload="{destination_target}", response_code="400"}}[{interval}])) by (destination_workload), 0.001)"""
+        return f""" round(sum(rate(istio_requests_total{{reporter=~"source", source_workload=~"(teastore-webui|teastore-recommender|teastore-persistence|teastore-image|teastore-auth), destination_workload="{destination_target}", response_code="400"}}[{interval}])) by (source_workload), 0.001)"""
 
 
 def _save_as_json(source, destination, res, datadir):

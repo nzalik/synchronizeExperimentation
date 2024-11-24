@@ -25,11 +25,13 @@ file_path_json = '../teastore.json'
 
 csv_file_path = "/home/erods-chouette/Documents/synchronizeExperimentation/Load/load1/"
 
-root_path = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/nantes/train/19-11-2024/load1profile_with_deep_locustfile_extended/hyperthreading"
+root_path = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/grenoble/train/22-11-2024/load1temp_profile_login_no_user_creation_at_beginning/hyperthreading/HomePage"
 
 latency_path = root_path
+print("root_path")
+print(root_path)
 
-services = ["ts-ui-dashboard"]
+services = ["ts-auth-service"]
 #services = ["ts-inside-payment-service","ts-order-other-service","ts-auth-service","ts-ui-dashboard", "ts-order-other-service", "ts-station-service", "ts-travel-service", "ts-food-service", "ts-ticketinfo-service","ts-basic-service"]
 
 #services = ["teastore-auth", "teastore-image", "teastore-persistence", "teastore-recommender", "teastore-registry","teastore-webui"]
@@ -262,8 +264,9 @@ for element in services:
             plt.title('Request volume')
             plt.ylim(0, request_volume_limit)
 
-            for i in range(1,range_limit):
+            for i in range(1,range_limit+1):
                 plot_stats_path = f"{root_path}/output/{x}_{i}_stats_history.csv"
+                print("le chemin")
                 print(plot_stats_path)
 
                 df_stats = pd.read_csv(plot_stats_path)
@@ -333,7 +336,7 @@ for element in services:
         # df_stats = pd.DataFrame()
 
 
-        for i in range(1, range_limit):
+        for i in range(1, range_limit+1):
             plot_stats_path = f"{root_path}/output/{x}_{i}_stats_history.csv"
 
             df_stats = pd.read_csv(plot_stats_path)

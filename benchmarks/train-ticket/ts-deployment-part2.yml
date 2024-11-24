@@ -1421,7 +1421,7 @@ spec:
     spec:
       containers:
       - name: ts-voucher-service
-        image: codewisdom/ts-voucher-service:0.0.4
+        image: codewisdom/ts-voucher-service:0.0.3 #changer vers 3 au lieu de 4
         imagePullPolicy: Always
         ports:
         - containerPort: 16101
