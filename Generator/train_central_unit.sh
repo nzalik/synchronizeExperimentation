@@ -28,12 +28,12 @@ category="128/linear/3nodes/linear"
 
 # This is to give an indication to the script from where the script is executed
 # From the home environment or from the Grid
-root_prefix="/home/erods-chouette/Documents/"
-init_root_prefix="/home/erods-chouette/"
+#root_prefix="/home/erods-chouette/Documents/"
+#init_root_prefix="/home/erods-chouette/"
 
 #Production environment
-#init_root_prefix="/home/ykoagnenzali/"
-#root_prefix="/home/ykoagnenzali/"
+init_root_prefix="/home/ykoagnenzali/"
+root_prefix="/home/ykoagnenzali/"
 
 prefix_folder="${root_prefix}synchronizeExperimentation"
 
@@ -83,7 +83,7 @@ export KUBECONFIG="${init_root_prefix}$CERTIFICATE"
 
         #sleep 240
         i=0
-            for i in $(seq 1 3);
+            for i in $(seq 1 5);
               do
                 root_file_name=$(basename "$file_name" .csv)
 
