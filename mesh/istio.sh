@@ -9,7 +9,8 @@ parent_dir=$1
 kubectl create namespace istio-system
 
 kubectl create -f "$parent_dir/mesh/istio"
-kubectl create -f $parent_dir/custom_deployments/istio-prometheus-nodeport.yaml
+#kubectl create -f $parent_dir/custom_deployments/istio-prometheus-nodeport.yaml
+kubectl create -f $parent_dir/custom_deployments/kube-prometheus-stack-nodeport.yaml
 # Télécharger et extraire Istio
 #curl -L https://istio.io/downloadIstio | sh -
 cd "$parent_dir/mesh/istio-1.23.3"

@@ -8,6 +8,7 @@ import sys
 import time
 from datetime import datetime
 from random import randint
+import requests
 
 import locust
 import numpy as np
@@ -61,11 +62,15 @@ class Requests:
         user = random.choice(USER_CREDETIALS)
         self.user_name = user
         self.password = user
-        self.trip_detail = random.choice(TRIP_DATA)
+        #self.trip_detail = random.choice(TRIP_DATA)
+        self.trip_detail = {}
+        self.contact = {}
         self.food_detail = {}
+        self.assurance = {}
+        self.contactid = ""
         self.departure_date = random.choice(TRAVEL_DATES)
-        # self.user_name = "fdse_microservice"
-        # self.password = "111111"
+        #self.user_name = "fdse_microservice"
+        #self.password = "111111"
 
         if VERBOSE_LOGGING == 1:
             logger = logging.getLogger("Debugging logger")
@@ -74,10 +79,12 @@ class Requests:
             self.debugging_logger = logger
         else:
             self.debugging_logger = None
+        logging.basicConfig(level=logging.DEBUG)
 
     def log_verbose(self, to_log):
         if self.debugging_logger is not None:
             self.debugging_logger.debug(json.dumps(to_log))
+        print("Logging:", to_log)
 
     def home(self, expected):
         req_label = sys._getframe().f_code.co_name + postfix(expected)
@@ -98,45 +105,78 @@ class Requests:
 
     def search_ticket(self, expected):
         logging.debug("search ticket")
-        stations = ["Shang Hai", "Tai Yuan", "Nan Jing", "Wu Xi", "Su Zhou", "Shang Hai Hong Qiao", "Bei Jing",
-                    "Shi Jia Zhuang", "Xu Zhou", "Ji Nan", "Hang Zhou", "Jia Xing Nan", "Zhen Jiang"]
-        from_station, to_station = random.sample(stations, 2)
+        # stations = ["Shang Hai", "Tai Yuan", "Nan Jing", "Wu Xi", "Su Zhou", "Shang Hai Hong Qiao", "Bei Jing",
+        #             "Shi Jia Zhuang", "Xu Zhou", "Ji Nan", "Hang Zhou", "Jia Xing Nan", "Zhen Jiang"]
+        stations = ["shanghai", "suzhou", "jinan"]
+        #from_station, to_station = random.sample(stations, 2)
+        from_station = "shanghai"
+        to_station = "suzhou"
+        # from_station = from_station.lower().replace(" ", "")
+        # to_station = to_station.lower().replace(" ", "")
         departure_date = self.departure_date
         head = {"Accept": "application/json",
                 "Content-Type": "application/json"}
         body_start = {
             "startingPlace": from_station,
             "endPlace": to_station,
-            "departureTime": departure_date
+           # "departureTime": departure_date
         }
+        print(body_start)
         req_label = sys._getframe().f_code.co_name + postfix(expected)
         start_time = time.time()
+
         response = self.client.post(
             url="/api/v1/travelservice/trips/left",
             headers=head,
             json=body_start,
             name=req_label)
-        if not response.json()["data"]:
-            response = self.client.post(
-                url="/api/v1/travel2service/trips/left",
-                headers=head,
-                json=body_start,
-                name=req_label)
+        quickest_trip = self._query_quickest()
+
+        if response.status_code is 200 :
+            if response.json()["data"]:
+                self.trip_detail = response.json()["data"][0]
+                print("*********the output*********")
+                print(response.json()["data"][0])
+            if not response.json()["data"]:
+                response = self.client.post(
+                    url="/api/v1/travel2service/trips/left",
+                    headers=head,
+                    json=body_start,
+                    name=req_label)
+        else:
+            response = quickest_trip
+            self.trip_detail = quickest_trip
         to_log = {'name': req_label, 'expected': expected, 'status_code': response.status_code,
                   'response_time': time.time() - start_time,
                   'response': self.try_to_read_response_as_json(response)}
         self.log_verbose(to_log)
 
-    # def search_departure(self, expected):
-    #     logging.info("search_departure")
-    #     stations = ["Shang Hai", "Tai Yuan", "Nan Jing", "Wu Xi", "Su Zhou", "Shang Hai Hong Qiao", "Bei Jing",
-    #                 "Shi Jia Zhuang", "Xu Zhou", "Ji Nan", "Hang Zhou", "Jia Xing Nan", "Zhen Jiang"]
-    #     from_station, to_station = random.sample(stations, 2)
-    #     if expected:
-    #         self.search_ticket(date.today().strftime(random_date_generator()), from_station, to_station, expected)
-    #     else:
-    #         self.search_ticket(date.today().strftime(random_date_generator()), random_string_generator(), "Su Zhou",
-    #                            expected)
+
+    def _query_quickest(self, date="2021-12-31", headers: dict = {}, expected=True):
+        req_label = sys._getframe().f_code.co_name + postfix(expected)
+        #url = f"{base_address}/api/v1/travelplanservice/travelPlan/quickest"
+        print("On est dans la fontion quickest")
+
+        payload = {
+            "startingPlace": "Nan Jing",
+            "endPlace": "Shang Hai",
+            "departureTime": "2024-11-27"
+        }
+
+        r = self.client.post(
+            url="/api/v1/travelplanservice/travelPlan/quickest",
+            headers=headers,
+            json=payload,
+            name=req_label)
+
+        #r = requests.post(url=url, json=payload, headers=headers)
+        print(r.content)
+        if r.status_code == 200:
+            print("query quickest success")
+        else:
+            print("query quickest failed")
+
+        return r.json()["data"][0]
 
     def _create_user(self, expected):
 
@@ -154,6 +194,31 @@ class Requests:
                       'response_time': time.time() - start_time,
                       'response': self.try_to_read_response_as_json(response2)}
             self.log_verbose(to_log)
+
+    def register(self, expected):
+            req_label = sys._getframe().f_code.co_name + postfix(expected)
+            start_time = time.time()
+            document_num = random.randint(1, 5)  # added by me
+            user = {
+                #"userId": "4d2a46c7-71cb-4cf1-b5bb-b68406d9da6f",
+                "userName": self.user_name,
+                "password": self.user_name,
+                "gender": 1,
+                "documentType": 1,
+                "documentNum": "2135488099312X",
+                "email": "nzalikyannick01@gmail.com"
+                }
+
+            with self.client.post(url="/api/v1/userservice/users/register",
+                                  headers={
+                                      "Accept": "application/json",
+                                      "Content-Type": "application/json"},
+                                  json=user, name=req_label) as response2:
+                print(response2.content)
+                to_log = {'name': req_label, 'expected': expected, 'status_code': response2.status_code,
+                          'response_time': time.time() - start_time,
+                          'response': self.try_to_read_response_as_json(response2)}
+                self.log_verbose(to_log)
 
     def _navigate_to_client_login(self, expected=True):
         req_label = sys._getframe().f_code.co_name + postfix(expected)
@@ -205,17 +270,20 @@ class Requests:
 
     # purchase ticket
 
+    #Go the the booking page with information about the trip
     def start_booking(self, expected):
         departure_date = self.departure_date
         head = {"Accept": "application/json",
                 "Content-Type": "application/json", "Authorization": self.bearer}
         req_label = sys._getframe().f_code.co_name + postfix(expected)
         start_time = time.time()
+        print("########tets################")
+        print(self.trip_detail)
         with self.client.get(
-                url="/client_ticket_book.html?tripId=" + self.trip_detail["trip_id"] + "&from=" + self.trip_detail[
-                    "from"] +
-                    "&to=" + self.trip_detail["to"] + "&seatType=" + self.trip_detail["seat_type"] + "&seat_price=" +
-                    self.trip_detail["seat_price"] +
+                url="/client_ticket_book.html?tripId=" + self.trip_detail["tripId"]["type"] + self.trip_detail["tripId"]["number"] + "&from=" + self.trip_detail[
+                    "startingStation"] +
+                    "&to=" + self.trip_detail["terminalStation"] + "&seatType=" + "2" + "&seat_price=" +
+                    self.trip_detail["priceForConfortClass"] +
                     "&date=" + departure_date,
                 headers=head,
                 name=req_label) as response:
@@ -232,6 +300,7 @@ class Requests:
                 url="/api/v1/assuranceservice/assurances/types",
                 headers=head,
                 name=req_label) as response:
+            self.assurance = response.json()["data"][0]
             to_log = {'name': req_label, 'expected': expected, 'status_code': response.status_code,
                       'response_time': time.time() - start_time,
                       'response': self.try_to_read_response_as_json(response)}
@@ -239,30 +308,38 @@ class Requests:
 
     def get_foods(self, expected):
         departure_date = self.departure_date
+        message = ""
         head = {"Accept": "application/json",
                 "Content-Type": "application/json", "Authorization": self.bearer}
         req_label = sys._getframe().f_code.co_name + postfix(expected)
         start_time = time.time()
         with self.client.get(
-                url="/api/v1/foodservice/foods/" + departure_date + "/" + self.trip_detail["from"] + "/" +
-                    self.trip_detail["to"] + "/" + self.trip_detail["trip_id"],
+                url="/api/v1/foodservice/foods/" + departure_date + "/" + self.trip_detail["startingStation"] + "/" +
+                     self.trip_detail["priceForConfortClass"] + "/" + self.trip_detail["tripId"]["type"] + self.trip_detail["tripId"]["number"],
                 headers=head,
                 name=req_label) as response:
-            # resp_data = response.json()
-            # if resp_data["data"]:
-            #     if random.uniform(0, 1) <= 0.5:
-            #         self.food_detail = {"foodType": 2,
-            #                             "foodName": resp_data["data"]["trainFoodList"][0]["foodList"][0]["foodName"],
-            #                             "foodPrice": resp_data["data"]["trainFoodList"][0]["foodList"][0]["price"]}
-            #     else:
-            #         self.food_detail = {"foodType": 1,
-            #                             "foodName": resp_data["data"]["foodStoreListMap"][self.trip_detail["from"]][0][
-            #                                 "foodList"][0]["foodName"],
-            #                             "foodPrice": resp_data["data"]["foodStoreListMap"][self.trip_detail["from"]][0][
-            #                                 "foodList"][0]["price"]}
+            print("%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
+            print(response.json())
+            if response.status_code is not 200 or response.json().get("data") is None:
+                if response.json().get("data")["data"]["trainFoodList"] is None:
+                    message = f"query food failed, response data is {response}"
+                else:
+                    resp_data = response.json()
+                    if resp_data["data"]:
+                        message = self.try_to_read_response_as_json(response)
+                        if random.uniform(0, 1) <= 0.5:
+                            self.food_detail = {"foodType": 2,
+                                                "foodName": resp_data["data"]["trainFoodList"][0]["foodList"][0]["foodName"],
+                                                "foodPrice": resp_data["data"]["trainFoodList"][0]["foodList"][0]["price"]}
+                        else:
+                            self.food_detail = {"foodType": 1,
+                                                "foodName": resp_data["data"]["foodStoreListMap"][self.trip_detail["from"]][0][
+                                                    "foodList"][0]["foodName"],
+                                                "foodPrice": resp_data["data"]["foodStoreListMap"][self.trip_detail["from"]][0][
+                                                    "foodList"][0]["price"]}
             to_log = {'name': req_label, 'expected': expected, 'status_code': response.status_code,
                       'response_time': time.time() - start_time,
-                      'response': self.try_to_read_response_as_json(response)}
+                      'response': message}
             self.log_verbose(to_log)
 
     def select_contact(self, expected):
@@ -305,12 +382,13 @@ class Requests:
             body_for_reservation = {
                 "accountId": self.user_id,
                 "contactsId": self.contactid,
-                "tripId": self.trip_detail["trip_id"],
-                "seatType": self.trip_detail["seat_type"],
+                "tripId": self.trip_detail["tripId"]["type"] + self.trip_detail["tripId"]["number"],
+                "seatType": 2,
                 "date": departure_date,
-                "from": self.trip_detail["from"],
-                "to": self.trip_detail["to"],
-                "assurance": random.choice(["0", "1"]),
+                "from": self.trip_detail["startingStation"],
+                "to":  self.trip_detail["priceForConfortClass"],
+                "assurance": "1",
+                #"assurance": random.choice(["0", "1"]),
                 "foodType": 1,
                 "foodName": "Bone Soup",
                 "foodPrice": 2.5,
@@ -500,8 +578,8 @@ class Requests:
                 json={
                     "accountId": self.user_id,
                     "handleDate": self.departure_date,
-                    "from": self.trip_detail["from"],
-                    "to": self.trip_detail["to"],
+                    "from": self.trip_detail["startingStation"],
+                    "to":  self.trip_detail["priceForConfortClass"],
                     "orderId": self.order_id,
                     "consignee": self.order_id,
                     "phone": ''.join([random.choice(string.digits) for n in range(8)]),
@@ -570,180 +648,6 @@ class Requests:
         task = getattr(self, name_without_suffix)
         task(name.endswith('_expected'))
 
-
-class UserOnlyLogin(HttpUser):
-    weight = 1
-    # wait_function = random.expovariate(1) * 1000
-    wait_time = constant(0)
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.client.mount("https://", HTTPAdapter(pool_maxsize=50))
-        self.client.mount("http://", HTTPAdapter(pool_maxsize=50))
-
-    @task()
-    def perform_task(self):
-        logging.debug("User home -> login")
-        request = Requests(self.client)
-        number = np.random.uniform()
-        if number < 0.98:
-            tasks_sequence = ["login_expected"]
-        else:
-            tasks_sequence = ["login_unexpected"]
-        for tasks in tasks_sequence:
-            request.perform_task(tasks)
-
-
-class UserNoLogin(HttpUser):
-    weight = 1
-    wait_time = constant(0)
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.client.mount('https://', HTTPAdapter(pool_maxsize=50))
-        self.client.mount('http://', HTTPAdapter(pool_maxsize=50))
-
-    @task
-    def perfom_task(self):
-        logging.debug("Running user 'only search'...")
-
-        task_sequence = ["home_expected", "search_ticket_expected"]
-
-        requests = Requests(self.client)
-        for task in task_sequence:
-            requests.perform_task(task)
-
-
-class UserBooking(HttpUser):
-    weight = 1
-    # wait_function = random.expovariate(1)
-    wait_time = constant(0)
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.client.mount('https://', HTTPAdapter(pool_maxsize=50))
-        self.client.mount('http://', HTTPAdapter(pool_maxsize=50))
-
-    @task
-    def perform_task(self):
-        logging.debug("Running user 'booking'...")
-
-        task_sequence = ["home_expected",
-                         "login_expected",
-                         "search_ticket_expected",
-                         "start_booking_expected",
-                         "get_assurance_types_expected",
-                         "get_foods_expected",
-                         "select_contact_expected",
-                         "finish_booking_expected"]
-        # task_sequence = ["login_expected", "select_contact_expected", "finish_booking_expected"]
-
-        requests = Requests(self.client)
-        for task in task_sequence:
-            requests.perform_task(task)
-
-
-class UserConsignTicket(HttpUser):
-    weight = 1
-    wait_time = constant(0)
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.client.mount('https://', HTTPAdapter(pool_maxsize=50))
-        self.client.mount('http://', HTTPAdapter(pool_maxsize=50))
-
-    @task
-    def perform_task(self):
-        logging.debug("Running user 'consign ticket'...")
-        task_sequence = [
-            "home_expected",
-            "login_expected",
-            "select_contact_expected",
-            "finish_booking_expected",
-            "select_order_expected",
-            "get_consigns_expected",
-            "confirm_consign_expected",
-        ]
-
-        requests = Requests(self.client)
-        for task in task_sequence:
-            requests.perform_task(task)
-
-
-class UserPay(HttpUser):
-    weight = 1
-    wait_time = constant(0)
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.client.mount('https://', HTTPAdapter(pool_maxsize=50))
-        self.client.mount('http://', HTTPAdapter(pool_maxsize=50))
-
-    @task
-    def perform_task(self):
-        logging.debug("Running user 'booking'...")
-
-        task_sequence = ["home_expected",
-                         "login_expected",
-                         "select_contact_expected",
-                         "finish_booking_expected",
-                         "select_order_expected",
-                         "pay_expected"]
-
-        requests = Requests(self.client)
-        for task in task_sequence:
-            requests.perform_task(task)
-
-
-class UserCancelNoRefund(HttpUser):
-    weight = 0
-    wait_time = constant(0)
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.client.mount('https://', HTTPAdapter(pool_maxsize=50))
-        self.client.mount('http://', HTTPAdapter(pool_maxsize=50))
-
-    @task
-    def perform_task(self):
-        logging.debug("Running user 'cancel no refund'...")
-
-        task_sequence = [
-            "home_expected",
-            "login_expected",
-            "select_order_expected",
-            "cancel_with_no_refund_expected",
-        ]
-
-        requests = Requests(self.client)
-        for task in task_sequence:
-            requests.perform_task(task)
-
-
-class UserCollectTicket(HttpUser):
-    weight = 1
-    wait_time = constant(0)
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.client.mount('https://', HTTPAdapter(pool_maxsize=50))
-        self.client.mount('http://', HTTPAdapter(pool_maxsize=50))
-
-    @task
-    def perform_task(self):
-        logging.debug("Running user 'collect ticket'...")
-
-        task_sequence = [
-            "home_expected",
-            "login_expected",
-            "select_order_expected",
-            "pay_expected",
-            "collect_ticket_expected",
-        ]
-
-        requests = Requests(self.client)
-        for task in task_sequence:
-            requests.perform_task(task)
 
 
 """

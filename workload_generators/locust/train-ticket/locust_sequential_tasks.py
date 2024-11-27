@@ -1,8 +1,10 @@
+import logging
 import os
 import sys
 import csv
-from locust import task, HttpUser, SequentialTaskSet, LoadTestShape
+from locust import task, HttpUser, SequentialTaskSet, LoadTestShape, constant
 from locust.exception import StopUser
+import numpy as np
 from requests.adapters import HTTPAdapter
 
 from locustfile import Requests
@@ -42,14 +44,10 @@ class CustomLoadShape(LoadTestShape):
 
 class SearchTicket(SequentialTaskSet):
 
-    #def __init__(self, *args, **kwargs):
-        #super().__init__(*args, **kwargs)
-        #self.client.mount('https://', HTTPAdapter(pool_maxsize=50))
-        #self.client.mount('http://', HTTPAdapter(pool_maxsize=50))
-
     @task
     def only_search(self):
         #logging.info("Running task 'only search'...")
+        #task_sequence = ["register_expected"]
         task_sequence = ["home_expected", "search_ticket_expected"]
         requests = Requests(self.client)
         for task in task_sequence:
@@ -60,8 +58,7 @@ class SearchTicket(SequentialTaskSet):
         #logging.info("Stopping task 'only search'...")
         raise StopUser()
 
-
-class BookTicket(SequentialTaskSet):
+class HomeLoginSearchStartBooking(SequentialTaskSet):
 
     # def __init__(self, *args, **kwargs):
     #     super().__init__(*args, **kwargs)
@@ -69,16 +66,14 @@ class BookTicket(SequentialTaskSet):
     #     self.client.mount('http://', HTTPAdapter(pool_maxsize=50))
 
     @task
-    def book_ticket(self):
+    def homeLoginSearchStartBooking(self):
         #logging.info("Running Tasks for booking...")
         task_sequence = ["home_expected",
                          "login_expected",
+                         "register_expected",
                          "search_ticket_expected",
-                         "start_booking_expected",
-                         "get_assurance_types_expected",
-                         "get_foods_expected",
-                         "select_contact_expected",
-                         "finish_booking_expected"]
+                         "start_booking_expected"
+                         ]
 
         requests = Requests(self.client)
         for task in task_sequence:
@@ -89,8 +84,27 @@ class BookTicket(SequentialTaskSet):
         #logging.info("Stopping booking tasks")
         raise StopUser()
 
+class HomeLoginSearchStartBookingAssuranceFood(SequentialTaskSet):
 
-class ConsignTicket(SequentialTaskSet):
+    @task
+    def homeLoginSearchStartBookingAssuranceFood(self):
+        #logging.info("Running Tasks for booking...")
+        task_sequence = ["home_expected",
+                         "register_expected",
+                         "login_expected",
+                         "search_ticket_expected",
+                         "start_booking_expected",
+                         "get_assurance_types_expected",
+                         "get_foods_expected",
+                         "select_contact_expected",
+                         #"finish_booking_expected"
+                         ]
+
+        requests = Requests(self.client)
+        for task in task_sequence:
+            requests.perform_task(task)
+
+class BookTicket(SequentialTaskSet):
 
     # def __init__(self, *args, **kwargs):
     #     super().__init__(*args, **kwargs)
@@ -98,10 +112,36 @@ class ConsignTicket(SequentialTaskSet):
     #     self.client.mount('http://', HTTPAdapter(pool_maxsize=50))
 
     @task
+    def book_ticket(self):
+        # logging.info("Running Tasks for booking...")
+        task_sequence = [  #
+            "home_expected",
+            "register_expected",
+            "login_expected",
+            "search_ticket_expected",
+            "start_booking_expected",
+            "get_assurance_types_expected",
+            "get_foods_expected",
+            "select_contact_expected",
+            "finish_booking_expected"
+        ]
+
+        requests = Requests(self.client)
+        for task in task_sequence:
+            requests.perform_task(task)
+    @task
+    def stop(self):
+        #logging.info("Stopping booking tasks")
+        raise StopUser()
+
+class ConsignTicket(SequentialTaskSet):
+
+    @task
     def perform_task(self):
        #logging.debug("Running tasks for 'consign ticket'...")
         task_sequence = [
             "home_expected",
+            "register_expected",
             "login_expected",
             "select_contact_expected",
             "finish_booking_expected",
@@ -119,18 +159,13 @@ class ConsignTicket(SequentialTaskSet):
         #logging.info("Stopping consign tasks")
         raise StopUser()
 
-
 class PayForTickets(SequentialTaskSet):
-    # def __init__(self, *args, **kwargs):
-    #     super().__init__(*args, **kwargs)
-    #     self.client.mount('https://', HTTPAdapter(pool_maxsize=50))
-    #     self.client.mount('http://', HTTPAdapter(pool_maxsize=50))
-
     @task
     def perform_task(self):
         # logging.debug("Running tasks for 'pay'...")
 
         task_sequence = ["home_expected",
+                         "register_expected",
                          "login_expected",
                          "select_contact_expected",
                          "finish_booking_expected",
@@ -146,13 +181,7 @@ class PayForTickets(SequentialTaskSet):
         #logging.info("Stopping pay tasks")
         raise StopUser()
 
-
 class CollectTicketTasks(SequentialTaskSet):
-
-    # def __init__(self, *args, **kwargs):
-    #     super().__init__(*args, **kwargs)
-    #     self.client.mount('https://', HTTPAdapter(pool_maxsize=50))
-    #     self.client.mount('http://', HTTPAdapter(pool_maxsize=50))
 
     @task
     def perform_task(self):
@@ -160,6 +189,7 @@ class CollectTicketTasks(SequentialTaskSet):
 
         task_sequence = [
             "home_expected",
+            "register_expected",
             "login_expected",
             "select_order_expected",
             "pay_expected",
@@ -176,22 +206,67 @@ class CollectTicketTasks(SequentialTaskSet):
         raise StopUser()
 
 
+class UserCancelNoRefund(SequentialTaskSet):
+    weight = 0
+   # wait_time = constant(0)
+
+    @task
+    def perform_task(self):
+        logging.debug("Running user 'cancel no refund'...")
+
+        task_sequence = [
+            "home_expected",
+            "register_expected",
+            "login_expected",
+            "select_order_expected",
+            "cancel_with_no_refund_expected",
+        ]
+
+        requests = Requests(self.client)
+        for task in task_sequence:
+            requests.perform_task(task)
+
+class UserOnlyLogin(SequentialTaskSet):
+    weight = 1
+    # wait_function = random.expovariate(1) * 1000
+    wait_time = constant(0)
+
+    @task()
+    def perform_task(self):
+        logging.debug("User home -> login")
+        request = Requests(self.client)
+        number = np.random.uniform()
+        if number < 0.98:
+            tasks_sequence = ["login_expected"]
+        else:
+            tasks_sequence = ["login_unexpected"]
+        for tasks in tasks_sequence:
+            request.perform_task(tasks)
+
+
+class UserNoLogin(SequentialTaskSet):
+    weight = 1
+    wait_time = constant(0)
+
+    def perfom_task(self):
+        logging.debug("Running user 'only search'...")
+
+        task_sequence = ["home_expected", "search_ticket_expected"]
+
+        requests = Requests(self.client)
+        for task in task_sequence:
+            requests.perform_task(task)
+
 class UserGlobal(HttpUser):
     task_mapping = {
         "SearchTicket": SearchTicket,
         "BookTicket": BookTicket,
         "ConsignTicket": ConsignTicket,
-        #"PayForTickets": PayForTickets,
-        #"CollectTicketTasks": CollectTicketTasks,
+        "HomeLoginSearchStartBookingAssuranceFood":HomeLoginSearchStartBookingAssuranceFood,
+        "HomeLoginSearchStartBooking": HomeLoginSearchStartBooking,
+        "PayForTickets": PayForTickets,
+        "CollectTicketTasks": CollectTicketTasks,
     }
 
     tasks = [task_mapping.get(GLOBAL_TASK, SearchTicket)]  # Par défaut HomePage si non défini
-
-    # tasks = {
-    #     SearchTicket: 1,
-    #     # BookTicket: 1,
-    #     # ConsignTicket: 1,
-    #     # PayForTickets: 1,
-    #     # CollectTicketTasks: 1
-    # }
 

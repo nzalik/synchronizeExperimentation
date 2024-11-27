@@ -164,8 +164,6 @@ def _get_query_modifier(metric_parameter, destination_target):
         return f"""histogram_quantile(0.95, sum(rate(istio_request_bytes_bucket{{reporter=~"destination", destination_workload=~"{destination_target}"}}[{interval}])) by (le, source_workload, destination_workload))"""
     elif metric_parameter['aggregator'] == "tcp":
         return f"""round(sum(rate(istio_tcp_sent_bytes_total{{reporter=~"destination", destination_workload=~"{destination_target}"}}[{interval}])) by (destination_workload), 0.001)"""
-    elif metric_parameter['aggregator'] == "latency_order":
-        return f"""topk(64, histogram_quantile(0.95, sum(rate(istio_request_duration_milliseconds_bucket{{namespace="default"}}[{interval}])) by (le, destination_workload)))"""
     else:
         return f""" round(sum(rate(istio_requests_total{{reporter=~"destination", destination_workload="{destination_target}", response_code="400"}}[{interval}])) by (destination_workload), 0.001)"""
 

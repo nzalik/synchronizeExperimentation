@@ -1,7 +1,7 @@
 # shellcheck disable=SC2045
 #/!/bin/bash
 
-host="http://econome-9.nantes.grid5000.fr:30080"
+host="http://econome-9.nantes.grid5000.fr:32677"
 for i in ../Load/temp_1/*.csv; do
 #for i in $(ls ../Load/profiles_2024-07-31/*.csv); do
 			INTENSITY=$( basename ${i%.*} )
@@ -13,9 +13,12 @@ for i in ../Load/temp_1/*.csv; do
 
 			echo "----- Starting workload with intensity $INTENSITY for $duration minutes -----"
 
+      task="SearchTicket"
 			#locust -f teastore_locustfile-custom-scale.py --headless
 
-			env INTENSITY_FILE=$i locust -f ./locust/teastore_locustfile-custom-scale.py --host $host --headless --csv=log
+env INTENSITY_FILE="$i" TASK=$task locust -f ./locust/train-ticket/locust_sequential_tasks.py --headless --host $host
+
+			#env INTENSITY_FILE=$i locust -f ./locust/teastore_locustfile-custom-scale.py --host $host --headless --csv=log
       #env INTENSITY_FILE="$i" locust -f ./locust/load_generator_train.py --headless --host $host
 
       #env INTENSITY_FILE="$file_name" locust -f ./locust/bi_locustfile_request.py --headless --csv $log_exp_folder_path --host $host

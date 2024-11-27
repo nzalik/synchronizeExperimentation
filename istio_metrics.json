@@ -47,5 +47,15 @@
   "metric": "istio_request_bytes_bucket",
     "name": "bytes",
     "aggregator": "bytes"
+  },
+  {
+  "metric": "topk",
+    "name": "latency_order",
+    "aggregator": "latency_order"
+  },
+  {
+  "metric": "topk",
+    "name": "request_order",
+    "aggregator": "request_order"
   }
 ]

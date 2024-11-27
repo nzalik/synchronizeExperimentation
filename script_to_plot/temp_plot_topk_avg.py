@@ -6,7 +6,7 @@ import numpy as np
 
 from utils.constants import plot_limit
 
-file_path="/home/erods-chouette/Documents/synchronizeExperimentation/locust/grenoble/train/24-11-2024/temp_1temp_profile_login_no_user_creation_at_beginning1/hyperthreading/linear_10/aggregation/1_top_pods_linear_10.json"
+file_path="/home/erods-chouette/Documents/synchronizeExperimentation/locust/nantes/train/sequential/27-11-2024/temp_15m_collect_warmup_load1/hyperthreading/SearchTicket/li_linear_5/aggregation/1_top_pods_li_linear_5.json"
 
 # Lire les données depuis un fichier JSON
 with open(file_path, 'r') as file:

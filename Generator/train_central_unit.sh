@@ -28,12 +28,12 @@ category="128/linear/3nodes/linear"
 
 # This is to give an indication to the script from where the script is executed
 # From the home environment or from the Grid
-#root_prefix="/home/erods-chouette/Documents/"
-#init_root_prefix="/home/erods-chouette/"
+root_prefix="/home/erods-chouette/Documents/"
+init_root_prefix="/home/erods-chouette/"
 
 #Production environment
-init_root_prefix="/home/ykoagnenzali/"
-root_prefix="/home/ykoagnenzali/"
+#init_root_prefix="/home/ykoagnenzali/"
+#root_prefix="/home/ykoagnenzali/"
 
 prefix_folder="${root_prefix}synchronizeExperimentation"
 
@@ -51,18 +51,18 @@ host="$WEBUI"
 export KUBECONFIG="${init_root_prefix}$CERTIFICATE"
 
 # This script deployed every necessary configuration for istio mesh
-/bin/bash "$prefix_folder/mesh/istio.sh" $prefix_folder
+#/bin/bash "$prefix_folder/mesh/istio.sh" $prefix_folder
 
   #number=$((number + 1))
   #new_folder_path="${new_folder_path1}/${number}"
-  #for task in "${TASK[@]}"; do
+  for task in "${TASK[@]}"; do
     echo "Traitement de la tâche : $task"
-    for element in load1
+    for element in temp_1
     #for element in train_load_100 train_load_200 train_load_300
     do
       # Complete relative path for data storage
       #new_folder_base="$parent_dir/synchronizeExperimentation/locust/$site/train/$date_str/${element}$PATH_SUFFIX/hyperthreading"
-      new_folder_base="$parent_dir/synchronizeExperimentation/locust/$site/train/$date_str/${element}$PATH_SUFFIX/hyperthreading/$task"
+      new_folder_base="$parent_dir/synchronizeExperimentation/locust/$site/train/test/sequential/$date_str/${element}$PATH_SUFFIX/hyperthreading/$task"
       #new_folder_base="$parent_dir/synchronizeExperimentation/locust/train/$element/nantes/hyperthreading/$category/$date_str"
       new_folder_path1="$new_folder_base"
       new_folder_path2="$new_folder_base/source"
@@ -76,14 +76,14 @@ export KUBECONFIG="${init_root_prefix}$CERTIFICATE"
         kubectl create -f $prefix_folder/benchmarks/train-ticket/ts-deployment-part3.yml
         # kubectl apply  -f trainticket-gateway.yaml
         sleep 480
-        python3 $prefix_folder/workload_generators/locust/train-ticket/ts_api_invoke_test.py $host
+        #python3 $prefix_folder/workload_generators/locust/train-ticket/ts_api_invoke_test.py $host
 
         #env INTENSITY_FILE="$prefix_folder$WARMUP_FILE" locust -f $prefix_folder/workload_generators/locust/teastore_locustfile-custom-scale.py --headless --host $host
         #env INTENSITY_FILE="$prefix_folder$WARMUP_FILE" locust -f $prefix_folder/workload_generators/locust/bi_locustfile_request.py --headless --csv $log_exp_folder_path --host $host
 
-        sleep 240
+        #sleep 240
         i=0
-            for i in $(seq 1 8);
+            for i in $(seq 1 3);
               do
                 root_file_name=$(basename "$file_name" .csv)
 
@@ -130,4 +130,4 @@ export KUBECONFIG="${init_root_prefix}$CERTIFICATE"
       done
       break
     done
-  #done
+  done

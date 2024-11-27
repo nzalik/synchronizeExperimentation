@@ -2,7 +2,7 @@ import json
 import matplotlib.pyplot as plt
 import datetime
 
-file_path="/home/erods-chouette/Documents/synchronizeExperimentation/locust/nantes/train/19-11-2024/load2profile_with_deep_locustfile/hyperthreading/li_const_2/aggregation/1_top_li_const_2.json"
+file_path="/home/erods-chouette/Documents/synchronizeExperimentation/locust/nantes/train/sequential/27-11-2024/temp_15m_collect_warmup_load1/hyperthreading/SearchTicket/li_linear_5/aggregation/1_top_pods_li_linear_5.json"
 
 
 # Lire les données depuis un fichier JSON

@@ -175,20 +175,6 @@ def path_to_save(init_path):
 
     return output_path
 
-def query_prometheus(query, prom_url):
-    my_url = prom_url + '/api/v1/' + query
-    res = None
-
-    try:
-        res = requests.get(my_url).json()
-    except Exception as e:
-        print(e)
-
-    if res != None and 'error' in res:
-        res = None
-
-    return res
-
 def query_prometheus_with_payload(prometheus_url, query, start_dt, end_dt, step):
     #payload = {'query': query, 'start': start_dt, 'end': end_dt, 'step': step + 's'}
     payload = {'query': query, 'start': start_dt, 'end': end_dt, 'step': step}
@@ -211,6 +197,18 @@ def query_prometheus_with_payload(prometheus_url, query, start_dt, end_dt, step)
 
     return res
 
+
+def query_prometheus(query, prom_url):
+    my_url = prom_url + '/api/v1/' + query
+    res = None
+    try:
+        res = requests.get(my_url).json()
+    except Exception as e:
+        print(e)
+    if res != None and 'error' in res:
+        res = None
+    return res
+
 def query_svc_names(namespace='default', start_dt="", end_dt="", prom_url=""):
     #query_str = 'label/pod/values?match[]=kube_pod_container_info{namespace="' + namespace + '"}'
     query_str = 'label/pod/values?match[]=kube_pod_container_info{namespace="' + namespace + '"}&start=' + str(
@@ -222,13 +220,13 @@ def query_svc_names(namespace='default', start_dt="", end_dt="", prom_url=""):
         for name in svc_names:
             # query_str = '/query?query=container_last_seen{namespace="' + namespace + '", pod="' + name + '"}'
             query_str = 'container_last_seen{namespace="' + namespace + '", pod="' + name + '"}'
+           # print(query_str)
             res = query_prometheus_with_payload(prom_url, query_str, start_dt, end_dt, step)
             if res != None and len(res['data']['result']) > 0:
                 instance = res['data']['result'][0]['metric']['instance'].split(':')[0]
                 # node = res['data']['result'][0]['metric']['node']
                 service_obj = {'pod': name, 'instance': instance}
                 services.append(service_obj)
-
     return services
 
 def init_metric_metadata(metric, pod_name, prom_url):

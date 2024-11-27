@@ -1,17 +1,20 @@
 import os
+import subprocess
 
-PREFIX = "codewisdom"
-VERSION = "0.2.0"
+PREFIX = "gricad-registry.univ-grenoble-alpes.fr/nzalikoy/scaler-task/"
+VERSION = "prod"
 
 base_path = os.getcwd()
 build_paths = []
+
+
 
 
 def main():
     if not mvn_build():
         print("mvn build failed")
     init_docker_build_paths()
-    # docker_login()
+    docker_login()
     docker_build_and_push()
 
 
@@ -30,13 +33,42 @@ def init_docker_build_paths():
 
 
 def docker_login():
-    username = os.getenv("DOCKER_USERNAME")
-    docker_hub_address = os.getenv("DOCKER_HUB_ADDRESS") or "registry.cn-hangzhou.aliyuncs.com"
-    print(f"[DOCKER HUB LOGIN] login username:{username} address:{docker_hub_address}")
-    print(f"[DOCKER HUB LOGIN] You should input your root password first and then dockerhub password")
-    docker_login = os.system(f"sudo docker login --username={username} {docker_hub_address}")
-    if not docker_login:
-        print("docker login failed")
+    registry_url = "gricad-registry.univ-grenoble-alpes.fr/nzalikoy/scaler-task/"
+    username = "nzalikoy"
+    password = "5KS9nJ8sE9QxsPSc2oik"
+
+    try:
+        login_command = [
+            "docker", "login", registry_url,
+            "-u", username,
+            "--password-stdin"
+        ]
+
+        # Passer le mot de passe via stdin
+        process = subprocess.run(
+            login_command,
+            input=password.encode(),  # Mot de passe en bytes
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True
+        )
+
+        # Vérifier le résultat
+        if process.returncode == 0:
+            print("Connexion réussie au registre Docker.")
+        else:
+            print(f"Échec de connexion : {process.stderr}")
+
+    except Exception as e:
+        print(f"Erreur : {e}")
+
+    # username = os.getenv("DOCKER_USERNAME")
+    # docker_hub_address = os.getenv("DOCKER_HUB_ADDRESS") or "registry.cn-hangzhou.aliyuncs.com"
+    # print(f"[DOCKER HUB LOGIN] login username:{username} address:{docker_hub_address}")
+    # print(f"[DOCKER HUB LOGIN] You should input your root password first and then dockerhub password")
+    # docker_login = os.system(f"sudo docker login --username={username} {docker_hub_address}")
+    # if not docker_login:
+    #     print("docker login failed")
 
 
 def docker_build_and_push():

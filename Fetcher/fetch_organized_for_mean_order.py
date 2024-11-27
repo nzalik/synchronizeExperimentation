@@ -72,6 +72,9 @@ new_timestampManual = start_timestamp
 target_timeManual = end_timestamp
 
 all_services = query_svc_names("default",new_timestampManual, target_timeManual, prom_url)
+#all_services = query_svc_names("default",target_timeManual, new_timestampManual, prom_url)
+print("all services")
+print(all_services)
 
 pod_names  = [(svc["pod"]) for svc in all_services]
 #services_names = ['-'.join(svc["pod"].split('-')[:-2]) for svc in all_services]
@@ -101,7 +104,8 @@ for section_name in config.sections():
             query_str_file = os.path.join(directory, f"{exp_nb}_{filename}")
 
             os.makedirs(directory, exist_ok=True)
-
+            print("fectch")
+            print(url)
             try:
                 res = requests.post(url, headers={'Content-Type': 'application/x-www-form-urlencoded'},
                                     data=payload).json()
@@ -111,6 +115,7 @@ for section_name in config.sections():
                         json.dump(res, f, ensure_ascii=False)
 
             except Exception as e:
+                print(res)
                 print(e)
                 print("...Fail at Prometheus request.")
 
@@ -130,7 +135,10 @@ queries = [
      "top_pods"),
     (
     f"topk(64, histogram_quantile(0.95, sum(rate(istio_request_duration_milliseconds_bucket{{namespace=\"default\"}}[{cpu_step}])) by (le, destination_workload)))",
-    "latency_top")
+    "top_latencies"),
+    (
+    f"topk(64, sum(rate(istio_requests_total{{namespace=\"default\"}}[{cpu_step}])) by (destination_workload))",
+    "top_requests")
 ]
 
 payload_common = {
