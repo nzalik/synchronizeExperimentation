@@ -9,15 +9,15 @@ line_styles=["solid","dotted","dashed","dashdot"]
 
 plot_limit = 301
 cpu_limit_max=0.002
-load_max=11
+load_max=8
 memory_limit=0.01
 pod_limit=2
 request_volume_limit = 11
 
-cpu_step = "5m"
+cpu_step = "30s"
 step = "1s"
 
-range_limit=2
+range_limit=4
 harmonization=False
 
 colors_table = [
@@ -270,8 +270,8 @@ def plot_json_generic(file_path, file_name, data_type='cpu'):
     json_data_file2 = open_file(os.path.join(file_path, list_element[1]))
     #print(list_element[2])
     json_data_file3 = open_file(os.path.join(file_path, list_element[2]))
-    #json_data_file4 = open_file(os.path.join(file_path, list_element[3]))
-    # json_data_file5 = open_file(os.path.join(file_path, list_element[4]))
+    json_data_file4 = open_file(os.path.join(file_path, list_element[3]))
+    json_data_file5 = open_file(os.path.join(file_path, list_element[4]))
     # json_data_file6 = open_file(os.path.join(file_path, list_element[5]))
     # json_data_file7 = open_file(os.path.join(file_path, list_element[6]))
     #json_data_file8 = open_file(os.path.join(file_path, list_element[7]))
@@ -285,8 +285,8 @@ def plot_json_generic(file_path, file_name, data_type='cpu'):
         datas1 = json_data_file1['data']['result'][0]['values']
         datas2 = json_data_file2['data']['result'][0]['values']
         datas3 = json_data_file3['data']['result'][0]['values']
-        #datas4 = json_data_file4['data']['result'][0]['values']
-        # datas5 = json_data_file5['data']['result'][0]['values']
+        datas4 = json_data_file4['data']['result'][0]['values']
+        datas5 = json_data_file5['data']['result'][0]['values']
         # datas6 = json_data_file6['data']['result'][0]['values']
         # datas7 = json_data_file7['data']['result'][0]['values']
         #datas8 = json_data_file8['data']['result'][0]['values']
@@ -308,8 +308,8 @@ def plot_json_generic(file_path, file_name, data_type='cpu'):
         values1 = [float(value) for _, value in datas1]
         values2 = [float(value) for _, value in datas2]
         values3 = [float(value) for _, value in datas3]
-       # values4 = [float(value) for _, value in datas4]
-        # values5 = [float(value) for _, value in datas5]
+        values4 = [float(value) for _, value in datas4]
+        values5 = [float(value) for _, value in datas5]
         # values6 = [float(value) for _, value in datas6]
         # values7 = [float(value) for _, value in datas7]
 #        values8 = [float(value) for _, value in datas8]
@@ -322,7 +322,7 @@ def plot_json_generic(file_path, file_name, data_type='cpu'):
 
         longueur_max = plot_limit
         # longueur_max = max(len(liste) for liste in [values1, values2, values3])
-        for liste in [values1, values2]:
+        for liste in [values1, values2, values3, values4, values5]:
             if len(liste) > longueur_max:
                 # Couper pour garder les longueur_max derniers éléments
                 del liste[:-longueur_max]
@@ -334,8 +334,8 @@ def plot_json_generic(file_path, file_name, data_type='cpu'):
         values1 = np.array((values1))
         values2 = np.array((values2))
         values3 = np.array((values3))
-        #values4 = np.array(smooth(values4))
-        # values5 = np.array(smooth(values5))
+        values4 = np.array((values4))
+        values5 = np.array((values5))
         # values6 = np.array(smooth(values6))
         # values7 = np.array(smooth(values7))
         #values8 = np.array(smooth(values8))
@@ -349,7 +349,7 @@ def plot_json_generic(file_path, file_name, data_type='cpu'):
         meanValues = np.mean([values1, values2], axis=0)
 
         if not is_cpu:
-            normalized_values = [value / (1000 ** 3) for value in meanValues]
+            normalized_values = [value / (1024 ** 3) for value in meanValues]
             last_ten_values = normalized_values[-(len(greater_than_value)):]
         else:
             last_ten_values = meanValues[-(len(greater_than_value)):]
@@ -370,7 +370,7 @@ def plot_json_generic(file_path, file_name, data_type='cpu'):
         #     legend_labelsMemory.append(label)
 
         #temp_list = [values1, values2]
-        temp_list = [values1, values2, values3][:range_limit]
+        temp_list = [values2, values3, values4, values5][:range_limit]
         for index, tab in enumerate(temp_list):
             print(index)
             #tab = temp_list[i-1]

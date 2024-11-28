@@ -25,18 +25,20 @@ file_path_json = '../teastore.json'
 
 csv_file_path = "/home/erods-chouette/Documents/synchronizeExperimentation/Load/load1/"
 
-root_path = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/grenoble/train/22-11-2024/load1temp_profile_login_no_user_creation_at_beginning/hyperthreading/HomePage"
+#root_path = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/nantes/train/test-grid/27-11-2024/temp_15m_collect_warmup_load1/hyperthreading/BookTicket"
+root_path = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/nantes/train/25-11-2024/load130s_collect_warmup_load1/hyperthreading"
 
 latency_path = root_path
 print("root_path")
 print(root_path)
 
-services = ["ts-auth-service"]
-#services = ["ts-inside-payment-service","ts-order-other-service","ts-auth-service","ts-ui-dashboard", "ts-order-other-service", "ts-station-service", "ts-travel-service", "ts-food-service", "ts-ticketinfo-service","ts-basic-service"]
+services = ["ts-travel-service"]
+#services = ["ts-auth-service","ts-basic-service" ,"ts-config-service", "ts-order-service", "ts-price-service", "ts-route-plan-service", "ts-route-service", "ts-seat-service", "ts-station-service", "ts-ticketinfo-service" ,"ts-train-service" ,"ts-travel-plan-service" ,"ts-travel-service" ,"ts-ui-dashboard" ,"ts-user-service"]
+#services = ["ts-auth-service","ts-ui-dashboard", "ts-user-service", "ts-station-service", "ts-travel-service", "ts-food-service", "ts-ticketinfo-service","ts-basic-service"]
 
 #services = ["teastore-auth", "teastore-image", "teastore-persistence", "teastore-recommender", "teastore-registry","teastore-webui"]
 
-elts = ["li_const_2"]
+elts = ["linear_10"]
 #elts = ["li_stairsu_2","li_stairsd_2","li_stairsu_2","si_sin_2"]
 #elts = ["li_const_2","linear_10", "li_stairsd_2","li_stairsu_2","si_sin_2"]
 #elts = ["li_const_2","linear_50","li_stairsd_2","li_stairsu_2","rd_bell_2","rd_jump_2","rd_stairs_2","si_abscos_2","si_abssin_2","si_cos_2","si_log_2","si_sin_2"]
@@ -73,7 +75,7 @@ for element in services:
         plot_window = 50  # Show by interval of 5 minutes
 
         # Plot the first set of data
-        plt.subplot(5, 1, 1)
+        plt.subplot(6, 1, 1)
         all_timestamps = []
         all_values = []
 
@@ -142,7 +144,7 @@ for element in services:
         plt.legend()
 
         # Plot the second set of data
-        plt.subplot(5, 1, 2)
+        plt.subplot(6, 1, 2)
         all_timestamps2 = []
 
         legend_objectsMemory = []
@@ -184,7 +186,7 @@ for element in services:
         plt.xticks(ticks2, ticks_seconds2)
 
         plt.xlabel('Time (seconds)')
-        plt.ylabel('Memory (Gbytes)')
+        plt.ylabel('Memory (Gbibytes)')
         plt.title('Memory usage')
         #plt.ylim(0, memory_limit)
         #plt.grid(True)
@@ -197,93 +199,8 @@ for element in services:
         plt.legend()
         lastEl = ticks_seconds2[-1]
 
-        plt.subplot(5, 1, 3)
-
-        max_value=0
-
-        json_filenames = []
-        plot_stats_path=""
-        # retrieve the max size to pyt ylim for all plots
-        for idx, svc in enumerate(services):
-            json_file_path = os.path.join(latency_path,"request_aggr", svc, x)
-            json_filenames = sorted([os.path.join(json_file_path, file) for file in
-                              os.listdir(json_file_path)[:range_limit]])  # Take the first 3 elements
-
-            for json_filename in json_filenames:
-                with open(json_filename) as f:
-                    source = json.load(f)
-                data_list = source['data']['result']
-                for json_data in data_list:
-                    result = json_data
-                    # values = [float(x[1]) for x in result["values"]]
-                    values = [float(x[1]) for x in result["values"] if x[1] != "NaN"]
-                    if values:  # Check if values is not empty
-                        print(max(values))
-                        if max(values) > max_value:
-                            max_value = max(values)
-
-        for idx, svc in enumerate(listElement):
-
-
-            json_file_path = os.path.join(latency_path, "request_aggr", svc, x)
-
-            json_filenames = sorted([os.path.join(json_file_path, file) for file in
-                              os.listdir(json_file_path)[:range_limit]])
-
-            max_value = math.ceil(max_value / 100) * 100
-
-            for json_filename in json_filenames:
-                position = json_filenames.index(json_filename)
-                file_name_with_extension = os.path.basename(json_filename)
-                file_name, _ = os.path.splitext(file_name_with_extension)
-
-                # Charger le JSON depuis un fichier
-                with open(json_filename) as f:
-                    data = json.load(f)
-
-                timestamps = []
-
-                plot_metrics(data, svc, int(position), "request_aggr")
-
-            time = []
-            values = []
-            try:
-                df = pd.read_csv(csv_file_path + x + ".csv", sep=",")
-                time = df.iloc[:, 0].tolist()
-                values = df.iloc[:, 1].tolist()
-            except FileNotFoundError:
-                # print(f"Le fichier {file_name} n'a pas été trouvé dans le chemin {plot_path}")
-                # Vous pouvez également faire d'autres traitements ici, comme retourner un DataFrame vide
-                df = pd.DataFrame()
-
-
-            #plt.plot(time, values, color='green', label='Load Intensity')
-            #plt.axhline(y=200, color='r', linestyle='--')
-            plt.xlabel('Time (seconds)')
-            plt.ylabel('rps')
-            plt.title('Request volume')
-            plt.ylim(0, request_volume_limit)
-
-            for i in range(1,range_limit+1):
-                plot_stats_path = f"{root_path}/output/{x}_{i}_stats_history.csv"
-                print("le chemin")
-                print(plot_stats_path)
-
-                df_stats = pd.read_csv(plot_stats_path)
-
-                requests = df_stats['Requests/s']
-                requests = requests.reindex(range(299), fill_value=0)
-                print(requests)
-                print("le tem")
-                print(time)
-
-                plt.plot(time, requests,  color=colors_table[i-1], linestyle=line_styles[(i-1) % len(line_styles)], label=f"locust_stats_{i}")
-                #plt.plot(time, requests)
-
-            plt.legend(loc='upper left', ncol=4, frameon=False)
-
 #-------------------------------------------------------------------------
-        plt.subplot(5, 1, 4)
+        plt.subplot(6, 1, 6)
 
         max_value = 0
 
@@ -328,10 +245,10 @@ for element in services:
         plt.ylim(0, load_max)
 
 
-        df_stats = pd.read_csv(plot_stats_path)
+        #df_stats = pd.read_csv(plot_stats_path)
 
         # print(df_stats.iloc[0])
-        print("nombre de ligne " + str(len(df_stats['User Count'])))
+        #print("nombre de ligne " + str(len(df_stats['User Count'])))
         # print(df_stats['Timestamp'])
         # df_stats = pd.DataFrame()
 
@@ -348,7 +265,7 @@ for element in services:
         plt.legend(loc='upper left', frameon=False)
 
 #-------------------------------------------------------------------------
-        plt.subplot(5, 1, 5)
+        plt.subplot(6, 1, 5)
 
         max_value = 0
 
@@ -403,7 +320,146 @@ for element in services:
             plt.xlabel('Time (seconds)')
             plt.ylabel('Latency (ms)')
             #plt.yscale('log')
-            plt.ylim(0, max_value)
+            #plt.ylim(0, max_value)
+#----------------------------------------------------------------------------------------------
+
+        plt.subplot(6, 1, 3)
+        max_value = 0
+
+        json_filenames = []
+        plot_stats_path = ""
+        # retrieve the max size to pyt ylim for all plots
+        for idx, svc in enumerate(services):
+            json_file_path = os.path.join(latency_path, "request_aggr", svc, x)
+            json_filenames = sorted([os.path.join(json_file_path, file) for file in
+                                     os.listdir(json_file_path)[:range_limit]])  # Take the first 3 elements
+
+            for json_filename in json_filenames:
+                with open(json_filename) as f:
+                    source = json.load(f)
+                data_list = source['data']['result']
+                for json_data in data_list:
+                    result = json_data
+                    # values = [float(x[1]) for x in result["values"]]
+                    values = [float(x[1]) for x in result["values"] if x[1] != "NaN"]
+                    if values:  # Check if values is not empty
+                        print(max(values))
+                        if max(values) > max_value:
+                            max_value = max(values)
+
+        for idx, svc in enumerate(listElement):
+
+            json_file_path = os.path.join(latency_path, "request_aggr", svc, x)
+
+            json_filenames = sorted([os.path.join(json_file_path, file) for file in
+                                     os.listdir(json_file_path)[:range_limit]])
+
+            max_value = math.ceil(max_value / 100) * 100
+
+            for json_filename in json_filenames[-range_limit:]:
+                position = json_filenames.index(json_filename)
+                file_name_with_extension = os.path.basename(json_filename)
+                file_name, _ = os.path.splitext(file_name_with_extension)
+
+                # Charger le JSON depuis un fichier
+                with open(json_filename) as f:
+                    data = json.load(f)
+
+                timestamps = []
+
+                plot_metrics(data, svc, int(position), "request_aggr")
+
+            time = []
+            values = []
+            try:
+                df = pd.read_csv(csv_file_path + x + ".csv", sep=",")
+                time = df.iloc[:, 0].tolist()
+                values = df.iloc[:, 1].tolist()
+            except FileNotFoundError:
+                # print(f"Le fichier {file_name} n'a pas été trouvé dans le chemin {plot_path}")
+                # Vous pouvez également faire d'autres traitements ici, comme retourner un DataFrame vide
+                df = pd.DataFrame()
+
+            # plt.plot(time, values, color='green', label='Load Intensity')
+            # plt.axhline(y=200, color='r', linestyle='--')
+            plt.xlabel('Time (seconds)')
+            plt.ylabel('rps')
+            plt.title('Request volume')
+            #plt.ylim(0, request_volume_limit)
+
+            plt.legend(loc='upper left', ncol=4, frameon=False)
+#-------------------------------------------------------------------------------------------------
+        plt.subplot(6, 1, 4)
+
+        max_value=0
+
+        json_filenames = []
+        plot_stats_path=""
+        # retrieve the max size to pyt ylim for all plots
+        for idx, svc in enumerate(services):
+            json_file_path = os.path.join(latency_path,"request_aggr", svc, x)
+            json_filenames = sorted([os.path.join(json_file_path, file) for file in
+                              os.listdir(json_file_path)[:range_limit]])  # Take the first 3 elements
+
+            for json_filename in json_filenames:
+                with open(json_filename) as f:
+                    source = json.load(f)
+                data_list = source['data']['result']
+                for json_data in data_list:
+                    result = json_data
+                    # values = [float(x[1]) for x in result["values"]]
+                    values = [float(x[1]) for x in result["values"] if x[1] != "NaN"]
+                    if values:  # Check if values is not empty
+                        print(max(values))
+                        if max(values) > max_value:
+                            max_value = max(values)
+
+        for idx, svc in enumerate(listElement):
+
+
+            json_file_path = os.path.join(latency_path, "request_aggr", svc, x)
+
+            json_filenames = sorted([os.path.join(json_file_path, file) for file in
+                              os.listdir(json_file_path)[:range_limit]])
+
+            max_value = math.ceil(max_value / 100) * 100
+
+
+
+            time = []
+            values = []
+            try:
+                df = pd.read_csv(csv_file_path + x + ".csv", sep=",")
+                time = df.iloc[:, 0].tolist()
+                values = df.iloc[:, 1].tolist()
+            except FileNotFoundError:
+                # print(f"Le fichier {file_name} n'a pas été trouvé dans le chemin {plot_path}")
+                # Vous pouvez également faire d'autres traitements ici, comme retourner un DataFrame vide
+                df = pd.DataFrame()
+
+
+            #plt.plot(time, values, color='green', label='Load Intensity')
+            #plt.axhline(y=200, color='r', linestyle='--')
+            plt.xlabel('Time (seconds)')
+            plt.ylabel('rps')
+            plt.title('Request volume')
+            plt.ylim(0, request_volume_limit)
+
+            for i in range(1,range_limit+1):
+                plot_stats_path = f"{root_path}/output/{x}_{i}_stats_history.csv"
+                print("le chemin")
+                print(plot_stats_path)
+
+                df_stats = pd.read_csv(plot_stats_path)
+
+                requests = df_stats['Requests/s']
+                requests = requests.reindex(range(299), fill_value=0)
+
+                plt.plot(time, requests,  color=colors_table[i-1], linestyle=line_styles[(i-1) % len(line_styles)], label=f"locust_stats_{i}")
+                #plt.plot(time, requests)
+
+            plt.legend(loc='upper left', ncol=4, frameon=False)
+#----------------------------------------------------------------------------------------------
 
         plt.tight_layout()
 

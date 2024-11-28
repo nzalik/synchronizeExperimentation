@@ -58,6 +58,17 @@ class SearchTicket(SequentialTaskSet):
         #logging.info("Stopping task 'only search'...")
         raise StopUser()
 
+class Home(SequentialTaskSet):
+
+    @task
+    def homeLoginSearchStartBooking(self):
+        #logging.info("Running Tasks for booking...")
+        task_sequence = ["home_expected"]
+
+        requests = Requests(self.client)
+        for task in task_sequence:
+            requests.perform_task(task)
+
 class HomeLoginSearchStartBooking(SequentialTaskSet):
 
     # def __init__(self, *args, **kwargs):
