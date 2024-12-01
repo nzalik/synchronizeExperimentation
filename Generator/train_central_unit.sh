@@ -57,7 +57,7 @@ export KUBECONFIG="${init_root_prefix}$CERTIFICATE"
   #new_folder_path="${new_folder_path1}/${number}"
   for task in "${TASK[@]}"; do
     echo "Traitement de la tâche : $task"
-    for element in temp_1 temp_2
+    for element in temp_2
     #for element in train_load_100 train_load_200 train_load_300
     do
       # Complete relative path for data storage
