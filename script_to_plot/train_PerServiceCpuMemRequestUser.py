@@ -23,22 +23,22 @@ from utils.constants import get_color_for_service_init, normalization, line_styl
 
 file_path_json = '../teastore.json'
 
-csv_file_path = "/home/erods-chouette/Documents/synchronizeExperimentation/Load/load1/"
+csv_file_path = "/home/erods-chouette/Documents/synchronizeExperimentation/Load/temp_1/"
 
-#root_path = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/nantes/train/test-grid/27-11-2024/temp_15m_collect_warmup_load1/hyperthreading/BookTicket"
-root_path = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/nantes/train/25-11-2024/load130s_collect_warmup_load1/hyperthreading"
+root_path = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/nantes/train/test/sequential/28-11-2024/temp_130s_collect_warmup_load1/hyperthreading/HomeLoginSearchStartBookingAssuranceFood"
+#root_path = f"/home/erods-chouette/Documents/synchronizeExperimentation/locust/nantes/train/25-11-2024/load130s_collect_warmup_load1/hyperthreading"
 
 latency_path = root_path
 print("root_path")
 print(root_path)
 
-services = ["ts-travel-service"]
-#services = ["ts-auth-service","ts-basic-service" ,"ts-config-service", "ts-order-service", "ts-price-service", "ts-route-plan-service", "ts-route-service", "ts-seat-service", "ts-station-service", "ts-ticketinfo-service" ,"ts-train-service" ,"ts-travel-plan-service" ,"ts-travel-service" ,"ts-ui-dashboard" ,"ts-user-service"]
+#services = ["ts-auth-service"]
+services = ["ts-auth-service","ts-basic-service" ,"ts-config-service", "ts-order-service", "ts-price-service", "ts-route-plan-service", "ts-route-service", "ts-seat-service", "ts-station-service", "ts-ticketinfo-service" ,"ts-train-service" ,"ts-travel-plan-service" ,"ts-travel-service" ,"ts-ui-dashboard" ,"ts-user-service"]
 #services = ["ts-auth-service","ts-ui-dashboard", "ts-user-service", "ts-station-service", "ts-travel-service", "ts-food-service", "ts-ticketinfo-service","ts-basic-service"]
 
 #services = ["teastore-auth", "teastore-image", "teastore-persistence", "teastore-recommender", "teastore-registry","teastore-webui"]
 
-elts = ["linear_10"]
+elts = ["li_linear_5"]
 #elts = ["li_stairsu_2","li_stairsd_2","li_stairsu_2","si_sin_2"]
 #elts = ["li_const_2","linear_10", "li_stairsd_2","li_stairsu_2","si_sin_2"]
 #elts = ["li_const_2","linear_50","li_stairsd_2","li_stairsu_2","rd_bell_2","rd_jump_2","rd_stairs_2","si_abscos_2","si_abssin_2","si_cos_2","si_log_2","si_sin_2"]
@@ -469,6 +469,6 @@ for element in services:
         #my_string = f"{save_graphics_at}/output{str(data_count + 1)}-{x}.png"
         my_string = f"{save_graphics_at}/{x}/output{str(data_count + 1)}-{element}.png"
         print(my_string)
-        #plt.savefig(my_string)
+        plt.savefig(my_string)
         plt.show()
         plt.close(fig)

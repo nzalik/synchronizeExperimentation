@@ -51,13 +51,13 @@ host="$WEBUI"
 export KUBECONFIG="${init_root_prefix}$CERTIFICATE"
 
 # This script deployed every necessary configuration for istio mesh
-#/bin/bash "$prefix_folder/mesh/istio.sh" $prefix_folder
+/bin/bash "$prefix_folder/mesh/istio.sh" $prefix_folder
 
   #number=$((number + 1))
   #new_folder_path="${new_folder_path1}/${number}"
   for task in "${TASK[@]}"; do
     echo "Traitement de la tâche : $task"
-    for element in temp_1
+    for element in temp_1 temp_2
     #for element in train_load_100 train_load_200 train_load_300
     do
       # Complete relative path for data storage
@@ -83,7 +83,7 @@ export KUBECONFIG="${init_root_prefix}$CERTIFICATE"
 
         #sleep 240
         i=0
-            for i in $(seq 1 5);
+            for i in $(seq 1 7);
               do
                 root_file_name=$(basename "$file_name" .csv)
 

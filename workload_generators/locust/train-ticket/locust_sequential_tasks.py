@@ -2,7 +2,7 @@ import logging
 import os
 import sys
 import csv
-from locust import task, HttpUser, SequentialTaskSet, LoadTestShape, constant
+from locust import task, HttpUser, SequentialTaskSet, LoadTestShape, constant, between
 from locust.exception import StopUser
 import numpy as np
 from requests.adapters import HTTPAdapter
@@ -240,7 +240,7 @@ class UserCancelNoRefund(SequentialTaskSet):
 class UserOnlyLogin(SequentialTaskSet):
     weight = 1
     # wait_function = random.expovariate(1) * 1000
-    wait_time = constant(0)
+    #wait_time = constant(0)
 
     @task()
     def perform_task(self):
@@ -257,7 +257,7 @@ class UserOnlyLogin(SequentialTaskSet):
 
 class UserNoLogin(SequentialTaskSet):
     weight = 1
-    wait_time = constant(0)
+   # wait_time = constant(0)
 
     def perfom_task(self):
         logging.debug("Running user 'only search'...")
@@ -269,6 +269,7 @@ class UserNoLogin(SequentialTaskSet):
             requests.perform_task(task)
 
 class UserGlobal(HttpUser):
+    wait_time = between(1, 3)
     task_mapping = {
         "SearchTicket": SearchTicket,
         "BookTicket": BookTicket,
