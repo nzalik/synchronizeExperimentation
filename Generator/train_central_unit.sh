@@ -51,7 +51,7 @@ host="$WEBUI"
 export KUBECONFIG="${init_root_prefix}$CERTIFICATE"
 
 # This script deployed every necessary configuration for istio mesh
-/bin/bash "$prefix_folder/mesh/istio.sh" $prefix_folder
+#/bin/bash "$prefix_folder/mesh/istio.sh" $prefix_folder
 
   #number=$((number + 1))
   #new_folder_path="${new_folder_path1}/${number}"
@@ -62,7 +62,7 @@ export KUBECONFIG="${init_root_prefix}$CERTIFICATE"
     do
       # Complete relative path for data storage
       #new_folder_base="$parent_dir/synchronizeExperimentation/locust/$site/train/$date_str/${element}$PATH_SUFFIX/hyperthreading"
-      new_folder_base="$parent_dir/synchronizeExperimentation/locust/$site/train/test/sequential/$date_str/${element}$PATH_SUFFIX/hyperthreading/$task"
+      new_folder_base="$parent_dir/synchronizeExperimentation/locust/$site/train/sequential/$date_str/${element}$PATH_SUFFIX/hyperthreading/$task"
       #new_folder_base="$parent_dir/synchronizeExperimentation/locust/train/$element/nantes/hyperthreading/$category/$date_str"
       new_folder_path1="$new_folder_base"
       new_folder_path2="$new_folder_base/source"
